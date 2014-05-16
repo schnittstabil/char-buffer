@@ -78,7 +78,7 @@ npm publish
 grunt bower
 cd target/bower/
 git add .
-git commit -m v0.1.0
+git commit -m "v0.1.0 [ci skip]"
 git tag -a v0.1.0 -m "bower v0.1.0"
 git push origin bower --tags
 bower register char-buffer git@github.com:schnittstabil/char-buffer.git
