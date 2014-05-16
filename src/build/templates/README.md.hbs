@@ -1,0 +1,67 @@
+# char-buffer [![Dependencies Status Image](https://gemnasium.com/schnittstabil/char-buffer.svg)](https://gemnasium.com/schnittstabil/char-buffer) [![Build Status Image](https://travis-ci.org/schnittstabil/char-buffer.svg)](https://travis-ci.org/schnittstabil/char-buffer) [![Coverage Status](https://coveralls.io/repos/schnittstabil/char-buffer/badge.png)](https://coveralls.io/r/schnittstabil/char-buffer) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+
+Collect CharCodes and convert them to a string.
+
+[![Selenium Test Status](https://saucelabs.com/browser-matrix/char-buffer.svg)](https://saucelabs.com/u/char-buffer)
+
+## Installation
+
+### Node Package Manager (npm)
+
+1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
+
+2. Install CharBuffer from [NPM](https://www.npmjs.org/):
+{{#code_helper lang="bash" indent=1}}npm install char-buffer{{/code_helper}}
+
+
+### Bower
+
+1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
+
+2. Install [Bower](http://bower.io/):
+{{#code_helper lang="bash" indent=1}}npm install bower --global{{/code_helper}}
+
+3. Install CharBuffer from [bower.io](http://bower.io/search):
+{{#code_helper lang="bash" indent=1}}bower install char-buffer{{/code_helper}}
+
+
+## Basic Usage
+
+`CharBuffer` provides multiple implementations to collect `CharCodes` via a common interface (`CharBuffer.CharBuffer`):
+
+* `CharBuffer.StringBuffer` uses a single `String`
+* `CharBuffer.StringArrayBuffer` uses an `Array` of `String`s
+* `CharBuffer.TypedArrayBuffer` uses an [Uint16Array](https://developer.mozilla.org/en-US/docs/Web/API/Uint16Array)
+* `CharBuffer.NodeBuffer` uses a [Node.js Buffer](http://nodejs.org/api/buffer.html)
+
+{{#code_helper lang="javascript"}}{{{example.overview}}}{{/code_helper}}
+
+## Documentations
+
+* [API](http://schnittstabil.github.io/char-buffer/api/#!/api)
+* [Code Coverage Report](http://schnittstabil.github.io/char-buffer/coverage)
+
+## Examples
+
+### Node.js
+
+{{#code_helper lang="javascript"}}{{{example.node}}}{{/code_helper}}
+
+### Browser Globals (using Bower)
+
+{{#code_helper lang="html"}}{{> example.bower.global.html }}{{/code_helper}}
+
+
+### Asynchronous Module Definition (using Bower)
+
+See [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api/blob/master/AMD.md) for Details.
+
+{{#code_helper lang="html"}}{{> example.bower.amd.html }}{{/code_helper}}
+
+## License
+
+Copyright (c) 2014 Michael Mayer
+
+Licensed under the MIT license.
+
+{{#if html}}<script>Ext.onReady(prettyPrint);</script>{{/if}}

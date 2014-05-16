@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Tests</title>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  <link rel="stylesheet" href="bower_components/mocha/mocha.css" />
+  <link rel="stylesheet" href="bower_components/mocha-screencast-reporter/screencast-reporter.css" />
+</head>
+<body>
+  <div id="mocha"></div>
+  <script type="text/javascript" src="bower_components/expect/index.js"></script>
+  <script type="text/javascript" src="bower_components/mocha-screencast-reporter/screencast-reporter.js"></script>
+  <script type="text/javascript" src="bower_components/mocha/mocha.js"></script>
+
+  <script type="text/javascript" src="../char-buffer.js"></script>
+  <script>mocha.setup({ ui: 'bdd' });</script>
+  <script type="text/javascript" src="tests.js"></script>
+  <script type="text/javascript" src="run-mocha.js"></script>
+</body>
+</html>

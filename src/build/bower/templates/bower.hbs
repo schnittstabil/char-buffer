@@ -1,0 +1,25 @@
+{
+  "name": "{{{name}}}",
+  "version": "{{{version}}}",
+  "homepage": "{{{homepage}}}",
+  "authors": [
+    "{{{author}}}"
+  ],
+  "description": "{{{description}}}",
+  "main": "{{{name}}}.js",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    {{#each keywords}}{{#if @index}},
+    {{/if}}"{{{this}}}"{{/each}}
+  ],
+  "license": "{{{license}}}",
+  "ignore": [
+    "bower_components",
+    "build.txt",
+    "Gruntfile.js",
+    "package.json"
+  ]
+}

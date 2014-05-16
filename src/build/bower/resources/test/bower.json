@@ -1,0 +1,9 @@
+{
+  "name": "char-buffer.test",
+  "private": true,
+  "dependencies": {
+    "expect": "~0.3.1",
+    "mocha": "~1.18.2",
+    "mocha-screencast-reporter": "~0.1.3"
+  }
+}
