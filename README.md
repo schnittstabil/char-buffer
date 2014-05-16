@@ -97,7 +97,7 @@ console.log(buffer.append(102).append(111).append(111).toString());
 
 ```html
 <!-- load CharBuffer -->
-<script src="bower_components/char-buffer.js"></script>
+<script src="bower_components/char-buffer/char-buffer.js"></script>
 <script>
 
 // create the default CharBuffer implementation:
@@ -123,7 +123,7 @@ See [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api/bl
 <!-- (optinal) load your amd loader: -->
 <script src="path/to/your/amd/loader.js"></script>
 <!-- load CharBuffer -->
-<script src="bower_components/char-buffer.js"></script>
+<script src="bower_components/char-buffer/char-buffer.js"></script>
 <script>
 
 /**
