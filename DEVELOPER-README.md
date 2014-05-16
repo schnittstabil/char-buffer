@@ -79,7 +79,7 @@ grunt bower
 cd target/bower/
 git add .
 git commit -m "bower v0.1.0"
-git tag -a v0.1.0 -m "bower v0.1.0"
+git tag v0.1.0
 git push origin bower --tags
 bower register char-buffer git@github.com:schnittstabil/char-buffer.git
 ```
@@ -91,7 +91,7 @@ grunt bower
 cd target/bower/
 git add .
 git commit -m "bower vX.Y.Z"
-git tag -a vX.Y.Z -m "bower vX.Y.Z"
+git tag vX.Y.Z
 git push origin bower --tags
 ```
 

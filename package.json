@@ -1,6 +1,6 @@
 {
   "name": "char-buffer",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "license": "MIT",
   "description": "Collect CharCodes and convert them to string.",
   "homepage": "https://github.com/schnittstabil/char-buffer",
