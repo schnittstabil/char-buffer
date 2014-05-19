@@ -24,9 +24,9 @@ function TypedArrayBuffer(initCapacity){
   if(!(this instanceof TypedArrayBuffer)){
     return new TypedArrayBuffer(initCapacity);
   }
+  CharBuffer.call(this);
   initCapacity = initCapacity || 16;
   this._buffer = new Uint16Array(initCapacity);
-  this._length = 0;
 }
 
 TypedArrayBuffer.prototype = new CharBuffer();
@@ -60,28 +60,32 @@ TypedArrayBuffer.prototype._ensureCapacity = function(minCapacity){
   * Appends a charCode to the buffer using [...].
   *
   * @param {Number} charCode The charCode to append.
+  * @param {Number} offset The zero based offset to write at.
   */
-TypedArrayBuffer.prototype.append = function(charCode){
-  this._ensureCapacity(this._length+1);
-  this._buffer[this._length++] = charCode;
-  return this;
-};
-
-/** */
-TypedArrayBuffer.prototype.setLength = function(newLength){
-  var msg;
-  if(newLength < 0 || newLength > this._buffer.length){
-    msg = 'newLength must be between 0 and ' + (this._buffer.length);
-    msg += ', ' + newLength + ' given.';
-    throw new RangeError(msg);
+TypedArrayBuffer.prototype.write = function(charCode, offset){
+  if(typeof offset === 'undefined'){
+    offset = this.length;
   }
-  this._length = newLength;
+  this._ensureCapacity(offset+1);
+  this._buffer[offset] = charCode;
+  this.length = offset+1 > this.length ? offset+1 : this.length, true;
   return this;
 };
 
 /** */
-TypedArrayBuffer.prototype.getLength = function(){
-  return this._length;
+TypedArrayBuffer.prototype.append = TypedArrayBuffer.prototype.write;
+
+/** */
+TypedArrayBuffer.prototype.read = function(offset){
+  return this._buffer[offset];
+};
+
+/** */
+TypedArrayBuffer.prototype.charCodeAt = TypedArrayBuffer.prototype.read;
+
+/** */
+TypedArrayBuffer.prototype.charAt = function(offset){
+  return String.fromCharCode(this.read(offset));
 };
 
 // jshint -W101
@@ -102,7 +106,7 @@ TypedArrayBuffer.prototype.getLength = function(){
 TypedArrayBuffer.prototype.toString = function(){
 // jshint +W101
   var ARGS_MAX = 65535,
-      len = this._length,
+      len = this.length,
       buf = '',
       startPos = 0,
       endPos = 0;

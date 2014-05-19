@@ -46,7 +46,7 @@ var buffer;
 // Create the default CharBuffer of your platform:
 buffer = new CharBuffer();
 
-// Same as before, but provide an estimate for the length of your string:
+// Same as before, but provide an estimate of the length of your string:
 buffer = new CharBuffer(3);
 
 // Create a specific CharBuffer implementation, if supported:
@@ -55,10 +55,10 @@ if(CharBuffer.TypedArrayBuffer.isSupported)
 }
 
 
-// Append a Charcode:
+// Append a CharCode:
 buffer.append(102);
 
-// Append two more Charcodes:
+// Append two more CharCodes:
 buffer.append(111).append(111);
 
 // Output 'foo':
@@ -96,19 +96,18 @@ console.log(buffer.append(102).append(111).append(111).toString());
 ### Browser Globals (using Bower)
 
 ```html
-<!-- load CharBuffer -->
-<script src="bower_components/char-buffer/char-buffer.js"></script>
+<script src="bower_components/char-buffer/char-buffer.global.js"></script>
 <script>
 
-// create the default CharBuffer implementation:
+// Create the default CharBuffer implementation:
 var buffer = new CharBuffer(3);
 
-// or create a specific CharBuffer implementation:
+// Or create a specific CharBuffer implementation:
 var TypedArrayBuffer = CharBuffer.TypedArrayBuffer,
     buffer           = new TypedArrayBuffer(3);
 
 
-// output 'foo'
+// Output 'foo'
 console.log(buffer.append(102).append(111).append(111).toString());
 
 </script>
@@ -117,40 +116,38 @@ console.log(buffer.append(102).append(111).append(111).toString());
 
 ### Asynchronous Module Definition (using Bower)
 
-See [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api/blob/master/AMD.md) for Details.
+See [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api/blob/master/AMD.md) for details.
 
 ```html
-<!-- (optinal) load your amd loader: -->
 <script src="path/to/your/amd/loader.js"></script>
-<!-- load CharBuffer -->
 <script src="bower_components/char-buffer/char-buffer.js"></script>
 <script>
 
 /**
- * use the CharBuffer package:
+ * Use the CharBuffer package:
  */
 require(['char-buffer'], function(CharBuffer){
   // create the default CharBuffer implementation:
   var buffer = new CharBuffer(3);
 
-  // or create a specific CharBuffer implementation by CharBuffer:
+  // Or create a specific CharBuffer implementation by CharBuffer:
   var TypedArrayBuffer = CharBuffer.TypedArrayBuffer,
       buffer = new TypedArrayBuffer(3);
 
 
-  // output 'foo'
+  // Output 'foo'
   console.log(buffer.append(102).append(111).append(111).toString());
 });
 
 
 /**
-  * or use a specific CharBuffer package:
+  * Or use a specific CharBuffer package:
   */
 require(['char-buffer/typed-array-buffer'], function(TypedArrayBuffer){
 
   var buffer = new TypedArrayBuffer(3);
 
-  // output 'foo'
+  // Output 'foo'
   console.log(buffer.append(102).append(111).append(111).toString());
 });
 

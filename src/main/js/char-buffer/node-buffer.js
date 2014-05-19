@@ -22,9 +22,9 @@ function NodeBuffer(initCapacity){
   if(!(this instanceof NodeBuffer)){
     return new NodeBuffer(initCapacity);
   }
+  CharBuffer.call(this);
   initCapacity = initCapacity || 16;
   this._buffer = new Buffer(initCapacity*2);
-  this._length = 0;
 }
 
 NodeBuffer.prototype = new CharBuffer();
@@ -55,36 +55,38 @@ NodeBuffer.prototype._ensureCapacity = function(minCapacity){
 };
 
 /**
-  * Appends a charCode to the buffer using
+  * Write a charCode to the buffer using
   * [Buffer.writeUInt16LE(charCode, ...)][1].
   *
   * [1]: http://nodejs.org/api/buffer.html#buffer_buf_writeuint16le_value_offset_noassert
   * @param {Number} charCode The charCode to append.
+  * @param {Number} offset The zero based offset to write at.
   */
-NodeBuffer.prototype.append = function(charCode){
-  this._ensureCapacity(this._length+1);
-  this._buffer.writeUInt16LE(charCode, this._length*2);
-  this._length++;
-  return this;
-};
-
-/** */
-NodeBuffer.prototype.setLength = function(newLength){
-  var msg;
-  if(newLength < 0 || newLength*2 > this._buffer.length){
-    msg = 'newLength must be between 0 and ' + (this._buffer.length/2);
-    msg += ', ' + newLength + ' given.';
-    throw new RangeError(msg);
+NodeBuffer.prototype.write = function(charCode, offset){
+  if(typeof offset === 'undefined'){
+    offset = this.length;
   }
-  this._length = newLength;
+  this._ensureCapacity(offset+1);
+  this._buffer.writeUInt16LE(charCode, offset*2);
+  this.length = offset+1 > this.length ? offset+1 : this.length, true;
   return this;
 };
 
 /** */
-NodeBuffer.prototype.getLength = function(){
-  return this._length;
+NodeBuffer.prototype.append = NodeBuffer.prototype.write;
+
+/** */
+NodeBuffer.prototype.read = function(offset){
+  return this._buffer.readUInt16LE(offset*2);
 };
 
+/** */
+NodeBuffer.prototype.charCodeAt = NodeBuffer.prototype.read;
+
+/** */
+NodeBuffer.prototype.charAt = function(offset){
+  return String.fromCharCode(this.read(offset));
+};
 
 /**
   * Returns the {@link String} represented by this buffer using
@@ -95,7 +97,7 @@ NodeBuffer.prototype.getLength = function(){
   * @return {String} The string.
   */
 NodeBuffer.prototype.toString = function(){
-  return this._buffer.toString('utf16le', 0, this._length*2);
+  return this._buffer.toString('utf16le', 0, this.length*2);
 };
 
 /**

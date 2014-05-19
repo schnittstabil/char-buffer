@@ -11,12 +11,13 @@ var CharBuffer = require('./char-buffer');
 /**
   * @method constructor
   *
-  * Constructs a StringArrayBuffer representing an empty string.
+  * Constructs a StringBuffer representing an empty string.
   */
 function StringBuffer(){
   if(!(this instanceof StringBuffer)){
     return new StringBuffer();
   }
+  CharBuffer.call(this);
   this._buffer = '';
 }
 
@@ -28,31 +29,48 @@ if(!StringBuffer.name){
 }
 
 /**
-  * Appends a charCode to the buffer using
+  * Write a charCode to the buffer using
   * {@link String#fromCharCode} and {@link String#concat +}.
   *
   * @param {Number} charCode The charCode to append.
+  * @param {Number} offset The zero based offset to write at.
   */
-StringBuffer.prototype.append = function(charCode){
-  this._buffer += String.fromCharCode(charCode);
+StringBuffer.prototype.write = function(charCode, offset){
+  if(typeof offset === 'undefined' || offset === this.length){
+    return this.append(charCode);
+  }
+  var pre  = this._buffer.slice(0, offset),
+      post = this._buffer.slice(offset+1);
+  this._buffer = pre + String.fromCharCode(charCode) + post;
+  this.length = this._buffer.length;
   return this;
 };
+
+/** */
+StringBuffer.prototype.append = function(charCode){
+  this._buffer += String.fromCharCode(charCode);
+  this.length = this._buffer.length;
+  return this;
+};
+
+/** */
+StringBuffer.prototype.charCodeAt = function(offset){
+  return this._buffer.charCodeAt(offset);
+};
+
+/** */
+StringBuffer.prototype.charAt = function(offset){
+  return this._buffer.charAt(offset);
+};
+
+/** */
+StringBuffer.prototype.read = StringBuffer.prototype.charCodeAt;
 
 /** */
 StringBuffer.prototype.setLength = function(newLength){
-  var msg;
-  if(newLength < 0 || newLength > this._buffer.length){
-    msg = 'newLength must be between 0 and ' + (this._buffer.length);
-    msg += ', ' + newLength + ' given.';
-    throw new RangeError(msg);
-  }
-  this._buffer = this._buffer.slice(0, newLength);
+  this.constructor.prototype.setLength.call(this, newLength);
+  this._buffer = this._buffer.slice(0, this.length);
   return this;
-};
-
-/** */
-StringBuffer.prototype.getLength = function(){
-  return this._buffer.length;
 };
 
 /**

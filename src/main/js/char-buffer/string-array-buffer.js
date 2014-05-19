@@ -21,9 +21,9 @@ function StringArrayBuffer(initCapacity){
   if(!(this instanceof StringArrayBuffer)){
     return new StringArrayBuffer(initCapacity);
   }
+  CharBuffer.call(this);
   initCapacity = initCapacity || 16;
   this._buffer = new Array(initCapacity);
-  this._length = 0;
 }
 
 StringArrayBuffer.prototype = new CharBuffer();
@@ -34,39 +34,43 @@ if(!StringArrayBuffer.name){
 }
 
 /**
-  * Appends a charCode to the buffer using
+  * Write a charCode to the buffer using
   * {@link String#fromCharCode} and {@link Array#push []}.
   *
   * @param {Number} charCode The charCode to append.
+  * @param {Number} offset The zero based offset to write at.
   */
-StringArrayBuffer.prototype.append = function(charCode){
-  this._buffer[this._length++] = String.fromCharCode(charCode);
-  return this;
-};
-
-/** */
-StringArrayBuffer.prototype.setLength = function(newLength){
-  var msg;
-  if(newLength < 0 || newLength > this._buffer.length){
-    msg = 'newLength must be between 0 and ' + (this._buffer.length);
-    msg += ', ' + newLength + ' given.';
-    throw new RangeError(msg);
+StringArrayBuffer.prototype.write = function(charCode, offset){
+  if(typeof offset === 'undefined'){
+    offset = this.length;
   }
-  this._length = newLength;
+  this._buffer[offset] = String.fromCharCode(charCode);
+  this.length = offset+1 > this.length ? offset+1 : this.length, true;
   return this;
 };
 
 /** */
-StringArrayBuffer.prototype.getLength = function(){
-  return this._length;
+StringArrayBuffer.prototype.append = StringArrayBuffer.prototype.write;
+
+/** */
+StringArrayBuffer.prototype.read = function(offset){
+  return this._buffer[offset].charCodeAt(0);
 };
+
+/** */
+StringArrayBuffer.prototype.charAt = function(offset){
+  return this._buffer[offset];
+};
+
+/** */
+StringArrayBuffer.prototype.charCodeAt = StringArrayBuffer.prototype.read;
 
 /**
   * Returns the {@link String} represented by this buffer.
   * @return {String} The string.
   */
 StringArrayBuffer.prototype.toString = function(){
-  return this._buffer.slice(0,this._length).join('');
+  return this._buffer.slice(0,this.length).join('');
 };
 
 /**

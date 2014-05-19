@@ -29,7 +29,7 @@ module.exports = function(grunt) {
         src: ['target/temp/requirejs/**/*'],
       },
       'bower-requirejs-post': {
-        src: ['target/bower/build.txt']
+        src: ['target/temp/bower/build.txt']
       },
     },
     copy: {
@@ -44,6 +44,15 @@ module.exports = function(grunt) {
             expand: true,
             cwd: 'src/test/js/', src: ['**'],
             dest: 'target/temp/requirejs/test'
+          },
+        ],
+      },
+      'bower-requirejs-post': {
+        files: [
+          {
+            expand: true,
+            cwd: 'target/temp/bower', src: ['**'],
+            dest: 'target/bower'
           },
         ],
       },
@@ -122,7 +131,7 @@ module.exports = function(grunt) {
           baseUrl: 'target/temp/requirejs',
           name: 'char-buffer',
           cjsTranslate: true,
-          out: 'target/bower/char-buffer.amd.js',
+          dir: 'target/temp/bower',
           optimize: 'none',
         }
       },
@@ -136,7 +145,7 @@ module.exports = function(grunt) {
             startFile: 'src/build/bower/templates/wrap.umd.start.frag',
             endFile: 'src/build/bower/templates/wrap.umd.end.frag'
           },
-          out: 'target/bower/char-buffer.js',
+          out: 'target/bower/char-buffer.global.js',
           optimize: 'none',
         }
       }
@@ -327,7 +336,7 @@ module.exports = function(grunt) {
   );
   grunt.registerTask(
     'bower-requirejs-post',
-    ['clean:bower-requirejs-post']
+    ['clean:bower-requirejs-post', 'copy:bower-requirejs-post']
   );
   grunt.registerTask(
     'bower-requirejs',
