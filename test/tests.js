@@ -26,8 +26,11 @@
       i, name_;
   
   function describeBasicTest(BufferConstr, data, useNew){
-    var MAX_LEN = 40,
-        dataLen = data.length,
+    var dataLen = data.length,
+        MAX_LEN = dataLen<=40 ? dataLen : 40,
+        MID = Math.round(dataLen/2),
+        TEST_CHAR = 'a',
+        TEST_CHARCODE = TEST_CHAR.charCodeAt(0),
         shortened = data.substring(0, MAX_LEN),
         bufferConstr = BufferConstr;
   
@@ -41,13 +44,26 @@
   
       for(j=0; j<dataLen; j++){
         buffer.append(data.charCodeAt(j));
-        if(j === Math.round(dataLen/2)){
-          expect(buffer.getLength()).to.be(j+1);
+        if(j === MID){
+          expect(buffer.length).to.be(j+1);
           expect(buffer.toString()).to.be(data.substr(0,j+1));
         }
       }
   
+      expect(buffer.length).to.be(dataLen);
       expect(buffer.toString()).to.be(data);
+  
+      buffer.write(TEST_CHARCODE, MID);
+  
+      for(j=0; j<MAX_LEN; j++){
+        if(j===MID){
+          expect(buffer.charAt(j)).to.be(TEST_CHAR);
+          expect(buffer.charCodeAt(j)).to.be(TEST_CHARCODE);
+        }else{
+          expect(buffer.charAt(j)).to.be(data.charAt(j));
+          expect(buffer.charCodeAt(j)).to.be(data.charCodeAt(j));
+        }
+      }
   
       expect(function(){
         buffer.setLength(-1);
@@ -58,6 +74,12 @@
       }).not.to.throwException();
   
       expect(buffer.toString()).to.be(data.substr(0,1));
+  
+      expect(function(){
+        // same as append
+        buffer.write(data.charCodeAt(1), buffer.getLength());
+      }).not.to.throwException();
+      expect(buffer.toString()).to.be(data.substr(0,2));
   
       done();
     });
