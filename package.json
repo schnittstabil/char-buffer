@@ -1,6 +1,6 @@
 {
   "name": "char-buffer",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "Collect CharCodes and convert them to string.",
   "homepage": "https://github.com/schnittstabil/char-buffer",
   "keywords": [
@@ -30,8 +30,8 @@
   "preferGlobal": false,
   "main": "./index.js",
   "scripts": {
-    "test": "grunt test",
-    "postinstall" : "cd node_modules && ln -s .. char-buffer && cd ../test && ../node_modules/.bin/bower install"
+    "pretest": "cd node_modules && ln -s .. char-buffer && cd ../test && ../node_modules/.bin/bower install",
+    "test": "grunt test"
   },
   "engines": {
     "node": ">= 0.8.0"
@@ -47,7 +47,6 @@
     "grunt-contrib-connect": "^0.7.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-istanbul": "^1.2.0",
-    "grunt-mocha-test": "^0.10.2",
     "grunt-saucelabs": "^5.1.3",
     "istanbul": "^0.2.7"
   }
