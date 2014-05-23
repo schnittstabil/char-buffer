@@ -29,9 +29,10 @@ module.exports = function(grunt) {
           coverage: true,
           recursive: true,
           reporter: 'spec',
+          root: '.',
           mask: '**/*_test.js',
           require: ['test/inject'],
-          reportFormats: ['lcovonly'],
+          reportFormats: ['cobertura', 'lcovonly'],
         }
       },
     },
