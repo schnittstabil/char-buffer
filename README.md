@@ -15,6 +15,34 @@ Collect CharCodes and convert them to a string.
     npm install char-buffer
     ```
 
+### Component
+
+1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
+
+2. Install [component](http://component.io/):
+    ```bash
+    npm install component --global
+    ```
+
+3. Create component.json:
+    ```json
+    {
+      "name": "getting-started",
+      "dependencies": {
+        "schnittstabil/char-buffer": "*"
+      }
+    }
+    ```
+
+4. Install dependencies:
+    ```bash
+    component install
+    ```
+
+5. Run build
+    ```bash
+    component build
+    ```
 
 ### Bower
 
@@ -91,6 +119,28 @@ var TypedArrayBuffer = require('char-buffer/typed-array-buffer'),
 
 // Output 'foo':
 console.log(buffer.append(102).append(111).append(111).toString());
+```
+
+### Component
+
+```javascript
+<script src="build/build.js"></script>
+<script>
+
+// Create the default CharBuffer implementation:
+var CharBuffer = require('char-buffer'),
+    buffer = new CharBuffer(3);
+
+// Or create a specific CharBuffer implementation:
+var CharBuffer = require('char-buffer'),
+    TypedArrayBuffer = CharBuffer.TypedArrayBuffer,
+    buffer           = new TypedArrayBuffer(3);
+
+
+// Output 'foo'
+console.log(buffer.append(102).append(111).append(111).toString());
+
+</script>
 ```
 
 ### Browser Globals (using Bower)
