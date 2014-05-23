@@ -12,6 +12,7 @@ module.exports = {
       amd:    readFileSync('./example.bower.amd.js'),
       global: readFileSync('./example.bower.global.js'),
     },
+    component: readFileSync('./example.component.js'),
     node: readFileSync('./example.node.js'),
   },
 };

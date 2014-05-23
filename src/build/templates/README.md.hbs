@@ -13,6 +13,26 @@ Collect CharCodes and convert them to a string.
 2. Install CharBuffer from [NPM](https://www.npmjs.org/):
 {{#code_helper lang="bash" indent=1}}npm install char-buffer{{/code_helper}}
 
+### Component
+
+1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
+
+2. Install [component](http://component.io/):
+{{#code_helper lang="bash" indent=1}}npm install component --global{{/code_helper}}
+
+3. Create component.json:
+{{#code_helper lang="json" indent=1}}{
+  "name": "getting-started",
+  "dependencies": {
+    "schnittstabil/char-buffer": "*"
+  }
+}{{/code_helper}}
+
+4. Install dependencies:
+{{#code_helper lang="bash" indent=1}}component install{{/code_helper}}
+
+5. Run build
+{{#code_helper lang="bash" indent=1}}component build{{/code_helper}}
 
 ### Bower
 
@@ -47,16 +67,20 @@ Collect CharCodes and convert them to a string.
 
 {{#code_helper lang="javascript"}}{{{example.node}}}{{/code_helper}}
 
+### Component
+
+{{#code_helper lang="javascript"}}{{>example.component.html}}{{/code_helper}}
+
 ### Browser Globals (using Bower)
 
-{{#code_helper lang="html"}}{{> example.bower.global.html }}{{/code_helper}}
+{{#code_helper lang="html"}}{{>example.bower.global.html}}{{/code_helper}}
 
 
 ### Asynchronous Module Definition (using Bower)
 
 See [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api/blob/master/AMD.md) for details.
 
-{{#code_helper lang="html"}}{{> example.bower.amd.html }}{{/code_helper}}
+{{#code_helper lang="html"}}{{>example.bower.amd.html}}{{/code_helper}}
 
 ## License
 
