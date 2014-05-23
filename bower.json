@@ -1,6 +1,6 @@
 {
   "name": "char-buffer",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "homepage": "https://github.com/schnittstabil/char-buffer",
   "authors": [
     "Michael Mayer <michael@schnittstabil.de>"
@@ -9,7 +9,8 @@
   "main": "char-buffer.js",
   "moduleType": [
     "amd",
-    "globals"
+    "globals",
+    "node"
   ],
   "keywords": [
     "Char",

@@ -24,7 +24,7 @@ Collect CharCodes and convert them to a string.
     npm install component --global
     ```
 
-3. Create component.json:
+3. Create `component.json`:
     ```json
     {
       "name": "getting-started",
@@ -123,7 +123,7 @@ console.log(buffer.append(102).append(111).append(111).toString());
 
 ### Component
 
-```javascript
+```html
 <script src="build/build.js"></script>
 <script>
 
