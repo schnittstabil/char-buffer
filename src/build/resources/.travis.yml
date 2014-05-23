@@ -7,3 +7,4 @@ node_js:
 - "0.10"
 before_script:
 - npm install -g grunt-cli
+- cd node_modules && ln -s .. char-buffer && cd ../test && ../node_modules/.bin/bower install
