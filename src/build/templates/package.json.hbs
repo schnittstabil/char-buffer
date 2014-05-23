@@ -20,7 +20,7 @@
   "main": "./index.js",
   "scripts": {
     "test": "grunt test",
-    "postinstall" : "ln -s -t node_modules ../ && cd test && ../node_modules/.bin/bower install"
+    "postinstall" : "cd node_modules && ln -s .. char-buffer && cd ../test && ../node_modules/.bin/bower install"
   },
   "engines": {
     "node": "{{{engines.node}}}"
