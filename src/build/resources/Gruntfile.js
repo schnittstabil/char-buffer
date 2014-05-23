@@ -22,13 +22,18 @@ module.exports = function(grunt) {
         }
       }
     },
-    mochaTest: {
-      all: {
+    'mocha_istanbul': {
+      coveralls: {
+        src: 'test/js',
         options: {
+          coverage: true,
+          recursive: true,
           reporter: 'spec',
+          mask: '**/*_test.js',
           require: ['test/inject'],
-        },
-        src: ['test/js/**/*_test.js']
+          coverageFolder: 'target/doc/coverage',
+          reportFormats: ['lcovonly'],
+        }
       },
     },
     watch: {}
@@ -39,6 +44,15 @@ module.exports = function(grunt) {
     if (key !== 'grunt' && key.indexOf('grunt') === 0) grunt.loadNpmTasks(key);
   }
 
+  grunt.event.on('coverage', function(lcov, done){
+    require('coveralls').handleInput(lcov, function(err){
+      if (err) {
+        return done(err);
+      }
+      done();
+    });
+  });
+
   grunt.registerTask('dev', ['connect', 'watch']);
-  grunt.registerTask('test', ['mochaTest', 'connect', 'saucelabs-mocha']);
+  grunt.registerTask('test', ['mocha_istanbul', 'connect', 'saucelabs-mocha']);
 };

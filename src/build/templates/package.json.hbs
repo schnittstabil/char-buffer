@@ -19,6 +19,7 @@
   "preferGlobal": false,
   "main": "./index.js",
   "scripts": {
+    "pretest": "cd node_modules && ln -s .. char-buffer && cd ../test && ../node_modules/.bin/bower install",
     "test": "grunt test"
   },
   "engines": {
@@ -29,6 +30,7 @@
     {{/if}}"{{@key}}": "{{{this}}}"{{/each}}
   },
   "devDependencies": {
+    "coveralls": "{{{devDependencies.coveralls}}}",
     "expect.js": "{{{devDependencies.[expect.js]}}}",
     "mocha": "{{{devDependencies.mocha}}}",
     "bower": "{{{devDependencies.bower}}}",
@@ -36,7 +38,6 @@
     "grunt-contrib-connect": "{{{devDependencies.[grunt-contrib-connect]}}}",
     "grunt-contrib-watch": "{{{devDependencies.[grunt-contrib-watch]}}}",
     "grunt-mocha-istanbul": "{{{devDependencies.[grunt-mocha-istanbul]}}}",
-    "grunt-mocha-test": "{{{devDependencies.[grunt-mocha-test]}}}",
     "grunt-saucelabs": "{{{devDependencies.[grunt-saucelabs]}}}",
     "istanbul": "{{{devDependencies.istanbul}}}"
   }
