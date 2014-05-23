@@ -1,4 +1,4 @@
-define(function (require, exports, module) {
+'use strict';
 var CharBuffer = require('./char-buffer');
 
 /**
@@ -81,5 +81,3 @@ StringArrayBuffer.isSupported = true;
 
 
 module.exports = StringArrayBuffer;
-
-});

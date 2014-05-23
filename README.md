@@ -120,7 +120,7 @@ See [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api/bl
 
 ```html
 <script src="path/to/your/amd/loader.js"></script>
-<script src="bower_components/char-buffer/char-buffer.js"></script>
+<script src="bower_components/char-buffer/char-buffer.amd.js"></script>
 <script>
 
 /**
@@ -159,5 +159,4 @@ require(['char-buffer/typed-array-buffer'], function(TypedArrayBuffer){
 Copyright (c) 2014 Michael Mayer
 
 Licensed under the MIT license.
-
 

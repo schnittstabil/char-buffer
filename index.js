@@ -1,4 +1,4 @@
-define(function (require, exports, module) {
+'use strict';
 /**
   * @class CharBuffer
   */
@@ -86,5 +86,3 @@ for(i=0; i<CharBuffer.CharBuffers.length; i++){
 CharBuffer.isSupported = CharBuffer._default ? CharBuffer._default.isSupported : false;
 
 exports = module.exports = CharBuffer;
-
-});

@@ -1,4 +1,4 @@
-
+'use strict';
 
 function buildTestString(len){
   var strBuffer = '',

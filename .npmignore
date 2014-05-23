@@ -1,0 +1,11 @@
+bower_components
+bower.json
+browsers.json
+build.txt
+char-buffer.amd.js
+char-buffer.global.js
+component.json
+.gitignore
+Gruntfile.js
+test
+.travis.yml
