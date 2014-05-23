@@ -31,7 +31,6 @@ module.exports = function(grunt) {
           reporter: 'spec',
           mask: '**/*_test.js',
           require: ['test/inject'],
-          coverageFolder: 'target/doc/coverage',
           reportFormats: ['lcovonly'],
         }
       },
