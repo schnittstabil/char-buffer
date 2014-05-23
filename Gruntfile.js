@@ -1,14 +1,18 @@
 'use strict';
 var _ = require('lodash'),
-    examples = require('./src/build/templates/examples');
+    glob = require('glob'),
+    examples = require('./src/build/templates/examples'),
+    srcs = glob.sync('**/*.js', {cwd:'src/main/js/char-buffer'});
 
 module.exports = function(grunt) {
+  var packageJson = grunt.file.readJSON('package.json');
+
   // Project configuration.
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
+    pkg: packageJson,
     clean: {
-      'bower-target': {
-        src: ['target/bower/**/*', 'target/bower/**/.*', '!target/bower/.git'],
+      'master': {
+        src: ['target/master/**/*', 'target/master/**/.*', '!target/master/.git'],
       },
       temp: {
         src: ['target/temp/**/*'],
@@ -21,15 +25,6 @@ module.exports = function(grunt) {
       },
       docCoverage: {
         src: ['target/doc/coverage/**/*'],
-      },
-      'npm-pre': {
-        src: ['target/npm/**/*', 'target/npm/**/.*', '!target/npm/.git'],
-      },
-      'bower-requirejs-pre': {
-        src: ['target/temp/requirejs/**/*'],
-      },
-      'bower-requirejs-post': {
-        src: ['target/temp/bower/build.txt']
       },
     },
     copy: {
@@ -47,64 +42,32 @@ module.exports = function(grunt) {
           },
         ],
       },
-      'bower-requirejs-post': {
-        files: [
-          {
-            expand: true,
-            cwd: 'target/temp/bower', src: ['**'],
-            dest: 'target/bower'
-          },
-        ],
-      },
-      'bower-resources': {
+      master: {
         files: [
           {
             expand: true,
             cwd: 'src/build/resources/', src: ['**', '**/.*'],
-            dest: 'target/bower'
+            dest: 'target/master'
           },
           {
             expand: true,
-            cwd: 'src/build/bower/resources/', src: ['**', '**/.*'],
-            dest: 'target/bower'
-          },
-        ],
-      },
-      npm: {
-        files: [
-          {
-            expand: true,
-            cwd: 'src/build/resources/', src: ['**', '**/.*'],
-            dest: 'target/npm'
-          },
-          {
-            expand: true,
-            cwd: 'src/build/npm/resources/', src: ['**', '**/.*'],
-            dest: 'target/npm'
+            cwd: '.', src: ['LICENSE'],
+            dest: 'target/master'
           },
           {
             expand: true,
             cwd: 'src/main/js/char-buffer', src: ['**', '**/.*'],
-            dest: 'target/npm'
+            dest: 'target/master'
           },
           {
             expand: true,
             cwd: 'src/test/js/', src: ['**', '**/.*'],
-            dest: 'target/npm/test/js'
+            dest: 'target/master/test/js'
           },
           {
             expand: true,
             cwd: 'src/test/', src: ['inject.js'],
-            dest: 'target/npm/test/'
-          },
-        ],
-      },
-      project: {
-        files: [
-          {
-            expand: true,
-            cwd: 'src/build/resources/', src: ['**', '**/.*'],
-            dest: './'
+            dest: 'target/master/test/'
           },
         ],
       },
@@ -122,7 +85,7 @@ module.exports = function(grunt) {
       },
       'bower-test': {
         src: ['src/test/js/**/*.js'],
-        dest: 'target/bower/test/tests.js',
+        dest: 'target/master/test/tests.js',
       },
     },
     requirejs: {
@@ -131,7 +94,7 @@ module.exports = function(grunt) {
           baseUrl: 'target/temp/requirejs',
           name: 'char-buffer',
           cjsTranslate: true,
-          dir: 'target/temp/bower',
+          out: 'target/master/char-buffer.amd.js',
           optimize: 'none',
         }
       },
@@ -142,29 +105,29 @@ module.exports = function(grunt) {
           include: ['char-buffer'],
           cjsTranslate: true,
           wrap: {
-            startFile: 'src/build/bower/templates/wrap.umd.start.frag',
-            endFile: 'src/build/bower/templates/wrap.umd.end.frag'
+            startFile: 'src/build/templates/wrap.umd.start.frag',
+            endFile: 'src/build/templates/wrap.umd.end.frag'
           },
-          out: 'target/bower/char-buffer.global.js',
+          out: 'target/master/char-buffer.global.js',
           optimize: 'none',
         }
       }
     },
     'compile-handlebars': {
-      bowerBowerJson: {
-        template: 'src/build/bower/templates/bower.hbs',
-        output: 'target/bower/bower.json',
-        templateData: 'package.json',
+      bowerJson: {
+        template: 'src/build/templates/bower.json.hbs',
+        output: 'target/master/bower.json',
+        templateData: packageJson,
       },
-      bowerPackageJson: {
-        template: 'src/build/bower/templates/package.hbs',
-        output: 'target/bower/package.json',
-        templateData: 'package.json',
+      packageJson: {
+        template: 'src/build/templates/package.json.hbs',
+        output: 'target/master/package.json',
+        templateData: packageJson,
       },
-      npmPackageJson: {
-        template: 'src/build/npm/templates/package.hbs',
-        output: 'target/npm/package.json',
-        templateData: 'package.json',
+      componentJson: {
+        template: 'src/build/templates/component.json.hbs',
+        output: 'target/master/component.json',
+        templateData: _.merge(_.clone(packageJson, true), {scripts:srcs}),
       },
       docWelcome: {
         template: 'src/build/templates/README.md.hbs',
@@ -178,21 +141,7 @@ module.exports = function(grunt) {
         helpers: 'src/build/templates/code_helper.js',
         partials: 'src/build/templates/**/*.hbs',
         templateData: _.merge(_.clone(examples, true), {html:false}),
-        output: 'README.md',
-      },
-      bowerREADME: {
-        template: 'src/build/templates/README.md.hbs',
-        helpers: 'src/build/templates/code_helper.js',
-        partials: 'src/build/templates/**/*.hbs',
-        templateData: _.merge(_.clone(examples, true), {html:false}),
-        output: 'target/bower/README.md',
-      },
-      npmREADME: {
-        template: 'src/build/templates/README.md.hbs',
-        helpers: 'src/build/templates/code_helper.js',
-        partials: 'src/build/templates/**/*.hbs',
-        templateData: _.merge(_.clone(examples, true), {html:false}),
-        output: 'target/npm/README.md',
+        output: 'target/master/README.md',
       },
     },
     mochaTest: {
@@ -329,52 +278,29 @@ module.exports = function(grunt) {
       ]
     );
 
-  // Bower tasks
-  grunt.registerTask(
-    'bower-requirejs-pre',
-    ['clean:bower-requirejs-pre', 'copy:bower-requirejs-pre']
-  );
-  grunt.registerTask(
-    'bower-requirejs-post',
-    ['clean:bower-requirejs-post', 'copy:bower-requirejs-post']
-  );
-  grunt.registerTask(
-    'bower-requirejs',
-    ['bower-requirejs-pre', 'requirejs', 'bower-requirejs-post']
-  );
-  grunt.registerTask(
-    'bower-templates',
-    [
-      'compile-handlebars:bowerBowerJson',
-      'compile-handlebars:bowerPackageJson',
-      'compile-handlebars:bowerREADME',
-    ]
-  );
-  grunt.registerTask(
-    'bower',
-    [
-      'clean:bower-target',
-      'bower-requirejs',
-      'copy:bower-resources', 'concat:bower-test', 'bower-templates'
-    ]
-  );
 
-  // Npm tasks.
-  grunt.registerTask('npm-pre',  ['clean:npm-pre']);
+  // master task
   grunt.registerTask(
-    'npm-templates',
+    'master',
     [
-      'compile-handlebars:npmPackageJson',
-      'compile-handlebars:npmREADME',
+      'clean:master',
+      'clean:temp',
+
+      'copy:master',
+
+      'copy:bower-requirejs-pre',
+      'requirejs',
+      'concat:bower-test',
+
+      'compile-handlebars:bowerJson',
+      'compile-handlebars:packageJson',
+      'compile-handlebars:componentJson',
+      'compile-handlebars:README',
     ]
   );
-  grunt.registerTask('npm', ['npm-pre', 'copy:npm', 'npm-templates']);
-
-  // Project tasks.
-  grunt.registerTask('project', ['compile-handlebars:README', 'copy:project']);
 
   // Dist tasks.
-  grunt.registerTask('dist', ['project', 'bower', 'doc', 'npm']);
+  grunt.registerTask('dist', ['master', 'doc']);
 
   // Default task.
   grunt.registerTask('default', ['compile-handlebars:README']);

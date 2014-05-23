@@ -19,7 +19,8 @@
   "preferGlobal": false,
   "main": "./index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/_mocha --require 'test/inject' -R spec --recursive test/js"
+    "test": "grunt test",
+    "postinstall" : "cd test && ../node_modules/.bin/bower install"
   },
   "engines": {
     "node": "{{{engines.node}}}"
@@ -30,6 +31,14 @@
   },
   "devDependencies": {
     "expect.js": "{{{devDependencies.[expect.js]}}}",
-    "mocha": "{{{devDependencies.mocha}}}"
+    "mocha": "{{{devDependencies.mocha}}}",
+    "bower": "{{{devDependencies.bower}}}",
+    "grunt": "{{{devDependencies.grunt}}}",
+    "grunt-contrib-connect": "{{{devDependencies.[grunt-contrib-connect]}}}",
+    "grunt-contrib-watch": "{{{devDependencies.[grunt-contrib-watch]}}}",
+    "grunt-mocha-istanbul": "{{{devDependencies.[grunt-mocha-istanbul]}}}",
+    "grunt-mocha-test": "{{{devDependencies.[grunt-mocha-test]}}}",
+    "grunt-saucelabs": "{{{devDependencies.[grunt-saucelabs]}}}",
+    "istanbul": "{{{devDependencies.istanbul}}}"
   }
 }

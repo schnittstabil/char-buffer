@@ -1,6 +1,6 @@
 {
   "name": "char-buffer",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "license": "MIT",
   "description": "Collect CharCodes and convert them to string.",
   "homepage": "https://github.com/schnittstabil/char-buffer",
@@ -44,6 +44,7 @@
     "bower": "^1.3.2",
     "coveralls": "^2.10.0",
     "expect.js": "^0.3.1",
+    "glob": "^4.0.0",
     "grunt": "^0.4.4",
     "grunt-compile-handlebars": "^0.7.3",
     "grunt-contrib-clean": "^0.5.0",

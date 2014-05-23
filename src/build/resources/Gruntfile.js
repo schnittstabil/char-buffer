@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     connect: {
       server: {
         options: {
-          base: "",
+          base: '',
           port: 9999
         }
       }
@@ -22,6 +22,15 @@ module.exports = function(grunt) {
         }
       }
     },
+    mochaTest: {
+      all: {
+        options: {
+          reporter: 'spec',
+          require: ['test/inject'],
+        },
+        src: ['test/js/**/*_test.js']
+      },
+    },
     watch: {}
   });
 
@@ -31,5 +40,5 @@ module.exports = function(grunt) {
   }
 
   grunt.registerTask('dev', ['connect', 'watch']);
-  grunt.registerTask("test", ["connect", "saucelabs-mocha"]);
+  grunt.registerTask('test', ['mochaTest', 'connect', 'saucelabs-mocha']);
 };

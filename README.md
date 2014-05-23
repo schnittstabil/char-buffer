@@ -1,163 +1,74 @@
-# char-buffer [![Dependencies Status Image](https://gemnasium.com/schnittstabil/char-buffer.svg)](https://gemnasium.com/schnittstabil/char-buffer) [![Build Status Image](https://travis-ci.org/schnittstabil/char-buffer.svg)](https://travis-ci.org/schnittstabil/char-buffer) [![Coverage Status](https://coveralls.io/repos/schnittstabil/char-buffer/badge.png)](https://coveralls.io/r/schnittstabil/char-buffer) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+# DEVELOPMENT README
 
-Collect CharCodes and convert them to a string.
+## Setup target/doc
 
-[![Selenium Test Status](https://saucelabs.com/browser-matrix/char-buffer.svg)](https://saucelabs.com/u/char-buffer)
+### 1st time
 
-## Installation
-
-### Node Package Manager (npm)
-
-1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
-
-2. Install CharBuffer from [NPM](https://www.npmjs.org/):
-    ```bash
-    npm install char-buffer
-    ```
-
-
-### Bower
-
-1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
-
-2. Install [Bower](http://bower.io/):
-    ```bash
-    npm install bower --global
-    ```
-
-3. Install CharBuffer from [bower.io](http://bower.io/search):
-    ```bash
-    bower install char-buffer
-    ```
-
-
-## Basic Usage
-
-`CharBuffer` provides multiple implementations to collect `CharCodes` via a common interface (`CharBuffer.CharBuffer`):
-
-* `CharBuffer.StringBuffer` uses a single `String`
-* `CharBuffer.StringArrayBuffer` uses an `Array` of `String`s
-* `CharBuffer.TypedArrayBuffer` uses an [Uint16Array](https://developer.mozilla.org/en-US/docs/Web/API/Uint16Array)
-* `CharBuffer.NodeBuffer` uses a [Node.js Buffer](http://nodejs.org/api/buffer.html)
-
-```javascript
-var buffer;
-
-// Create the default CharBuffer of your platform:
-buffer = new CharBuffer();
-
-// Same as before, but provide an estimate of the length of your string:
-buffer = new CharBuffer(3);
-
-// Create a specific CharBuffer implementation, if supported:
-if(CharBuffer.TypedArrayBuffer.isSupported)
-  buffer = new CharBuffer.TypedArrayBuffer(3);
-}
-
-
-// Append a CharCode:
-buffer.append(102);
-
-// Append two more CharCodes:
-buffer.append(111).append(111);
-
-// Output 'foo':
-console.log(buffer.toString());
+```bash
+mkdir --parents target/doc/ && cd target/doc/
+git clone git@github.com:schnittstabil/char-buffer.git .
+git checkout --orphan gh-pages
+git rm -rf .
+cd ../.. && grunt doc && cd target/doc/
+git add .
+git commit -m "Initial commit"
+git push -u origin gh-pages
+git branch --delete master
+cd ../..
+git pull
 ```
 
-## Documentations
+### nth time
 
-* [API](http://schnittstabil.github.io/char-buffer/api/#!/api)
-* [Code Coverage Report](http://schnittstabil.github.io/char-buffer/coverage)
-
-## Examples
-
-### Node.js
-
-```javascript
-// Create the default CharBuffer implementation:
-var CharBuffer = require('char-buffer'),
-    buffer     = new CharBuffer(3);
-
-// Or create a specific CharBuffer implementation by CharBuffer:
-var CharBuffer       = require('char-buffer'),
-    TypedArrayBuffer = CharBuffer.TypedArrayBuffer,
-    buffer           = new TypedArrayBuffer(3);
-
-// Or create a specific CharBuffer implementation by package:
-var TypedArrayBuffer = require('char-buffer/typed-array-buffer'),
-    buffer           = new TypedArrayBuffer(3);
-
-
-// Output 'foo':
-console.log(buffer.append(102).append(111).append(111).toString());
+```bash
+mkdir --parents target/doc/ && cd target/doc/
+git clone git@github.com:schnittstabil/char-buffer.git .
+git checkout gh-pages
+git branch --delete master
 ```
 
-### Browser Globals (using Bower)
+## Setup target/master
 
-```html
-<script src="bower_components/char-buffer/char-buffer.global.js"></script>
-<script>
-
-// Create the default CharBuffer implementation:
-var buffer = new CharBuffer(3);
-
-// Or create a specific CharBuffer implementation:
-var TypedArrayBuffer = CharBuffer.TypedArrayBuffer,
-    buffer           = new TypedArrayBuffer(3);
-
-
-// Output 'foo'
-console.log(buffer.append(102).append(111).append(111).toString());
-
-</script>
+```bash
+mkdir --parents target/master/ && cd target/master/
+git clone git@github.com:schnittstabil/char-buffer.git .
 ```
 
+## Publish
 
-### Asynchronous Module Definition (using Bower)
+### Bower 1st time
 
-See [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api/blob/master/AMD.md) for details.
-
-```html
-<script src="path/to/your/amd/loader.js"></script>
-<script src="bower_components/char-buffer/char-buffer.js"></script>
-<script>
-
-/**
- * Use the CharBuffer package:
- */
-require(['char-buffer'], function(CharBuffer){
-  // create the default CharBuffer implementation:
-  var buffer = new CharBuffer(3);
-
-  // Or create a specific CharBuffer implementation by CharBuffer:
-  var TypedArrayBuffer = CharBuffer.TypedArrayBuffer,
-      buffer = new TypedArrayBuffer(3);
-
-
-  // Output 'foo'
-  console.log(buffer.append(102).append(111).append(111).toString());
-});
-
-
-/**
-  * Or use a specific CharBuffer package:
-  */
-require(['char-buffer/typed-array-buffer'], function(TypedArrayBuffer){
-
-  var buffer = new TypedArrayBuffer(3);
-
-  // Output 'foo'
-  console.log(buffer.append(102).append(111).append(111).toString());
-});
-
-</script>
+```bash
+grunt dist
+cd target/master/
+git add .
+git commit -m "bower v0.1.0"
+git tag v0.1.0
+git push origin master --tags
+bower register char-buffer git@github.com:schnittstabil/char-buffer.git
 ```
 
-## License
+### nth time
+```bash
+grunt dist
+cd target/master/
 
-Copyright (c) 2014 Michael Mayer
+# run tests
+npm install && npm test
 
-Licensed under the MIT license.
+npm pack && xdg-open char-buffer*.tgz
+rm char-buffer*.tgz
 
+# if ok
+npm publish
 
+# bower:
+git add .
+git commit -m "bower vX.Y.Z"
+git tag vX.Y.Z
+git push origin master --tags
+```
+
+## Links
+
+* [JS Unit Testing on Sauce](https://saucelabs.com/docs/javascript-unit-testing-tutorial)
