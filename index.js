@@ -1,4 +1,10 @@
 'use strict';
+import AbstractCharBuffer from './abstract-char-buffer';
+import StringBuffer from './string-buffer';
+import StringArrayBuffer from './string-array-buffer';
+import TypedArrayBuffer from './typed-array-buffer';
+import NodeBuffer from './node-buffer';
+
 /**
   * @class CharBuffer
   */
@@ -12,12 +18,12 @@
   *   {@link String#length length} of the {@link String} represented by this
   *   buffer).
   */
-function CharBuffer(initCapacity){
+function CharBuffer(initCapacity) {
   return CharBuffer._default.call(this, initCapacity);
 }
 
 /* istanbul ignore if: IE-fix */
-if(!CharBuffer.name){
+if (!CharBuffer.name) {
   CharBuffer.name = 'CharBuffer';
 }
 
@@ -25,14 +31,14 @@ if(!CharBuffer.name){
   * @property {CharBuffer[]} CharBuffers
   * @static
   *
-  * Array of all {@link CharBuffer.CharBuffer} implementations.
+  * Array of all {@link CharBuffer.AbstractCharBuffer} implementations.
   */
 CharBuffer.CharBuffers = [
-  require('./char-buffer'),
-  require('./string-buffer'),
-  require('./string-array-buffer'),
-  require('./typed-array-buffer'),
-  require('./node-buffer')
+  AbstractCharBuffer,
+  StringBuffer,
+  StringArrayBuffer,
+  TypedArrayBuffer,
+  NodeBuffer
 ];
 
 /**
@@ -40,13 +46,13 @@ CharBuffer.CharBuffers = [
   *   "TypedArrayBuffer", "NodeBuffer"]]
   * @static
   *
-  * Names of the supported {@link CharBuffer.CharBuffer} implementations of the
+  * Names of the supported {@link CharBuffer.AbstractCharBuffer} implementations of the
   * current platform.
   */
 CharBuffer.supported = [];
 
 /**
-  * @property {CharBuffer.CharBuffer} [_default=
+  * @property {CharBuffer.AbstractCharBuffer} [_default=
   *   CharBuffers.filter(isSupported).last()]
   * @static
   * @private
@@ -58,17 +64,16 @@ CharBuffer.supported = [];
   */
 CharBuffer._default = null;
 
-
 var i,
     buffer;
 
 // last supported {@link CharBuffer.CharBuffers} becomes
 // {@link CharBuffer._default}
-for(i=0; i<CharBuffer.CharBuffers.length; i++){
+for (i = 0; i < CharBuffer.CharBuffers.length; i++) {
   buffer = CharBuffer.CharBuffers[i];
 
   /* istanbul ignore else */
-  if(buffer.isSupported){
+  if (buffer.isSupported) {
     CharBuffer.supported.push(buffer.name);
     CharBuffer._default = buffer;
   }
@@ -85,4 +90,4 @@ for(i=0; i<CharBuffer.CharBuffers.length; i++){
   */
 CharBuffer.isSupported = CharBuffer._default ? CharBuffer._default.isSupported : false;
 
-exports = module.exports = CharBuffer;
+export default CharBuffer;

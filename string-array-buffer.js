@@ -1,11 +1,11 @@
 'use strict';
-var CharBuffer = require('./char-buffer');
+import AbstractCharBuffer from './abstract-char-buffer';
 
 /**
   * @class CharBuffer.StringArrayBuffer
-  * @extends CharBuffer.CharBuffer
+  * @extends CharBuffer.AbstractCharBuffer
   *
-  * {@link CharBuffer.CharBuffer} implementation using an {@link Array} of
+  * {@link CharBuffer.AbstractCharBuffer} implementation using an {@link Array} of
   * {@link String}s.
   */
 
@@ -17,19 +17,19 @@ var CharBuffer = require('./char-buffer');
   *     {@link String#length length} of the {@link String} represented by this
   *     buffer).
   */
-function StringArrayBuffer(initCapacity){
-  if(!(this instanceof StringArrayBuffer)){
+function StringArrayBuffer(initCapacity) {
+  if (!(this instanceof StringArrayBuffer)) {
     return new StringArrayBuffer(initCapacity);
   }
-  CharBuffer.call(this);
+  AbstractCharBuffer.call(this);
   initCapacity = initCapacity || 16;
   this._buffer = new Array(initCapacity);
 }
 
-StringArrayBuffer.prototype = new CharBuffer();
+StringArrayBuffer.prototype = new AbstractCharBuffer();
 
 /* istanbul ignore if: IE-fix */
-if(!StringArrayBuffer.name){
+if (!StringArrayBuffer.name) {
   StringArrayBuffer.name = 'StringArrayBuffer';
 }
 
@@ -40,12 +40,12 @@ if(!StringArrayBuffer.name){
   * @param {Number} charCode The charCode to append.
   * @param {Number} offset The zero based offset to write at.
   */
-StringArrayBuffer.prototype.write = function(charCode, offset){
-  if(typeof offset === 'undefined'){
+StringArrayBuffer.prototype.write = function(charCode, offset) {
+  if (typeof offset === 'undefined') {
     offset = this.length;
   }
   this._buffer[offset] = String.fromCharCode(charCode);
-  this.length = offset+1 > this.length ? offset+1 : this.length, true;
+  this.length = offset + 1 > this.length ? offset + 1 : this.length;
   return this;
 };
 
@@ -53,12 +53,12 @@ StringArrayBuffer.prototype.write = function(charCode, offset){
 StringArrayBuffer.prototype.append = StringArrayBuffer.prototype.write;
 
 /** */
-StringArrayBuffer.prototype.read = function(offset){
+StringArrayBuffer.prototype.read = function(offset) {
   return this._buffer[offset].charCodeAt(0);
 };
 
 /** */
-StringArrayBuffer.prototype.charAt = function(offset){
+StringArrayBuffer.prototype.charAt = function(offset) {
   return this._buffer[offset];
 };
 
@@ -69,15 +69,14 @@ StringArrayBuffer.prototype.charCodeAt = StringArrayBuffer.prototype.read;
   * Returns the {@link String} represented by this buffer.
   * @return {String} The string.
   */
-StringArrayBuffer.prototype.toString = function(){
-  return this._buffer.slice(0,this.length).join('');
+StringArrayBuffer.prototype.toString = function() {
+  return this._buffer.slice(0, this.length).join('');
 };
 
 /**
-  * @inheritdoc CharBuffer.CharBuffer#isSupported
+  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
   * @static
   */
 StringArrayBuffer.isSupported = true;
 
-
-module.exports = StringArrayBuffer;
+export default StringArrayBuffer;

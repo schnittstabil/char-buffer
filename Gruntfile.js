@@ -1,6 +1,8 @@
 'use strict';
 
 module.exports = function(grunt) {
+  var browsers = grunt.file.readJSON('browsers.json'),
+      testname = 'char-buffer_' + grunt.template.today('yymmdd-HH:MM');
   grunt.initConfig({
     connect: {
       server: {
@@ -11,32 +13,43 @@ module.exports = function(grunt) {
       }
     },
     'saucelabs-mocha': {
-      all: {
+      global: {
         options: {
-          urls: ['http://127.0.0.1:9999/test/index.html'],
+          urls: [
+            'http://127.0.0.1:9999/test/index.global.html',
+          ],
           build: process.env.TRAVIS_JOB_ID,
-          concurrency: 1,
-          browsers: grunt.file.readJSON('browsers.json'),
-          testname: 'char-buffer_' + grunt.template.today('yymmdd-HH:MM'),
-          tags: ['bower']
-        }
-      }
-    },
-    'mocha_istanbul': {
-      coveralls: {
-        src: 'test/js',
+          throttled: 1,
+          browsers: browsers,
+          testname: testname,
+          tags: ['global'],
+        },
+      },
+      component: {
         options: {
-          coverage: true,
-          recursive: true,
-          reporter: 'spec',
-          root: '..',
-          mask: '**/*_test.js',
-          require: ['test/inject'],
-          reportFormats: ['cobertura', 'lcovonly'],
-        }
+          urls: [
+            'http://127.0.0.1:9999/test/index.component.html',
+          ],
+          build: process.env.TRAVIS_JOB_ID,
+          throttled: 1,
+          browsers: browsers,
+          testname: testname,
+          tags: ['component'],
+        },
+      },
+      amd: {
+        options: {
+          urls: [
+            'http://127.0.0.1:9999/test/index.amd.html',
+          ],
+          build: process.env.TRAVIS_JOB_ID,
+          throttled: 1,
+          browsers: browsers,
+          testname: testname,
+          tags: ['amd'],
+        },
       },
     },
-    watch: {}
   });
 
   // Loading dependencies
@@ -44,15 +57,5 @@ module.exports = function(grunt) {
     if (key !== 'grunt' && key.indexOf('grunt') === 0) grunt.loadNpmTasks(key);
   }
 
-  grunt.event.on('coverage', function(lcov, done){
-    require('coveralls').handleInput(lcov, function(err){
-      if (err) {
-        return done(err);
-      }
-      done();
-    });
-  });
-
-  grunt.registerTask('dev', ['connect', 'watch']);
-  grunt.registerTask('test', ['mocha_istanbul', 'connect', 'saucelabs-mocha']);
+  grunt.registerTask('test', ['connect', 'saucelabs-mocha']);
 };

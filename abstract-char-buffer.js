@@ -1,6 +1,6 @@
 'use strict';
 /**
-  * @class CharBuffer.CharBuffer
+  * @class CharBuffer.AbstractCharBuffer
   * @abstract
   *
   * Base class for all CharBuffers.
@@ -13,15 +13,15 @@
   *     {@link String#length length} of the {@link String} represented by this
   *     buffer).
   */
-function CharBuffer(initCapacity){
-  if(!(this instanceof CharBuffer)){
-    return new CharBuffer(initCapacity);
+function AbstractCharBuffer(initCapacity) {
+  if (!(this instanceof AbstractCharBuffer)) {
+    return new AbstractCharBuffer(initCapacity);
   }
 }
 
 /* istanbul ignore if: IE-fix */
-if(!CharBuffer.name){
-  CharBuffer.name = 'CharBuffer';
+if (!AbstractCharBuffer.name) {
+  AbstractCharBuffer.name = 'AbstractCharBuffer';
 }
 
 /**
@@ -32,7 +32,7 @@ if(!CharBuffer.name){
   *
   * @param {Number} charCode The charCode to append.
   */
-CharBuffer.prototype.append = undefined;
+AbstractCharBuffer.prototype.append = undefined;
 
 /**
   * @chainable
@@ -44,7 +44,7 @@ CharBuffer.prototype.append = undefined;
   * @param {Number} offset The zero based offset to write at.
   * @throws {Error} if offset < 0 or offset > this.length
   */
-CharBuffer.prototype.write = undefined;
+AbstractCharBuffer.prototype.write = undefined;
 
 /**
   * @abstract
@@ -55,7 +55,7 @@ CharBuffer.prototype.write = undefined;
   * @return {Number} The charCode.
   * @throws {Error} if offset < 0 or offset >= this.length
   */
-CharBuffer.prototype.read = undefined;
+AbstractCharBuffer.prototype.read = undefined;
 
 /**
   * @abstract
@@ -66,7 +66,7 @@ CharBuffer.prototype.read = undefined;
   * @return {Number} The charCode.
   * @throws {Error} if offset < 0 or offset >= this.length
   */
-CharBuffer.prototype.charCodeAt = undefined;
+AbstractCharBuffer.prototype.charCodeAt = undefined;
 
 /**
   * @abstract
@@ -77,14 +77,13 @@ CharBuffer.prototype.charCodeAt = undefined;
   * @return {String} The char.
   * @throws {Error} if offset < 0 or offset >= this.length
   */
-CharBuffer.prototype.charAt = undefined;
-
+AbstractCharBuffer.prototype.charAt = undefined;
 
 /**
   * @property {Number} length Length of the {@link String} represented by this buffer.
   * @readonly
   */
-CharBuffer.prototype.length = 0;
+AbstractCharBuffer.prototype.length = 0;
 
 /**
   * @abstract
@@ -92,7 +91,7 @@ CharBuffer.prototype.length = 0;
   * Gets the length of the {@link String} represented by this buffer.
   * @return {Number} The length of the {@link String}.
   */
-CharBuffer.prototype.getLength = function(){
+AbstractCharBuffer.prototype.getLength = function() {
   return this.length;
 };
 
@@ -103,9 +102,9 @@ CharBuffer.prototype.getLength = function(){
   * @param {Number} newLength The new length.
   * @throws {RangeError} if `newLength < 0 || newLength > this.length`
   */
-CharBuffer.prototype.setLength = function(newLength){
+AbstractCharBuffer.prototype.setLength = function(newLength) {
   var msg;
-  if(newLength < 0 || newLength > this.length){
+  if (newLength < 0 || newLength > this.length) {
     msg = 'newLength must be between 0 and ' + (this.length);
     msg += ', ' + newLength + ' given.';
     throw new RangeError(msg);
@@ -120,14 +119,14 @@ CharBuffer.prototype.setLength = function(newLength){
   * Returns the {@link String} represented by this buffer.
   * @return {String} The string.
   */
-CharBuffer.prototype.toString = undefined;
+AbstractCharBuffer.prototype.toString = undefined;
 
 /**
   * @property {Boolean}
   * @static
   * @template
-  * Indicates whether this CharBuffer is supported by the current platform.
+  * Indicates whether this AbstractCharBuffer is supported by the current platform.
   */
-CharBuffer.isSupported = false;
+AbstractCharBuffer.isSupported = false;
 
-module.exports = CharBuffer;
+export default AbstractCharBuffer;

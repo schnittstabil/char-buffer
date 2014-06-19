@@ -45,12 +45,12 @@
 }, {
   "browserName": "iphone",
   "platform": "OS X 10.6",
-  "version": "4",
+  "version": "7.1",
   "device-orientation": "portrait"
 }, {
   "browserName": "ipad",
   "platform": "OS X 10.9",
-  "version": "7.1",
+  "version": "4",
   "device-orientation": "portrait"
 }, {
   "browserName": "android",

@@ -6,11 +6,11 @@
     "Michael Mayer <michael@schnittstabil.de>"
   ],
   "description": "Collect CharCodes and convert them to string.",
-  "main": "char-buffer.js",
+  "main": "index.js",
   "moduleType": [
     "amd",
-    "globals",
-    "node"
+    "es6",
+    "globals"
   ],
   "keywords": [
     "Char",
@@ -31,13 +31,14 @@
   "ignore": [
     "bower_components",
     "browsers.json",
+    "build/",
     "build.txt",
     "component.json",
-    ".gitignore",
+    "components/",
+    "**/.*",
     "Gruntfile.js",
     "node_modules",
     "package.json",
-    "test",
-    ".travis.yml"
+    "test"
   ]
 }

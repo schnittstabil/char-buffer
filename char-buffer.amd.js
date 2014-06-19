@@ -1,6 +1,6 @@
-define('char-buffer/char-buffer',['require','exports','module'],function (require, exports, module) {
+define('char-buffer/abstract-char-buffer',['require','exports','module'],function (require, exports, module) {
 /**
-  * @class CharBuffer.CharBuffer
+  * @class CharBuffer.AbstractCharBuffer
   * @abstract
   *
   * Base class for all CharBuffers.
@@ -13,15 +13,15 @@ define('char-buffer/char-buffer',['require','exports','module'],function (requir
   *     {@link String#length length} of the {@link String} represented by this
   *     buffer).
   */
-function CharBuffer(initCapacity){
-  if(!(this instanceof CharBuffer)){
-    return new CharBuffer(initCapacity);
+function AbstractCharBuffer(initCapacity) {
+  if (!(this instanceof AbstractCharBuffer)) {
+    return new AbstractCharBuffer(initCapacity);
   }
 }
 
 /* istanbul ignore if: IE-fix */
-if(!CharBuffer.name){
-  CharBuffer.name = 'CharBuffer';
+if (!AbstractCharBuffer.name) {
+  AbstractCharBuffer.name = 'AbstractCharBuffer';
 }
 
 /**
@@ -32,7 +32,7 @@ if(!CharBuffer.name){
   *
   * @param {Number} charCode The charCode to append.
   */
-CharBuffer.prototype.append = undefined;
+AbstractCharBuffer.prototype.append = undefined;
 
 /**
   * @chainable
@@ -44,7 +44,7 @@ CharBuffer.prototype.append = undefined;
   * @param {Number} offset The zero based offset to write at.
   * @throws {Error} if offset < 0 or offset > this.length
   */
-CharBuffer.prototype.write = undefined;
+AbstractCharBuffer.prototype.write = undefined;
 
 /**
   * @abstract
@@ -55,7 +55,7 @@ CharBuffer.prototype.write = undefined;
   * @return {Number} The charCode.
   * @throws {Error} if offset < 0 or offset >= this.length
   */
-CharBuffer.prototype.read = undefined;
+AbstractCharBuffer.prototype.read = undefined;
 
 /**
   * @abstract
@@ -66,7 +66,7 @@ CharBuffer.prototype.read = undefined;
   * @return {Number} The charCode.
   * @throws {Error} if offset < 0 or offset >= this.length
   */
-CharBuffer.prototype.charCodeAt = undefined;
+AbstractCharBuffer.prototype.charCodeAt = undefined;
 
 /**
   * @abstract
@@ -77,14 +77,13 @@ CharBuffer.prototype.charCodeAt = undefined;
   * @return {String} The char.
   * @throws {Error} if offset < 0 or offset >= this.length
   */
-CharBuffer.prototype.charAt = undefined;
-
+AbstractCharBuffer.prototype.charAt = undefined;
 
 /**
   * @property {Number} length Length of the {@link String} represented by this buffer.
   * @readonly
   */
-CharBuffer.prototype.length = 0;
+AbstractCharBuffer.prototype.length = 0;
 
 /**
   * @abstract
@@ -92,7 +91,7 @@ CharBuffer.prototype.length = 0;
   * Gets the length of the {@link String} represented by this buffer.
   * @return {Number} The length of the {@link String}.
   */
-CharBuffer.prototype.getLength = function(){
+AbstractCharBuffer.prototype.getLength = function() {
   return this.length;
 };
 
@@ -103,9 +102,9 @@ CharBuffer.prototype.getLength = function(){
   * @param {Number} newLength The new length.
   * @throws {RangeError} if `newLength < 0 || newLength > this.length`
   */
-CharBuffer.prototype.setLength = function(newLength){
+AbstractCharBuffer.prototype.setLength = function(newLength) {
   var msg;
-  if(newLength < 0 || newLength > this.length){
+  if (newLength < 0 || newLength > this.length) {
     msg = 'newLength must be between 0 and ' + (this.length);
     msg += ', ' + newLength + ' given.';
     throw new RangeError(msg);
@@ -120,28 +119,28 @@ CharBuffer.prototype.setLength = function(newLength){
   * Returns the {@link String} represented by this buffer.
   * @return {String} The string.
   */
-CharBuffer.prototype.toString = undefined;
+AbstractCharBuffer.prototype.toString = undefined;
 
 /**
   * @property {Boolean}
   * @static
   * @template
-  * Indicates whether this CharBuffer is supported by the current platform.
+  * Indicates whether this AbstractCharBuffer is supported by the current platform.
   */
-CharBuffer.isSupported = false;
+AbstractCharBuffer.isSupported = false;
 
-module.exports = CharBuffer;
+module.exports = AbstractCharBuffer;
 
 });
 
-define('char-buffer/string-buffer',['require','exports','module','./char-buffer'],function (require, exports, module) {
-var CharBuffer = require('./char-buffer');
+define('char-buffer/string-buffer',['require','exports','module','./abstract-char-buffer'],function (require, exports, module) {
+var AbstractCharBuffer = require('./abstract-char-buffer');
 
 /**
   * @class CharBuffer.StringBuffer
-  * @extends CharBuffer.CharBuffer
+  * @extends CharBuffer.AbstractCharBuffer
   *
-  * {@link CharBuffer.CharBuffer} implementation using a single {@link String}.
+  * {@link CharBuffer.AbstractCharBuffer} implementation using a single {@link String}.
   */
 
 /**
@@ -149,18 +148,18 @@ var CharBuffer = require('./char-buffer');
   *
   * Constructs a StringBuffer representing an empty string.
   */
-function StringBuffer(){
-  if(!(this instanceof StringBuffer)){
+function StringBuffer() {
+  if (!(this instanceof StringBuffer)) {
     return new StringBuffer();
   }
-  CharBuffer.call(this);
+  AbstractCharBuffer.call(this);
   this._buffer = '';
 }
 
-StringBuffer.prototype = new CharBuffer();
+StringBuffer.prototype = new AbstractCharBuffer();
 
 /* istanbul ignore if: IE-fix */
-if(!StringBuffer.name){
+if (!StringBuffer.name) {
   StringBuffer.name = 'StringBuffer';
 }
 
@@ -171,31 +170,31 @@ if(!StringBuffer.name){
   * @param {Number} charCode The charCode to append.
   * @param {Number} offset The zero based offset to write at.
   */
-StringBuffer.prototype.write = function(charCode, offset){
-  if(typeof offset === 'undefined' || offset === this.length){
+StringBuffer.prototype.write = function(charCode, offset) {
+  if (typeof offset === 'undefined' || offset === this.length) {
     return this.append(charCode);
   }
   var pre  = this._buffer.slice(0, offset),
-      post = this._buffer.slice(offset+1);
+      post = this._buffer.slice(offset + 1);
   this._buffer = pre + String.fromCharCode(charCode) + post;
   this.length = this._buffer.length;
   return this;
 };
 
 /** */
-StringBuffer.prototype.append = function(charCode){
+StringBuffer.prototype.append = function(charCode) {
   this._buffer += String.fromCharCode(charCode);
   this.length = this._buffer.length;
   return this;
 };
 
 /** */
-StringBuffer.prototype.charCodeAt = function(offset){
+StringBuffer.prototype.charCodeAt = function(offset) {
   return this._buffer.charCodeAt(offset);
 };
 
 /** */
-StringBuffer.prototype.charAt = function(offset){
+StringBuffer.prototype.charAt = function(offset) {
   return this._buffer.charAt(offset);
 };
 
@@ -203,7 +202,7 @@ StringBuffer.prototype.charAt = function(offset){
 StringBuffer.prototype.read = StringBuffer.prototype.charCodeAt;
 
 /** */
-StringBuffer.prototype.setLength = function(newLength){
+StringBuffer.prototype.setLength = function(newLength) {
   this.constructor.prototype.setLength.call(this, newLength);
   this._buffer = this._buffer.slice(0, this.length);
   return this;
@@ -213,29 +212,28 @@ StringBuffer.prototype.setLength = function(newLength){
   * Returns the internal {@link String}.
   * @return {String} The string.
   */
-StringBuffer.prototype.toString = function(){
+StringBuffer.prototype.toString = function() {
   return this._buffer;
 };
 
 /**
-  * @inheritdoc CharBuffer.CharBuffer#isSupported
+  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
   * @static
   */
 StringBuffer.isSupported = true;
-
 
 module.exports = StringBuffer;
 
 });
 
-define('char-buffer/string-array-buffer',['require','exports','module','./char-buffer'],function (require, exports, module) {
-var CharBuffer = require('./char-buffer');
+define('char-buffer/string-array-buffer',['require','exports','module','./abstract-char-buffer'],function (require, exports, module) {
+var AbstractCharBuffer = require('./abstract-char-buffer');
 
 /**
   * @class CharBuffer.StringArrayBuffer
-  * @extends CharBuffer.CharBuffer
+  * @extends CharBuffer.AbstractCharBuffer
   *
-  * {@link CharBuffer.CharBuffer} implementation using an {@link Array} of
+  * {@link CharBuffer.AbstractCharBuffer} implementation using an {@link Array} of
   * {@link String}s.
   */
 
@@ -247,19 +245,19 @@ var CharBuffer = require('./char-buffer');
   *     {@link String#length length} of the {@link String} represented by this
   *     buffer).
   */
-function StringArrayBuffer(initCapacity){
-  if(!(this instanceof StringArrayBuffer)){
+function StringArrayBuffer(initCapacity) {
+  if (!(this instanceof StringArrayBuffer)) {
     return new StringArrayBuffer(initCapacity);
   }
-  CharBuffer.call(this);
+  AbstractCharBuffer.call(this);
   initCapacity = initCapacity || 16;
   this._buffer = new Array(initCapacity);
 }
 
-StringArrayBuffer.prototype = new CharBuffer();
+StringArrayBuffer.prototype = new AbstractCharBuffer();
 
 /* istanbul ignore if: IE-fix */
-if(!StringArrayBuffer.name){
+if (!StringArrayBuffer.name) {
   StringArrayBuffer.name = 'StringArrayBuffer';
 }
 
@@ -270,12 +268,12 @@ if(!StringArrayBuffer.name){
   * @param {Number} charCode The charCode to append.
   * @param {Number} offset The zero based offset to write at.
   */
-StringArrayBuffer.prototype.write = function(charCode, offset){
-  if(typeof offset === 'undefined'){
+StringArrayBuffer.prototype.write = function(charCode, offset) {
+  if (typeof offset === 'undefined') {
     offset = this.length;
   }
   this._buffer[offset] = String.fromCharCode(charCode);
-  this.length = offset+1 > this.length ? offset+1 : this.length, true;
+  this.length = offset + 1 > this.length ? offset + 1 : this.length;
   return this;
 };
 
@@ -283,12 +281,12 @@ StringArrayBuffer.prototype.write = function(charCode, offset){
 StringArrayBuffer.prototype.append = StringArrayBuffer.prototype.write;
 
 /** */
-StringArrayBuffer.prototype.read = function(offset){
+StringArrayBuffer.prototype.read = function(offset) {
   return this._buffer[offset].charCodeAt(0);
 };
 
 /** */
-StringArrayBuffer.prototype.charAt = function(offset){
+StringArrayBuffer.prototype.charAt = function(offset) {
   return this._buffer[offset];
 };
 
@@ -299,29 +297,28 @@ StringArrayBuffer.prototype.charCodeAt = StringArrayBuffer.prototype.read;
   * Returns the {@link String} represented by this buffer.
   * @return {String} The string.
   */
-StringArrayBuffer.prototype.toString = function(){
-  return this._buffer.slice(0,this.length).join('');
+StringArrayBuffer.prototype.toString = function() {
+  return this._buffer.slice(0, this.length).join('');
 };
 
 /**
-  * @inheritdoc CharBuffer.CharBuffer#isSupported
+  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
   * @static
   */
 StringArrayBuffer.isSupported = true;
-
 
 module.exports = StringArrayBuffer;
 
 });
 
-define('char-buffer/typed-array-buffer',['require','exports','module','./char-buffer'],function (require, exports, module) {
-var CharBuffer = require('./char-buffer');
+define('char-buffer/typed-array-buffer',['require','exports','module','./abstract-char-buffer'],function (require, exports, module) {
+var AbstractCharBuffer = require('./abstract-char-buffer');
 
 /**
   * @class CharBuffer.TypedArrayBuffer
-  * @extends CharBuffer.CharBuffer
+  * @extends CharBuffer.AbstractCharBuffer
   *
-  * {@link CharBuffer.CharBuffer} implementation using a [Typed Array][1]
+  * {@link CharBuffer.AbstractCharBuffer} implementation using a [Typed Array][1]
   * (more precisely an [Uint16Array][2]]).
   *
   * [1]: https://www.khronos.org/registry/typedarray/specs/latest/
@@ -336,19 +333,19 @@ var CharBuffer = require('./char-buffer');
   *     {@link String#length length} of the {@link String} represented by this
   *     buffer).
   */
-function TypedArrayBuffer(initCapacity){
-  if(!(this instanceof TypedArrayBuffer)){
+function TypedArrayBuffer(initCapacity) {
+  if (!(this instanceof TypedArrayBuffer)) {
     return new TypedArrayBuffer(initCapacity);
   }
-  CharBuffer.call(this);
+  AbstractCharBuffer.call(this);
   initCapacity = initCapacity || 16;
   this._buffer = new Uint16Array(initCapacity);
 }
 
-TypedArrayBuffer.prototype = new CharBuffer();
+TypedArrayBuffer.prototype = new AbstractCharBuffer();
 
 /* istanbul ignore if: IE-fix */
-if(!TypedArrayBuffer.name){
+if (!TypedArrayBuffer.name) {
   TypedArrayBuffer.name = 'TypedArrayBuffer';
 }
 
@@ -361,10 +358,10 @@ if(!TypedArrayBuffer.name){
   *     {@link String#length length} of the {@link String} this buffer may
   *     represent).
   */
-TypedArrayBuffer.prototype._ensureCapacity = function(minCapacity){
-  if(this._buffer.length < minCapacity){
-    if(minCapacity < this._buffer.length*2){
-      minCapacity = this._buffer.length*2; // i.e. double the capacity (!)
+TypedArrayBuffer.prototype._ensureCapacity = function(minCapacity) {
+  if (this._buffer.length < minCapacity) {
+    if (minCapacity < this._buffer.length * 2) {
+      minCapacity = this._buffer.length * 2; // i.e. double the capacity (!)
     }
     var buffer = new Uint16Array(minCapacity);
     buffer.set(this._buffer);
@@ -378,13 +375,13 @@ TypedArrayBuffer.prototype._ensureCapacity = function(minCapacity){
   * @param {Number} charCode The charCode to append.
   * @param {Number} offset The zero based offset to write at.
   */
-TypedArrayBuffer.prototype.write = function(charCode, offset){
-  if(typeof offset === 'undefined'){
+TypedArrayBuffer.prototype.write = function(charCode, offset) {
+  if (typeof offset === 'undefined') {
     offset = this.length;
   }
-  this._ensureCapacity(offset+1);
+  this._ensureCapacity(offset + 1);
   this._buffer[offset] = charCode;
-  this.length = offset+1 > this.length ? offset+1 : this.length, true;
+  this.length = offset + 1 > this.length ? offset + 1 : this.length;
   return this;
 };
 
@@ -392,7 +389,7 @@ TypedArrayBuffer.prototype.write = function(charCode, offset){
 TypedArrayBuffer.prototype.append = TypedArrayBuffer.prototype.write;
 
 /** */
-TypedArrayBuffer.prototype.read = function(offset){
+TypedArrayBuffer.prototype.read = function(offset) {
   return this._buffer[offset];
 };
 
@@ -400,7 +397,7 @@ TypedArrayBuffer.prototype.read = function(offset){
 TypedArrayBuffer.prototype.charCodeAt = TypedArrayBuffer.prototype.read;
 
 /** */
-TypedArrayBuffer.prototype.charAt = function(offset){
+TypedArrayBuffer.prototype.charAt = function(offset) {
   return String.fromCharCode(this.read(offset));
 };
 
@@ -419,7 +416,7 @@ TypedArrayBuffer.prototype.charAt = function(offset){
   *
   * @return {String} The string.
   */
-TypedArrayBuffer.prototype.toString = function(){
+TypedArrayBuffer.prototype.toString = function() {
 // jshint +W101
   var ARGS_MAX = 65535,
       len = this.length,
@@ -427,54 +424,53 @@ TypedArrayBuffer.prototype.toString = function(){
       startPos = 0,
       endPos = 0;
 
-  if(len <= ARGS_MAX){
+  if (len <= ARGS_MAX) {
     return String.fromCharCode.apply(
         null,
         this._buffer.subarray(startPos, len)
       );
   }
 
-  do{
+  do {
     startPos = endPos;
     endPos += ARGS_MAX;
-    if(endPos>len){
-      endPos=len;
+    if (endPos > len) {
+      endPos = len;
     }
     buf += String.fromCharCode.apply(
         null,
-        this._buffer.subarray(startPos,endPos)
+        this._buffer.subarray(startPos, endPos)
       );
-  }while(endPos < len);
+  } while (endPos < len);
 
   return buf;
 };
 
 /**
-  * @inheritdoc CharBuffer.CharBuffer#isSupported
+  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
   * @static
   */
-TypedArrayBuffer.isSupported = (function(){
-  try{
+TypedArrayBuffer.isSupported = (function() {
+  try {
     return String.fromCharCode.apply(null, new Uint16Array()) === '';
-  }catch(err){
+  } catch (err) {
     /* istanbul ignore next */
     return false;
   }
 }());
 
-
 module.exports = TypedArrayBuffer;
 
 });
 
-define('char-buffer/node-buffer',['require','exports','module','./char-buffer'],function (require, exports, module) {
-var CharBuffer = require('./char-buffer');
+define('char-buffer/node-buffer',['require','exports','module','./abstract-char-buffer'],function (require, exports, module) {
+var AbstractCharBuffer = require('./abstract-char-buffer');
 
 /**
   * @class CharBuffer.NodeBuffer
-  * @extends CharBuffer.CharBuffer
+  * @extends CharBuffer.AbstractCharBuffer
   *
-  * {@link CharBuffer.CharBuffer} implementation using a [Node.js Buffer][1].
+  * {@link CharBuffer.AbstractCharBuffer} implementation using a [Node.js Buffer][1].
   *
   * [1]: http://nodejs.org/api/buffer.html
   */
@@ -487,19 +483,19 @@ var CharBuffer = require('./char-buffer');
   *     {@link String#length length} of the {@link String} represented by this
   *     buffer).
   */
-function NodeBuffer(initCapacity){
-  if(!(this instanceof NodeBuffer)){
+function NodeBuffer(initCapacity) {
+  if (!(this instanceof NodeBuffer)) {
     return new NodeBuffer(initCapacity);
   }
-  CharBuffer.call(this);
+  AbstractCharBuffer.call(this);
   initCapacity = initCapacity || 16;
-  this._buffer = new Buffer(initCapacity*2);
+  this._buffer = new Buffer(initCapacity * 2);
 }
 
-NodeBuffer.prototype = new CharBuffer();
+NodeBuffer.prototype = new AbstractCharBuffer();
 
 /* istanbul ignore if: IE-fix */
-if(!NodeBuffer.name){
+if (!NodeBuffer.name) {
   NodeBuffer.name = 'NodeBuffer';
 }
 
@@ -512,12 +508,12 @@ if(!NodeBuffer.name){
   *     {@link String#length length} of the {@link String} this buffer may
   *     represent).
   */
-NodeBuffer.prototype._ensureCapacity = function(minCapacity){
-  if(this._buffer.length < minCapacity*2){
-    if(minCapacity < this._buffer.length){
+NodeBuffer.prototype._ensureCapacity = function(minCapacity) {
+  if (this._buffer.length < minCapacity * 2) {
+    if (minCapacity < this._buffer.length) {
       minCapacity = this._buffer.length; // i.e. double the capacity (!)
     }
-    var buffer = new Buffer(minCapacity*2);
+    var buffer = new Buffer(minCapacity * 2);
     this._buffer.copy(buffer);
     this._buffer = buffer;
   }
@@ -531,13 +527,13 @@ NodeBuffer.prototype._ensureCapacity = function(minCapacity){
   * @param {Number} charCode The charCode to append.
   * @param {Number} offset The zero based offset to write at.
   */
-NodeBuffer.prototype.write = function(charCode, offset){
-  if(typeof offset === 'undefined'){
+NodeBuffer.prototype.write = function(charCode, offset) {
+  if (typeof offset === 'undefined') {
     offset = this.length;
   }
-  this._ensureCapacity(offset+1);
-  this._buffer.writeUInt16LE(charCode, offset*2);
-  this.length = offset+1 > this.length ? offset+1 : this.length, true;
+  this._ensureCapacity(offset + 1);
+  this._buffer.writeUInt16LE(charCode, offset * 2);
+  this.length = offset + 1 > this.length ? offset + 1 : this.length;
   return this;
 };
 
@@ -545,15 +541,15 @@ NodeBuffer.prototype.write = function(charCode, offset){
 NodeBuffer.prototype.append = NodeBuffer.prototype.write;
 
 /** */
-NodeBuffer.prototype.read = function(offset){
-  return this._buffer.readUInt16LE(offset*2);
+NodeBuffer.prototype.read = function(offset) {
+  return this._buffer.readUInt16LE(offset * 2);
 };
 
 /** */
 NodeBuffer.prototype.charCodeAt = NodeBuffer.prototype.read;
 
 /** */
-NodeBuffer.prototype.charAt = function(offset){
+NodeBuffer.prototype.charAt = function(offset) {
   return String.fromCharCode(this.read(offset));
 };
 
@@ -565,30 +561,35 @@ NodeBuffer.prototype.charAt = function(offset){
   *
   * @return {String} The string.
   */
-NodeBuffer.prototype.toString = function(){
-  return this._buffer.toString('utf16le', 0, this.length*2);
+NodeBuffer.prototype.toString = function() {
+  return this._buffer.toString('utf16le', 0, this.length * 2);
 };
 
 /**
-  * @inheritdoc CharBuffer.CharBuffer#isSupported
+  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
   * @static
   */
 NodeBuffer.isSupported = (function() {
-  try{
+  try {
     var buffer = new Buffer('A', 'utf16le');
     return buffer.readUInt16LE(0) === 65;
-  }catch(e){
+  } catch (e) {
     /* istanbul ignore next */
     return false;
   }
 }());
 
-
 module.exports = NodeBuffer;
 
 });
 
-define('char-buffer/index',['require','exports','module','./char-buffer','./string-buffer','./string-array-buffer','./typed-array-buffer','./node-buffer'],function (require, exports, module) {
+define('char-buffer/index',['require','exports','module','./abstract-char-buffer','./string-buffer','./string-array-buffer','./typed-array-buffer','./node-buffer'],function (require, exports, module) {
+var AbstractCharBuffer = require('./abstract-char-buffer');
+var StringBuffer = require('./string-buffer');
+var StringArrayBuffer = require('./string-array-buffer');
+var TypedArrayBuffer = require('./typed-array-buffer');
+var NodeBuffer = require('./node-buffer');
+
 /**
   * @class CharBuffer
   */
@@ -602,12 +603,12 @@ define('char-buffer/index',['require','exports','module','./char-buffer','./stri
   *   {@link String#length length} of the {@link String} represented by this
   *   buffer).
   */
-function CharBuffer(initCapacity){
+function CharBuffer(initCapacity) {
   return CharBuffer._default.call(this, initCapacity);
 }
 
 /* istanbul ignore if: IE-fix */
-if(!CharBuffer.name){
+if (!CharBuffer.name) {
   CharBuffer.name = 'CharBuffer';
 }
 
@@ -615,14 +616,14 @@ if(!CharBuffer.name){
   * @property {CharBuffer[]} CharBuffers
   * @static
   *
-  * Array of all {@link CharBuffer.CharBuffer} implementations.
+  * Array of all {@link CharBuffer.AbstractCharBuffer} implementations.
   */
 CharBuffer.CharBuffers = [
-  require('./char-buffer'),
-  require('./string-buffer'),
-  require('./string-array-buffer'),
-  require('./typed-array-buffer'),
-  require('./node-buffer')
+  AbstractCharBuffer,
+  StringBuffer,
+  StringArrayBuffer,
+  TypedArrayBuffer,
+  NodeBuffer
 ];
 
 /**
@@ -630,13 +631,13 @@ CharBuffer.CharBuffers = [
   *   "TypedArrayBuffer", "NodeBuffer"]]
   * @static
   *
-  * Names of the supported {@link CharBuffer.CharBuffer} implementations of the
+  * Names of the supported {@link CharBuffer.AbstractCharBuffer} implementations of the
   * current platform.
   */
 CharBuffer.supported = [];
 
 /**
-  * @property {CharBuffer.CharBuffer} [_default=
+  * @property {CharBuffer.AbstractCharBuffer} [_default=
   *   CharBuffers.filter(isSupported).last()]
   * @static
   * @private
@@ -648,17 +649,16 @@ CharBuffer.supported = [];
   */
 CharBuffer._default = null;
 
-
 var i,
     buffer;
 
 // last supported {@link CharBuffer.CharBuffers} becomes
 // {@link CharBuffer._default}
-for(i=0; i<CharBuffer.CharBuffers.length; i++){
+for (i = 0; i < CharBuffer.CharBuffers.length; i++) {
   buffer = CharBuffer.CharBuffers[i];
 
   /* istanbul ignore else */
-  if(buffer.isSupported){
+  if (buffer.isSupported) {
     CharBuffer.supported.push(buffer.name);
     CharBuffer._default = buffer;
   }
@@ -675,15 +675,16 @@ for(i=0; i<CharBuffer.CharBuffers.length; i++){
   */
 CharBuffer.isSupported = CharBuffer._default ? CharBuffer._default.isSupported : false;
 
-exports = module.exports = CharBuffer;
+module.exports = CharBuffer;
 
 });
 
 define('char-buffer',['require','exports','module','./char-buffer/index'],function (require, exports, module) {
 /*
- * AMD entry point (i.e. require('CharBuffer', ...))
+ * Facade for AMD etc.
  */
-module.exports = require('./char-buffer/index');
+var Facade = require('./char-buffer/index');
+module.exports = Facade;
 
 });
 

@@ -21,11 +21,21 @@
   "dependencies": {
     
   },
-  "development": {},
+  "development": {
+      "dependencies": {
+        "schnittstabil/expect": "*",
+        "schnittstabil/mocha-screencast-reporter": "*",
+        "visionmedia/mocha": "*"
+      },
+      "scripts": [
+        "test/char-buffer_test.js",
+        "test/umd_test.js"
+      ]
+  },
   "license": "MIT",
   "main": "index.js",
   "scripts": [
-    "char-buffer.js",
+    "abstract-char-buffer.js",
     "index.js",
     "node-buffer.js",
     "string-array-buffer.js",

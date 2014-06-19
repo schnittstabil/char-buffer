@@ -1,11 +1,11 @@
 'use strict';
-var CharBuffer = require('./char-buffer');
+import AbstractCharBuffer from './abstract-char-buffer';
 
 /**
   * @class CharBuffer.NodeBuffer
-  * @extends CharBuffer.CharBuffer
+  * @extends CharBuffer.AbstractCharBuffer
   *
-  * {@link CharBuffer.CharBuffer} implementation using a [Node.js Buffer][1].
+  * {@link CharBuffer.AbstractCharBuffer} implementation using a [Node.js Buffer][1].
   *
   * [1]: http://nodejs.org/api/buffer.html
   */
@@ -18,19 +18,19 @@ var CharBuffer = require('./char-buffer');
   *     {@link String#length length} of the {@link String} represented by this
   *     buffer).
   */
-function NodeBuffer(initCapacity){
-  if(!(this instanceof NodeBuffer)){
+function NodeBuffer(initCapacity) {
+  if (!(this instanceof NodeBuffer)) {
     return new NodeBuffer(initCapacity);
   }
-  CharBuffer.call(this);
+  AbstractCharBuffer.call(this);
   initCapacity = initCapacity || 16;
-  this._buffer = new Buffer(initCapacity*2);
+  this._buffer = new Buffer(initCapacity * 2);
 }
 
-NodeBuffer.prototype = new CharBuffer();
+NodeBuffer.prototype = new AbstractCharBuffer();
 
 /* istanbul ignore if: IE-fix */
-if(!NodeBuffer.name){
+if (!NodeBuffer.name) {
   NodeBuffer.name = 'NodeBuffer';
 }
 
@@ -43,12 +43,12 @@ if(!NodeBuffer.name){
   *     {@link String#length length} of the {@link String} this buffer may
   *     represent).
   */
-NodeBuffer.prototype._ensureCapacity = function(minCapacity){
-  if(this._buffer.length < minCapacity*2){
-    if(minCapacity < this._buffer.length){
+NodeBuffer.prototype._ensureCapacity = function(minCapacity) {
+  if (this._buffer.length < minCapacity * 2) {
+    if (minCapacity < this._buffer.length) {
       minCapacity = this._buffer.length; // i.e. double the capacity (!)
     }
-    var buffer = new Buffer(minCapacity*2);
+    var buffer = new Buffer(minCapacity * 2);
     this._buffer.copy(buffer);
     this._buffer = buffer;
   }
@@ -62,13 +62,13 @@ NodeBuffer.prototype._ensureCapacity = function(minCapacity){
   * @param {Number} charCode The charCode to append.
   * @param {Number} offset The zero based offset to write at.
   */
-NodeBuffer.prototype.write = function(charCode, offset){
-  if(typeof offset === 'undefined'){
+NodeBuffer.prototype.write = function(charCode, offset) {
+  if (typeof offset === 'undefined') {
     offset = this.length;
   }
-  this._ensureCapacity(offset+1);
-  this._buffer.writeUInt16LE(charCode, offset*2);
-  this.length = offset+1 > this.length ? offset+1 : this.length, true;
+  this._ensureCapacity(offset + 1);
+  this._buffer.writeUInt16LE(charCode, offset * 2);
+  this.length = offset + 1 > this.length ? offset + 1 : this.length;
   return this;
 };
 
@@ -76,15 +76,15 @@ NodeBuffer.prototype.write = function(charCode, offset){
 NodeBuffer.prototype.append = NodeBuffer.prototype.write;
 
 /** */
-NodeBuffer.prototype.read = function(offset){
-  return this._buffer.readUInt16LE(offset*2);
+NodeBuffer.prototype.read = function(offset) {
+  return this._buffer.readUInt16LE(offset * 2);
 };
 
 /** */
 NodeBuffer.prototype.charCodeAt = NodeBuffer.prototype.read;
 
 /** */
-NodeBuffer.prototype.charAt = function(offset){
+NodeBuffer.prototype.charAt = function(offset) {
   return String.fromCharCode(this.read(offset));
 };
 
@@ -96,23 +96,22 @@ NodeBuffer.prototype.charAt = function(offset){
   *
   * @return {String} The string.
   */
-NodeBuffer.prototype.toString = function(){
-  return this._buffer.toString('utf16le', 0, this.length*2);
+NodeBuffer.prototype.toString = function() {
+  return this._buffer.toString('utf16le', 0, this.length * 2);
 };
 
 /**
-  * @inheritdoc CharBuffer.CharBuffer#isSupported
+  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
   * @static
   */
 NodeBuffer.isSupported = (function() {
-  try{
+  try {
     var buffer = new Buffer('A', 'utf16le');
     return buffer.readUInt16LE(0) === 65;
-  }catch(e){
+  } catch (e) {
     /* istanbul ignore next */
     return false;
   }
 }());
 
-
-module.exports = NodeBuffer;
+export default NodeBuffer;

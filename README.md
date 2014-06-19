@@ -4,64 +4,9 @@ Collect CharCodes and convert them to a string.
 
 [![Selenium Test Status](https://saucelabs.com/browser-matrix/char-buffer.svg)](https://saucelabs.com/u/char-buffer)
 
-## Installation
-
-### Node Package Manager (npm)
-
-1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
-
-2. Install CharBuffer from [NPM](https://www.npmjs.org/):
-    ```bash
-    npm install char-buffer
-    ```
-
-### Component
-
-1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
-
-2. Install [component](http://component.io/):
-    ```bash
-    npm install component --global
-    ```
-
-3. Create `component.json`:
-    ```json
-    {
-      "name": "getting-started",
-      "dependencies": {
-        "schnittstabil/char-buffer": "*"
-      }
-    }
-    ```
-
-4. Install dependencies:
-    ```bash
-    component install
-    ```
-
-5. Run build
-    ```bash
-    component build
-    ```
-
-### Bower
-
-1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
-
-2. Install [Bower](http://bower.io/):
-    ```bash
-    npm install bower --global
-    ```
-
-3. Install CharBuffer from [bower.io](http://bower.io/search):
-    ```bash
-    bower install char-buffer
-    ```
-
-
 ## Basic Usage
 
-`CharBuffer` provides multiple implementations to collect `CharCodes` via a common interface (`CharBuffer.CharBuffer`):
+`CharBuffer` provides multiple implementations to collect `CharCodes` via a common interface (`CharBuffer.AbstractCharBuffer`):
 
 * `CharBuffer.StringBuffer` uses a single `String`
 * `CharBuffer.StringArrayBuffer` uses an `Array` of `String`s
@@ -93,15 +38,25 @@ buffer.append(111).append(111);
 console.log(buffer.toString());
 ```
 
+
 ## Documentations
 
 * [API](http://schnittstabil.github.io/char-buffer/api/#!/api)
 * [Code Coverage Report](http://schnittstabil.github.io/char-buffer/coverage)
 
-## Examples
 
-### Node.js
+## Node Package Manager (npm)
 
+### Installation
+
+1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
+
+2. Install CharBuffer from [NPM](https://www.npmjs.org/):
+    ```bash
+    npm install char-buffer
+    ```
+
+### Examples
 ```javascript
 // Create the default CharBuffer implementation:
 var CharBuffer = require('char-buffer'),
@@ -121,12 +76,43 @@ var TypedArrayBuffer = require('char-buffer/typed-array-buffer'),
 console.log(buffer.append(102).append(111).append(111).toString());
 ```
 
-### Component
+
+## Component
+
+### Installation
+
+1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
+
+2. Install [component](http://component.io/):
+    ```bash
+    npm install component --global
+    ```
+
+3. Create `component.json`:
+    ```json
+    {
+      "name": "getting-started",
+      "dependencies": {
+        "schnittstabil/char-buffer": "*"
+      }
+    }
+    ```
+
+4. Install dependencies:
+    ```bash
+    component install
+    ```
+
+5. Run build
+    ```bash
+    component build
+    ```
+
+### Examples
 
 ```html
 <script src="build/build.js"></script>
 <script>
-
 // Create the default CharBuffer implementation:
 var CharBuffer = require('char-buffer'),
     buffer = new CharBuffer(3);
@@ -139,16 +125,35 @@ var CharBuffer = require('char-buffer'),
 
 // Output 'foo'
 console.log(buffer.append(102).append(111).append(111).toString());
-
 </script>
 ```
 
-### Browser Globals (using Bower)
+
+## Bower
+
+### Installation
+
+1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
+
+2. Install [Bower](http://bower.io/):
+    ```bash
+    npm install bower --global
+    ```
+
+3. Install CharBuffer from [bower.io](http://bower.io/search):
+    ```bash
+    bower install char-buffer
+    ```
+
+### Examples using  ES6 Module Loader Polyfill
+
+See [ModuleLoader/es6-module-loader](https://github.com/ModuleLoader/es6-module-loader) for details.
+
+### Examples using Browser Globals
 
 ```html
 <script src="bower_components/char-buffer/char-buffer.global.js"></script>
 <script>
-
 // Create the default CharBuffer implementation:
 var buffer = new CharBuffer(3);
 
@@ -159,12 +164,11 @@ var TypedArrayBuffer = CharBuffer.TypedArrayBuffer,
 
 // Output 'foo'
 console.log(buffer.append(102).append(111).append(111).toString());
-
 </script>
 ```
 
 
-### Asynchronous Module Definition (using Bower)
+### Examples using Asynchronous Module Definition
 
 See [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api/blob/master/AMD.md) for details.
 
@@ -172,7 +176,6 @@ See [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api/bl
 <script src="path/to/your/amd/loader.js"></script>
 <script src="bower_components/char-buffer/char-buffer.amd.js"></script>
 <script>
-
 /**
  * Use the CharBuffer package:
  */
@@ -200,9 +203,9 @@ require(['char-buffer/typed-array-buffer'], function(TypedArrayBuffer){
   // Output 'foo'
   console.log(buffer.append(102).append(111).append(111).toString());
 });
-
 </script>
 ```
+
 
 ## License
 

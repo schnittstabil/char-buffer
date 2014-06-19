@@ -1,11 +1,11 @@
 'use strict';
-var CharBuffer = require('./char-buffer');
+import AbstractCharBuffer from './abstract-char-buffer';
 
 /**
   * @class CharBuffer.TypedArrayBuffer
-  * @extends CharBuffer.CharBuffer
+  * @extends CharBuffer.AbstractCharBuffer
   *
-  * {@link CharBuffer.CharBuffer} implementation using a [Typed Array][1]
+  * {@link CharBuffer.AbstractCharBuffer} implementation using a [Typed Array][1]
   * (more precisely an [Uint16Array][2]]).
   *
   * [1]: https://www.khronos.org/registry/typedarray/specs/latest/
@@ -20,19 +20,19 @@ var CharBuffer = require('./char-buffer');
   *     {@link String#length length} of the {@link String} represented by this
   *     buffer).
   */
-function TypedArrayBuffer(initCapacity){
-  if(!(this instanceof TypedArrayBuffer)){
+function TypedArrayBuffer(initCapacity) {
+  if (!(this instanceof TypedArrayBuffer)) {
     return new TypedArrayBuffer(initCapacity);
   }
-  CharBuffer.call(this);
+  AbstractCharBuffer.call(this);
   initCapacity = initCapacity || 16;
   this._buffer = new Uint16Array(initCapacity);
 }
 
-TypedArrayBuffer.prototype = new CharBuffer();
+TypedArrayBuffer.prototype = new AbstractCharBuffer();
 
 /* istanbul ignore if: IE-fix */
-if(!TypedArrayBuffer.name){
+if (!TypedArrayBuffer.name) {
   TypedArrayBuffer.name = 'TypedArrayBuffer';
 }
 
@@ -45,10 +45,10 @@ if(!TypedArrayBuffer.name){
   *     {@link String#length length} of the {@link String} this buffer may
   *     represent).
   */
-TypedArrayBuffer.prototype._ensureCapacity = function(minCapacity){
-  if(this._buffer.length < minCapacity){
-    if(minCapacity < this._buffer.length*2){
-      minCapacity = this._buffer.length*2; // i.e. double the capacity (!)
+TypedArrayBuffer.prototype._ensureCapacity = function(minCapacity) {
+  if (this._buffer.length < minCapacity) {
+    if (minCapacity < this._buffer.length * 2) {
+      minCapacity = this._buffer.length * 2; // i.e. double the capacity (!)
     }
     var buffer = new Uint16Array(minCapacity);
     buffer.set(this._buffer);
@@ -62,13 +62,13 @@ TypedArrayBuffer.prototype._ensureCapacity = function(minCapacity){
   * @param {Number} charCode The charCode to append.
   * @param {Number} offset The zero based offset to write at.
   */
-TypedArrayBuffer.prototype.write = function(charCode, offset){
-  if(typeof offset === 'undefined'){
+TypedArrayBuffer.prototype.write = function(charCode, offset) {
+  if (typeof offset === 'undefined') {
     offset = this.length;
   }
-  this._ensureCapacity(offset+1);
+  this._ensureCapacity(offset + 1);
   this._buffer[offset] = charCode;
-  this.length = offset+1 > this.length ? offset+1 : this.length, true;
+  this.length = offset + 1 > this.length ? offset + 1 : this.length;
   return this;
 };
 
@@ -76,7 +76,7 @@ TypedArrayBuffer.prototype.write = function(charCode, offset){
 TypedArrayBuffer.prototype.append = TypedArrayBuffer.prototype.write;
 
 /** */
-TypedArrayBuffer.prototype.read = function(offset){
+TypedArrayBuffer.prototype.read = function(offset) {
   return this._buffer[offset];
 };
 
@@ -84,7 +84,7 @@ TypedArrayBuffer.prototype.read = function(offset){
 TypedArrayBuffer.prototype.charCodeAt = TypedArrayBuffer.prototype.read;
 
 /** */
-TypedArrayBuffer.prototype.charAt = function(offset){
+TypedArrayBuffer.prototype.charAt = function(offset) {
   return String.fromCharCode(this.read(offset));
 };
 
@@ -103,7 +103,7 @@ TypedArrayBuffer.prototype.charAt = function(offset){
   *
   * @return {String} The string.
   */
-TypedArrayBuffer.prototype.toString = function(){
+TypedArrayBuffer.prototype.toString = function() {
 // jshint +W101
   var ARGS_MAX = 65535,
       len = this.length,
@@ -111,40 +111,39 @@ TypedArrayBuffer.prototype.toString = function(){
       startPos = 0,
       endPos = 0;
 
-  if(len <= ARGS_MAX){
+  if (len <= ARGS_MAX) {
     return String.fromCharCode.apply(
         null,
         this._buffer.subarray(startPos, len)
       );
   }
 
-  do{
+  do {
     startPos = endPos;
     endPos += ARGS_MAX;
-    if(endPos>len){
-      endPos=len;
+    if (endPos > len) {
+      endPos = len;
     }
     buf += String.fromCharCode.apply(
         null,
-        this._buffer.subarray(startPos,endPos)
+        this._buffer.subarray(startPos, endPos)
       );
-  }while(endPos < len);
+  } while (endPos < len);
 
   return buf;
 };
 
 /**
-  * @inheritdoc CharBuffer.CharBuffer#isSupported
+  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
   * @static
   */
-TypedArrayBuffer.isSupported = (function(){
-  try{
+TypedArrayBuffer.isSupported = (function() {
+  try {
     return String.fromCharCode.apply(null, new Uint16Array()) === '';
-  }catch(err){
+  } catch (err) {
     /* istanbul ignore next */
     return false;
   }
 }());
 
-
-module.exports = TypedArrayBuffer;
+export default TypedArrayBuffer;

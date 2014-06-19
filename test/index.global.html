@@ -13,9 +13,31 @@
   <script type="text/javascript" src="bower_components/mocha-screencast-reporter/screencast-reporter.js"></script>
   <script type="text/javascript" src="bower_components/mocha/mocha.js"></script>
 
+
   <script type="text/javascript" src="../char-buffer.global.js"></script>
+
   <script>mocha.setup({ ui: 'bdd' });</script>
-  <script type="text/javascript" src="tests.js"></script>
-  <script type="text/javascript" src="run-mocha.js"></script>
+
+  <script type="text/javascript" src="umd_test.js"></script>
+
+  <script type="text/javascript">
+    //mocha.checkLeaks();
+    mocha.reporter(ScreencastReporter);
+
+    var runner = mocha.run();
+
+    // check if ended (with sauce labs issues)
+    var count = 5,
+        check = setInterval(function(){
+      if (runner.stats.end) {
+        window.mochaResults = runner.stats;
+        if(count>0){
+          count--;
+        }else{
+          clearInterval(check);
+        }
+      }
+    }, 1000);
+  </script>
 </body>
 </html>
