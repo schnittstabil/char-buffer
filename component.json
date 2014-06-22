@@ -2,7 +2,7 @@
   "name": "char-buffer",
   "repo": "schnittstabil/char-buffer",
   "description": "Collect CharCodes and convert them to string.",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "keywords": [
     "Char",
     "CharCode",

@@ -6,7 +6,7 @@ import AbstractCharBuffer from './abstract-char-buffer';
   * @extends CharBuffer.AbstractCharBuffer
   *
   * {@link CharBuffer.AbstractCharBuffer} implementation using a [Typed Array][1]
-  * (more precisely an [Uint16Array][2]]).
+  * (more precisely an [Uint16Array][2]).
   *
   * [1]: https://www.khronos.org/registry/typedarray/specs/latest/
   * [2]: https://developer.mozilla.org/en-US/docs/Web/API/Uint16Array

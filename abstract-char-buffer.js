@@ -14,6 +14,7 @@
   *     buffer).
   */
 function AbstractCharBuffer(initCapacity) {
+  /* istanbul ignore if */
   if (!(this instanceof AbstractCharBuffer)) {
     return new AbstractCharBuffer(initCapacity);
   }

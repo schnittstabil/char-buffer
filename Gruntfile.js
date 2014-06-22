@@ -2,7 +2,9 @@
 
 module.exports = function(grunt) {
   var browsers = grunt.file.readJSON('browsers.json'),
-      testname = 'char-buffer_' + grunt.template.today('yymmdd-HH:MM');
+      testname = 'char-buffer_' + grunt.template.today('yymmdd-HH:MM'),
+      build = process.env.TRAVIS_JOB_ID + '_' + grunt.template.today('yymmdd-HHMM');
+
   grunt.initConfig({
     connect: {
       server: {
@@ -18,7 +20,7 @@ module.exports = function(grunt) {
           urls: [
             'http://127.0.0.1:9999/test/index.global.html',
           ],
-          build: process.env.TRAVIS_JOB_ID,
+          build: build,
           throttled: 1,
           browsers: browsers,
           testname: testname,
@@ -30,7 +32,7 @@ module.exports = function(grunt) {
           urls: [
             'http://127.0.0.1:9999/test/index.component.html',
           ],
-          build: process.env.TRAVIS_JOB_ID,
+          build: build,
           throttled: 1,
           browsers: browsers,
           testname: testname,
@@ -42,7 +44,7 @@ module.exports = function(grunt) {
           urls: [
             'http://127.0.0.1:9999/test/index.amd.html',
           ],
-          build: process.env.TRAVIS_JOB_ID,
+          build: build,
           throttled: 1,
           browsers: browsers,
           testname: testname,
