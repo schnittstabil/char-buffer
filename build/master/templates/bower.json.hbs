@@ -1,0 +1,33 @@
+{
+  "name": "{{{name}}}",
+  "version": "{{{version}}}",
+  "homepage": "{{{homepage}}}",
+  "authors": [
+    "{{{author}}}"
+  ],
+  "description": "{{{description}}}",
+  "main": "index.js",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals"
+  ],
+  "keywords": [
+    {{#each keywords}}{{#if @index}},
+    {{/if}}"{{{this}}}"{{/each}}
+  ],
+  "license": "{{{license}}}",
+  "ignore": [
+    "bower_components",
+    "browsers.json",
+    "build/",
+    "build.txt",
+    "component.json",
+    "components/",
+    "**/.*",
+    "Gruntfile.js",
+    "node_modules",
+    "package.json",
+    "test"
+  ]
+}

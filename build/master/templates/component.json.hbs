@@ -1,0 +1,31 @@
+{
+  "name": "{{{name}}}",
+  "repo": "schnittstabil/{{{name}}}",
+  "description": "{{{description}}}",
+  "version": "{{{version}}}",
+  "keywords": [
+    {{#each keywords}}{{#if @index}},
+    {{/if}}"{{{this}}}"{{/each}}
+  ],
+  "dependencies": {
+    {{#each dependencies}}{{#if @index}},
+    {{/if}}"{{@key}}": "{{{this}}}"{{/each}}
+  },
+  "development": {
+      "dependencies": {
+        "schnittstabil/expect": "*",
+        "schnittstabil/mocha-screencast-reporter": "*",
+        "visionmedia/mocha": "*"
+      },
+      "scripts": [
+        {{#each test.scripts}}{{#if @index}},
+        {{/if}}"{{{this}}}"{{/each}}
+      ]
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    {{#each scripts}}{{#if @index}},
+    {{/if}}"{{{this}}}"{{/each}}
+  ]
+}

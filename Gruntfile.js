@@ -1,44 +1,104 @@
 'use strict';
-var _ = require('lodash'),
-    glob = require('glob'),
-    examples = require('./src/build/templates/examples'),
-    srcs = glob.sync('**/*.js', {cwd:'src/main/js/char-buffer'});
-
 module.exports = function(grunt) {
-  var packageJson = grunt.file.readJSON('package.json');
+  var es6ToCommonjsTransform = require('es6-module-jstransform'),
+      scripts = grunt.file.expand({cwd: 'src/char-buffer/'}, ['**/*.js', '!test/**/*']),
+      testScripts = grunt.file.expand({cwd: 'src/char-buffer/'}, ['!**/*.js', 'test/**/*.js']),
+      testScriptsFullPath = grunt.file.expand({cwd: 'src/'}, ['!**/*.js', '**/test/**/*.js']),
+      packageJson = grunt.file.readJSON('package.json');
 
   // Project configuration.
   grunt.initConfig({
     pkg: packageJson,
     clean: {
-      'master': {
-        src: ['target/master/**/*', 'target/master/**/.*', '!target/master/.git'],
-      },
       temp: {
-        src: ['target/temp/**/*'],
+        src: ['temp/**/*'],
       },
-      doc: {
-        src: ['target/doc/**/*', 'target/doc/**/.*', '!target/doc/.git'],
+      npm: {
+        src: ['target/npm/**/*'],
       },
-      docApi: {
-        src: ['target/doc/api/**/*'],
+      master: {
+        src: ['target/master/**/*', 'target/master/**/.*', '!target/master/**/.git'],
       },
-      docCoverage: {
-        src: ['target/doc/coverage/**/*'],
+      'gh-pages': {
+        src: ['target/gh-pages/**/*', 'target/gh-pages/**/.*', '!target/gh-pages/.git'],
+      },
+      'gh-pages:api': {
+        src: ['target/gh-pages/api/**/*'],
+      },
+      'gh-pages:coverage': {
+        src: ['target/gh-pages/coverage/**/*'],
       },
     },
-    copy: {
-      'bower-requirejs-pre': {
+    es6ToCommonjs: {
+      'char-buffer': {
         files: [
           {
             expand: true,
-            cwd: 'src/main/js/', src: ['**'],
-            dest: 'target/temp/requirejs'
+            cwd: 'src',
+            src: ['**/*.js'],
+            dest: 'temp/commonjs/',
+          },
+        ],
+      },
+    },
+    'compile-handlebars': {
+      'templates_temp_gh-pages': {
+        template: 'build/templates/**/*.hbs',
+        templateData: {html: true, scripts: scripts, test: {scripts: testScripts}},
+        globals: [
+          './package.json',
+        ],
+        helpers: 'build/templates/code_helper.js',
+        output: 'temp/gh-pages/**/*',
+      },
+      master: {
+        template: 'build/master/templates/**/*.hbs',
+        templateData: {html: false, scripts: scripts, test: {scripts: testScripts}},
+        globals: [
+          './package.json',
+        ],
+        output: 'target/master/**/*',
+      },
+      'templates_master': {
+        template: 'build/templates/**/*.hbs',
+        templateData: {html: false},
+        globals: [
+          './package.json',
+        ],
+        helpers: 'build/templates/code_helper.js',
+        output: 'target/master/**/*',
+      },
+      npm: {
+        template: 'build/npm/templates/**/*.hbs',
+        templateData: {html: false, scripts: scripts, test: {scripts: testScripts}},
+        globals: [
+          './package.json',
+        ],
+        output: 'target/npm/**/*',
+      },
+      'templates_npm': {
+        template: 'build/templates/**/*.hbs',
+        templateData: {html: false},
+        globals: [
+          './package.json',
+        ],
+        helpers: 'build/templates/code_helper.js',
+        output: 'target/npm/**/*',
+      },
+    },
+    copy: {
+      'gh-pages': {
+        files: [
+          {
+            expand: true,
+            src: ['LICENSE'],
+            dest: 'target/gh-pages',
           },
           {
             expand: true,
-            cwd: 'src/test/js/', src: ['**'],
-            dest: 'target/temp/requirejs/test'
+            cwd: 'build/gh-pages/resources',
+            src: ['**', '**/.*'],
+            dest: 'target/gh-pages',
           },
         ],
       },
@@ -46,204 +106,226 @@ module.exports = function(grunt) {
         files: [
           {
             expand: true,
-            cwd: 'src/build/resources/', src: ['**', '**/.*'],
-            dest: 'target/master'
+            flatten: true,
+            src: [
+              'LICENSE',
+              'temp/amd/char-buffer.amd.js',
+              'temp/global/char-buffer.global.js',
+            ],
+            dest: 'target/master/',
           },
           {
             expand: true,
-            cwd: '.', src: ['LICENSE'],
-            dest: 'target/master'
+            flatten: true,
+            src: [
+              'temp/amd_tests/char-buffer.amd_tests.js',
+            ],
+            dest: 'target/master/test',
           },
           {
             expand: true,
-            cwd: 'src/main/js/char-buffer', src: ['**', '**/.*'],
-            dest: 'target/master'
+            cwd: 'build/master/resources',
+            src: ['**', '**/.*'],
+            dest: 'target/master',
           },
           {
             expand: true,
-            cwd: 'src/test/js/', src: ['**', '**/.*'],
-            dest: 'target/master/test/js'
+            cwd: 'src/char-buffer',
+            src: ['**', '**/.*'],
+            dest: 'target/master',
+          },
+        ],
+      },
+      npm: {
+        files: [
+          {
+            expand: true,
+            src: ['LICENSE'],
+            dest: 'target/npm',
           },
           {
             expand: true,
-            cwd: 'src/test/', src: ['inject.js'],
-            dest: 'target/master/test/'
+            cwd: 'build/npm/resources',
+            src: ['**', '**/.*'],
+            dest: 'target/npm',
+          },
+          {
+            expand: true,
+            cwd: 'temp/commonjs/char-buffer',
+            src: ['**', '**/.*'],
+            dest: 'target/npm',
           },
         ],
       },
     },
-    concat: {
-      options: {
-        process: function(src, filepath) {
-          var result = '(function(){\n  ';
-          result += '/* source: ' + filepath + ' */\n';
-          result += src.replace(/^/gm, '  ');
-          result += '/* ecruos: ' + filepath + ' */\n';
-          result += '}());\n';
-          return result;
-        },
-      },
-      'bower-test': {
-        src: ['src/test/js/**/*.js'],
-        dest: 'target/master/test/tests.js',
-      },
-    },
     requirejs: {
-      'bower.amd': {
+      amd: {
         options: {
-          baseUrl: 'target/temp/requirejs',
+          baseUrl: 'temp/commonjs',
           name: 'char-buffer',
           cjsTranslate: true,
-          out: 'target/master/char-buffer.amd.js',
+          out: 'temp/amd/char-buffer.amd.js',
           optimize: 'none',
-        }
+        },
       },
-      'bower.global': {
+      'amd_test': {
         options: {
-          baseUrl: 'target/temp/requirejs',
-          name: '../../../node_modules/almond/almond',
+          baseUrl: 'temp/commonjs',
+          include: testScriptsFullPath,
+          paths: {
+            'expect': 'empty:',
+            'char-buffer': 'empty:',
+          },
+          cjsTranslate: true,
+          out: 'temp/amd_tests/char-buffer.amd_tests.js',
+          optimize: 'none',
+        },
+      },
+      global: {
+        options: {
+          baseUrl: 'temp/commonjs',
+          name: '../../node_modules/almond/almond',
           include: ['char-buffer'],
           cjsTranslate: true,
           wrap: {
-            startFile: 'src/build/templates/wrap.umd.start.frag',
-            endFile: 'src/build/templates/wrap.umd.end.frag'
+            startFile: 'build/master/wrap.global.start.js.frag',
+            endFile: 'build/master/wrap.global.end.js.frag'
           },
-          out: 'target/master/char-buffer.global.js',
+          out: 'temp/global/char-buffer.global.js',
           optimize: 'none',
         }
-      }
-    },
-    'compile-handlebars': {
-      bowerJson: {
-        template: 'src/build/templates/bower.json.hbs',
-        output: 'target/master/bower.json',
-        templateData: packageJson,
-      },
-      packageJson: {
-        template: 'src/build/templates/package.json.hbs',
-        output: 'target/master/package.json',
-        templateData: packageJson,
-      },
-      componentJson: {
-        template: 'src/build/templates/component.json.hbs',
-        output: 'target/master/component.json',
-        templateData: _.merge(_.clone(packageJson, true), {scripts:srcs}),
-      },
-      docWelcome: {
-        template: 'src/build/templates/README.md.hbs',
-        helpers: 'src/build/templates/code_helper.js',
-        partials: 'src/build/templates/**/*.hbs',
-        templateData: _.merge(_.clone(examples, true), {html:true}),
-        output: 'target/temp/doc/WELCOME.md',
-      },
-      README: {
-        template: 'src/build/templates/README.md.hbs',
-        helpers: 'src/build/templates/code_helper.js',
-        partials: 'src/build/templates/**/*.hbs',
-        templateData: _.merge(_.clone(examples, true), {html:false}),
-        output: 'target/master/README.md',
       },
     },
     mochaTest: {
       fast: {
         options: {
           reporter: 'spec',
-          require: ['src/test/inject'],
         },
-        src: ['src/test/js/**/*_test.js', '!**/*_slow_test.js']
+        src: [
+          'temp/commonjs/**/test/**/*_test.js',
+          '!temp/commonjs/**/test/**/*_slow_test.js',
+        ],
       },
       slow: {
         options: {
           reporter: 'spec',
-          require: ['src/test/inject'],
         },
-        src: ['src/test/js/**/*_slow_test.js']
+        src: ['temp/commonjs/**/test/**/*_slow_test.js'],
       },
     },
     'mocha_istanbul': {
-      coverageDoc: {
-        src: 'src/test/js',
+      'char-bufferCoverage': {
+        src: 'temp/commonjs/char-buffer/test',
         options: {
           recursive: true,
           reporter: 'spec',
           mask: '**/*_test.js',
-          require: ['src/test/inject'],
-          coverageFolder: 'target/doc/coverage',
+          coverageFolder: 'target/gh-pages/coverage',
           reportFormats: ['html'],
-        }
+        },
       },
       coveralls: {
-        src: 'src/test/js',
+        src: 'temp/commonjs/char-buffer/test',
         options: {
           coverage: true,
           recursive: true,
           reporter: 'spec',
           mask: '**/*_test.js',
-          require: ['src/test/inject'],
-          coverageFolder: 'target/doc/coverage',
+          coverageFolder: 'target/gh-pages/coverage',
           reportFormats: ['lcovonly'],
-        }
+        },
       },
     },
     jsduck: {
-      main: {
-        src: [
-          'src/main/**/*.js',
-        ],
-        dest: 'target/doc/api',
+      'temp/commonjs': {
+        src: ['temp/commonjs/char-buffer/**/*.js', '!temp/commonjs/char-buffer/test/**/*.js'],
+        dest: 'target/gh-pages/api',
         options: {
           'builtin-classes': true,
           'title': '<%= pkg.name %>',
-          'welcome': 'target/temp/doc/WELCOME.md',
-        }
-      }
+          'welcome': 'temp/gh-pages/README.md',
+        },
+      },
     },
     jshint: {
       gruntfile: {
         options: {
-          jshintrc: '.jshintrc'
+          jshintrc: 'build/.jshintrc',
         },
-        src: 'Gruntfile.js'
+        src: ['Gruntfile.js'],
       },
-      main: {
+      src: {
         options: {
-          jshintrc: 'src/main/.jshintrc'
+          jshintrc: 'build/src.char-buffer.jshintrc',
         },
-        src: ['src/main/**/*.js']
+        src: ['src/**/*.js', '!src/**/test/**/*.js'],
       },
       test: {
         options: {
-          jshintrc: 'src/test/.jshintrc'
+          jshintrc: 'build/src.char-buffer.test.jshintrc',
         },
-        src: ['src/test/**/*.js']
+        src: ['!src/**/*.js', 'src/**/test/**/*.js'],
+      },
+    },
+    jscs: {
+      gruntfile: {
+        options: {
+          config: 'build/.jscsrc',
+        },
+        files: {
+          src: ['Gruntfile.js'],
+        },
+      },
+      'temp/commonjs': {
+        options: {
+          config: 'build/.jscsrc',
+        },
+        files: {
+          src: ['temp/commonjs/**/*.js', '!temp/commonjs/**/test/**/*.js'],
+        },
+      },
+      'temp/commonjs/test': {
+        options: {
+          config: 'build/.jscsrc',
+        },
+        files: {
+          src: ['!temp/commonjs/**/*.js', 'temp/commonjs/**/test/**/*.js'],
+        },
       },
     },
     watch: {
-      test: {
-        files: ['src/**'],
-        tasks: ['mochaTest:fast']
-      },
-      doc: {
-        files: ['src/**'],
-        tasks: ['doc:api']
+      lint: {
+        files: ['Gruntfile.js', 'package.json', 'src/**'],
+        tasks: ['lint'],
       },
     },
     githooks: {
       all: {
-        'pre-commit': 'lint test:fast dist',
-      }
-    }
+        'pre-commit': 'lint dist',
+      },
+    },
   });
 
   // Load grunt tasks.
-  for (var key in grunt.file.readJSON('package.json').devDependencies) {
-    if (key !== 'grunt' && key.indexOf('grunt') === 0){
+  for (var key in packageJson.devDependencies) {
+    if (key !== 'grunt' && key.indexOf('grunt') === 0) {
       grunt.loadNpmTasks(key);
     }
   }
 
-  grunt.event.on('coverage', function(lcov, done){
-    require('coveralls').handleInput(lcov, function(err){
+  grunt.registerMultiTask('es6ToCommonjs', function() {
+    this.files.forEach(function(files) {
+      var output = '';
+      files.src.forEach(function(src) {
+        var input = grunt.file.read(src);
+        output += es6ToCommonjsTransform(input).code;
+      });
+      grunt.file.write(files.dest, output);
+    });
+  });
+
+  grunt.event.on('coverage', function(lcov, done) {
+    require('coveralls').handleInput(lcov, function(err) {
       if (err) {
         return done(err);
       }
@@ -251,57 +333,63 @@ module.exports = function(grunt) {
     });
   });
 
-  // simple aliases
-  grunt.registerTask('lint', ['jshint']);
+  // lint
+  grunt.registerTask('lint', [
+    'es6ToCommonjs',
+    'jscs',
+    'jshint',
+  ]);
 
-  // Test tasks.
-  grunt.registerTask('test', ['mocha_istanbul:coveralls']);
-  grunt.registerTask('test:fast', ['mochaTest:fast']);
-  grunt.registerTask('test:slow', ['mochaTest:slow']);
-  grunt.registerTask('test:all', ['mochaTest']);
+  // test
+  grunt.registerTask('test', [
+    'es6ToCommonjs',
+    'mochaTest',
+  ]);
 
-  // Doc tasks.
-  grunt.registerTask('doc', ['clean:doc', 'doc:api', 'doc:coverage']);
-  grunt.registerTask(
-    'doc:api',
-    [
-      //'clean:docApi',
-      'compile-handlebars:docWelcome',
-      'jsduck',
-    ]
-  );
-  grunt.registerTask(
-      'doc:coverage',
-      [
-        'clean:docCoverage',
-        'mocha_istanbul:coverageDoc',
-      ]
-    );
+  // npm
+  grunt.registerTask('npm', [
+    'es6ToCommonjs',
+    'copy:npm',
+    'compile-handlebars:npm',
+    'compile-handlebars:templates_npm',
+  ]);
 
+  // gh-pages
+  grunt.registerTask('coverage', [
+    'es6ToCommonjs',
+    'mocha_istanbul:char-bufferCoverage',
+  ]);
+  grunt.registerTask('report-coveralls', [
+    'es6ToCommonjs',
+    'mocha_istanbul:coveralls',
+  ]);
+  grunt.registerTask('api', [
+    'es6ToCommonjs',
+    'compile-handlebars:templates_temp_gh-pages',
+    'jsduck',
+  ]);
+  grunt.registerTask('gh-pages', [
+    'es6ToCommonjs',
+    'mocha_istanbul:char-bufferCoverage',
+    'compile-handlebars:templates_temp_gh-pages',
+    'jsduck',
+  ]);
 
-  // master task
-  grunt.registerTask(
+  // master
+  grunt.registerTask('master', [
+    'es6ToCommonjs',
+    'requirejs',
+    'copy:master',
+    'compile-handlebars:master',
+    'compile-handlebars:templates_master',
+  ]);
+
+  // dist
+  grunt.registerTask('dist', [
+    'clean',
+    'lint',
+    'gh-pages',
     'master',
-    [
-      'clean:master',
-      'clean:temp',
-
-      'copy:master',
-
-      'copy:bower-requirejs-pre',
-      'requirejs',
-      'concat:bower-test',
-
-      'compile-handlebars:bowerJson',
-      'compile-handlebars:packageJson',
-      'compile-handlebars:componentJson',
-      'compile-handlebars:README',
-    ]
-  );
-
-  // Dist tasks.
-  grunt.registerTask('dist', ['master', 'doc']);
-
-  // Default task.
-  grunt.registerTask('default', ['compile-handlebars:README']);
+    'npm',
+  ]);
 };

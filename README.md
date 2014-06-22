@@ -63,8 +63,9 @@ rm char-buffer*.tgz
 npm publish
 
 # bower:
+# bump version @ package.json && build dist
 git add .
-git commit -m "bower vX.Y.Z"
+git commit -m "bump version"
 git tag vX.Y.Z
 git push origin master --tags
 ```

@@ -1,6 +1,6 @@
 {
   "name": "char-buffer",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "license": "MIT",
   "description": "Collect CharCodes and convert them to string.",
   "homepage": "https://github.com/schnittstabil/char-buffer",
@@ -31,9 +31,7 @@
   "private": true,
   "main": "./src/main/js/char-buffer/index.js",
   "scripts": {
-    "postinstall": "cd ./node_modules && ln -s ../src/main/js/char-buffer",
-    "test": "NODE_PATH=./src/main/js istanbul cover --dir ./target/doc/coverage _mocha -- -R spec --recursive src/test/js/ --require src/test/inject && cat ./target/doc/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "clean": "rm -r ./target/doc/coverage/"
+    "test": "grunt report-coveralls"
   },
   "engines": {
     "node": ">= 0.8.0"
@@ -41,9 +39,11 @@
   "dependencies": {},
   "devDependencies": {
     "almond": "^0.2.9",
-    "bower": "^1.3.2",
-    "coveralls": "^2.10.0",
-    "expect.js": "^0.3.1",
+    "builder-es6-module-to-cjs": "^1.1.0",
+    "component": "^0.19.9",
+    "coveralls": "^2.10.1",
+    "es6-module-jstransform": "^0.1.4",
+    "expect": "schnittstabil/expect#0.3.1+schnittstabil",
     "glob": "^4.0.0",
     "grunt": "^0.4.4",
     "grunt-compile-handlebars": "^0.7.3",
@@ -51,18 +51,18 @@
     "grunt-contrib-concat": "^0.4.0",
     "grunt-contrib-connect": "^0.7.1",
     "grunt-contrib-copy": "^0.5.0",
-    "grunt-contrib-handlebars": "^0.8.0",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-requirejs": "^0.4.3",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-githooks": "^0.3.1",
+    "grunt-jscs-checker": "^0.5.1",
     "grunt-jsduck": "^1.0.1",
     "grunt-mocha-istanbul": "^1.2.0",
     "grunt-mocha-test": "^0.10.2",
-    "grunt-saucelabs": "^5.1.3",
-    "handlebars": "^2.0.0-alpha.2",
-    "istanbul": "^0.2.7",
+    "grunt-shell": "^0.7.0",
+    "handlebars": "^2.0.0-alpha.4",
+    "jscs": "^1.5.3",
     "lodash": "^2.4.1",
-    "mocha": "^1.18.2"
+    "mocha": "^1.20.1"
   }
 }

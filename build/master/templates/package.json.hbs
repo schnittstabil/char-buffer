@@ -1,0 +1,36 @@
+{
+  "name": "{{{name}}}",
+  "version": "{{{version}}}",
+  "description": "{{{description}}}",
+  "homepage": "{{{homepage}}}",
+  "keywords": [
+    {{#each keywords}}{{#if @index}},
+    {{/if}}"{{{this}}}"{{/each}}
+  ],
+  "author": "{{{author}}}",
+  "license": "{{{license}}}",
+  "repository": {
+    "type": "{{{repository.type}}}",
+    "url": "{{{repository.url}}}"
+  },
+  "bugs": {
+    "url": "{{{bugs.url}}}"
+  },
+  "preferGlobal": false,
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "engines": {
+    "node": "{{{engines.node}}}"
+  },
+  "dependencies": {
+    {{#each dependencies}}{{#if @index}},
+    {{/if}}"{{@key}}": "{{{this}}}"{{/each}}
+  },
+  "devDependencies": {
+    "grunt": "{{{devDependencies.grunt}}}",
+    "grunt-contrib-connect": "^0.7.1",
+    "grunt-saucelabs": "^8.0.2"
+  }
+}
