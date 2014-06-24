@@ -2,8 +2,8 @@
 (function (root, factory) {
   'use strict';
   if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define('char-buffer/test/umd_test', ['expect', 'char-buffer/index'], factory);
+    // AMD
+    define(['expect', '../index'], factory);
   } else if (typeof exports === 'object') {
     // CommonJS
     factory(require('expect'), require('../index'));

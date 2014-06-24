@@ -18,12 +18,12 @@
         "visionmedia/mocha": "*"
       },
       "scripts": [
-        {{#each test.scripts}}{{#if @index}},
+        {{#each tests}}{{#if @index}},
         {{/if}}"{{{this}}}"{{/each}}
       ]
   },
   "license": "MIT",
-  "main": "index.js",
+  "main": "char-buffer.js",
   "scripts": [
     {{#each scripts}}{{#if @index}},
     {{/if}}"{{{this}}}"{{/each}}

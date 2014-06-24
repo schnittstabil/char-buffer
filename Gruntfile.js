@@ -1,9 +1,8 @@
 'use strict';
 module.exports = function(grunt) {
   var es6ToCommonjsTransform = require('es6-module-jstransform'),
-      scripts = grunt.file.expand({cwd: 'src/char-buffer/'}, ['**/*.js', '!test/**/*']),
-      testScripts = grunt.file.expand({cwd: 'src/char-buffer/'}, ['!**/*.js', 'test/**/*.js']),
-      testScriptsFullPath = grunt.file.expand({cwd: 'src/'}, ['!**/*.js', '**/test/**/*.js']),
+      scripts = grunt.file.expand({cwd: 'src'}, ['**/*.js', '!**/test/**/*']),
+      tests = grunt.file.expand({cwd: 'src'}, ['!**/*.js', '**/test/**/*.js']),
       packageJson = grunt.file.readJSON('package.json');
 
   // Project configuration.
@@ -30,13 +29,13 @@ module.exports = function(grunt) {
       },
     },
     es6ToCommonjs: {
-      'char-buffer': {
+      'commonjs': {
         files: [
           {
             expand: true,
             cwd: 'src',
             src: ['**/*.js'],
-            dest: 'temp/commonjs/',
+            dest: 'temp/commonjs',
           },
         ],
       },
@@ -44,7 +43,7 @@ module.exports = function(grunt) {
     'compile-handlebars': {
       'templates_temp_gh-pages': {
         template: 'build/templates/**/*.hbs',
-        templateData: {html: true, scripts: scripts, test: {scripts: testScripts}},
+        templateData: {html: true},
         globals: [
           './package.json',
         ],
@@ -53,7 +52,7 @@ module.exports = function(grunt) {
       },
       master: {
         template: 'build/master/templates/**/*.hbs',
-        templateData: {html: false, scripts: scripts, test: {scripts: testScripts}},
+        templateData: {html: false, scripts: scripts, tests: tests},
         globals: [
           './package.json',
         ],
@@ -70,7 +69,7 @@ module.exports = function(grunt) {
       },
       npm: {
         template: 'build/npm/templates/**/*.hbs',
-        templateData: {html: false, scripts: scripts, test: {scripts: testScripts}},
+        templateData: {html: false},
         globals: [
           './package.json',
         ],
@@ -120,7 +119,7 @@ module.exports = function(grunt) {
             src: [
               'temp/amd_tests/char-buffer.amd_tests.js',
             ],
-            dest: 'target/master/test',
+            dest: 'target/master/',
           },
           {
             expand: true,
@@ -130,7 +129,7 @@ module.exports = function(grunt) {
           },
           {
             expand: true,
-            cwd: 'src/char-buffer',
+            cwd: 'src',
             src: ['**', '**/.*'],
             dest: 'target/master',
           },
@@ -171,7 +170,7 @@ module.exports = function(grunt) {
       'amd_test': {
         options: {
           baseUrl: 'temp/commonjs',
-          include: testScriptsFullPath,
+          include: tests,
           paths: {
             'expect': 'empty:',
             'char-buffer': 'empty:',
@@ -214,8 +213,8 @@ module.exports = function(grunt) {
       },
     },
     'mocha_istanbul': {
-      'char-bufferCoverage': {
-        src: 'temp/commonjs/char-buffer/test',
+      coverage: {
+        src: 'temp/commonjs/char-buffer',
         options: {
           recursive: true,
           reporter: 'spec',
@@ -225,7 +224,7 @@ module.exports = function(grunt) {
         },
       },
       coveralls: {
-        src: 'temp/commonjs/char-buffer/test',
+        src: 'temp/commonjs/char-buffer',
         options: {
           coverage: true,
           recursive: true,
@@ -238,7 +237,7 @@ module.exports = function(grunt) {
     },
     jsduck: {
       'temp/commonjs': {
-        src: ['temp/commonjs/char-buffer/**/*.js', '!temp/commonjs/char-buffer/test/**/*.js'],
+        src: ['temp/commonjs/char-buffer/**/*.js', '!temp/commonjs/**/test/**/*.js'],
         dest: 'target/gh-pages/api',
         options: {
           'builtin-classes': true,
@@ -256,13 +255,13 @@ module.exports = function(grunt) {
       },
       src: {
         options: {
-          jshintrc: 'build/src.char-buffer.jshintrc',
+          jshintrc: 'build/src.jshintrc',
         },
         src: ['src/**/*.js', '!src/**/test/**/*.js'],
       },
       test: {
         options: {
-          jshintrc: 'build/src.char-buffer.test.jshintrc',
+          jshintrc: 'build/src.test.jshintrc',
         },
         src: ['!src/**/*.js', 'src/**/test/**/*.js'],
       },
@@ -357,7 +356,7 @@ module.exports = function(grunt) {
   // gh-pages
   grunt.registerTask('coverage', [
     'es6ToCommonjs',
-    'mocha_istanbul:char-bufferCoverage',
+    'mocha_istanbul:coverage',
   ]);
   grunt.registerTask('report-coveralls', [
     'es6ToCommonjs',
@@ -370,7 +369,7 @@ module.exports = function(grunt) {
   ]);
   grunt.registerTask('gh-pages', [
     'es6ToCommonjs',
-    'mocha_istanbul:char-bufferCoverage',
+    'mocha_istanbul:coverage',
     'compile-handlebars:templates_temp_gh-pages',
     'jsduck',
   ]);
