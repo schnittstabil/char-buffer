@@ -1,12 +1,12 @@
 {
   "name": "char-buffer",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "homepage": "https://github.com/schnittstabil/char-buffer",
   "authors": [
     "Michael Mayer <michael@schnittstabil.de>"
   ],
   "description": "Collect CharCodes and convert them to string.",
-  "main": "index.js",
+  "main": "char-buffer.js",
   "moduleType": [
     "amd",
     "es6",

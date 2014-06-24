@@ -681,9 +681,6 @@ module.exports = CharBuffer;
 });
 
 define('char-buffer',['require','exports','module','./char-buffer/index'],function (require, exports, module) {
-/*
- * Facade for AMD etc.
- */
 var Facade = require('./char-buffer/index');
 module.exports = Facade;
 

@@ -171,8 +171,8 @@ describe('CharBuffer.CharBuffers', function() {
 (function (root, factory) {
   
   if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define('char-buffer/test/umd_test', ['expect', 'char-buffer/index'], factory);
+    // AMD
+    define('char-buffer/test/umd_test.js',['expect', '../index'], factory);
   } else if (typeof exports === 'object') {
     // CommonJS
     factory(require('expect'), require('../index'));
@@ -200,6 +200,4 @@ describe('CharBuffer.CharBuffers', function() {
     }
   });
 }));
-
-define("char-buffer/test/umd_test.js", function(){});
 

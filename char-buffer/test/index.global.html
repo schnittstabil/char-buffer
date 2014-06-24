@@ -13,28 +13,14 @@
   <script type="text/javascript" src="bower_components/mocha-screencast-reporter/screencast-reporter.js"></script>
   <script type="text/javascript" src="bower_components/mocha/mocha.js"></script>
 
-  <script type="text/javascript" src="bower_components/requirejs/require.js"></script>
+
+  <script type="text/javascript" src="/char-buffer.global.js"></script>
+
+  <script>mocha.setup({ ui: 'bdd' });</script>
+
+  <script type="text/javascript" src="umd_test.js"></script>
+
   <script type="text/javascript">
-    // track test modules
-    var testModules = [],
-        requireJsDefine = define;
-    define = function() {
-      requireJsDefine.apply(this, arguments);
-      if(arguments.length > 0 && typeof arguments[0] === 'string' && arguments[0].match(/^.*\/test\/.*_test.js$/)){
-        testModules.push(arguments[0]);
-      }
-    }
-
-    // tiny shim
-    define('expect',[],function(){
-      return expect;
-    });
-  </script>
-  <script type="text/javascript" src="../char-buffer.amd.js"></script>
-  <script type="text/javascript" src="char-buffer.amd_tests.js"></script>
-
-  <script>mocha.setup({ ui: 'bdd' });
-  require(testModules, function(){
     //mocha.checkLeaks();
     mocha.reporter(ScreencastReporter);
 
@@ -52,7 +38,6 @@
         }
       }
     }, 1000);
-  });
   </script>
 </body>
 </html>

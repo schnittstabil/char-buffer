@@ -145,9 +145,9 @@ console.log(buffer.append(102).append(111).append(111).toString());
     bower install char-buffer
     ```
 
-### Examples using  ES6 Module Loader Polyfill
+### Examples using SystemJS
 
-See [ModuleLoader/es6-module-loader](https://github.com/ModuleLoader/es6-module-loader) for details.
+See [systemjs/systemjs](https://github.com/systemjs/systemjs) for details.
 
 ### Examples using Browser Globals
 

@@ -2,7 +2,7 @@
   "name": "char-buffer",
   "repo": "schnittstabil/char-buffer",
   "description": "Collect CharCodes and convert them to string.",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "keywords": [
     "Char",
     "CharCode",
@@ -28,18 +28,19 @@
         "visionmedia/mocha": "*"
       },
       "scripts": [
-        "test/char-buffer_test.js",
-        "test/umd_test.js"
+        "char-buffer/test/char-buffer_test.js",
+        "char-buffer/test/umd_test.js"
       ]
   },
   "license": "MIT",
-  "main": "index.js",
+  "main": "char-buffer.js",
   "scripts": [
-    "abstract-char-buffer.js",
-    "index.js",
-    "node-buffer.js",
-    "string-array-buffer.js",
-    "string-buffer.js",
-    "typed-array-buffer.js"
+    "char-buffer.js",
+    "char-buffer/abstract-char-buffer.js",
+    "char-buffer/index.js",
+    "char-buffer/node-buffer.js",
+    "char-buffer/string-array-buffer.js",
+    "char-buffer/string-buffer.js",
+    "char-buffer/typed-array-buffer.js"
   ]
 }

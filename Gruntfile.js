@@ -18,7 +18,7 @@ module.exports = function(grunt) {
       global: {
         options: {
           urls: [
-            'http://127.0.0.1:9999/test/index.global.html',
+            'http://127.0.0.1:9999/char-buffer/test/index.global.html',
           ],
           build: build,
           throttled: 1,
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
       component: {
         options: {
           urls: [
-            'http://127.0.0.1:9999/test/index.component.html',
+            'http://127.0.0.1:9999/char-buffer/test/index.component.html',
           ],
           build: build,
           throttled: 1,
@@ -42,7 +42,7 @@ module.exports = function(grunt) {
       amd: {
         options: {
           urls: [
-            'http://127.0.0.1:9999/test/index.amd.html',
+            'http://127.0.0.1:9999/char-buffer/test/index.amd.html',
           ],
           build: build,
           throttled: 1,
