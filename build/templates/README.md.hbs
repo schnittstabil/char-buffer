@@ -103,7 +103,8 @@ var CharBuffer = require('char-buffer'),
     buffer = new CharBuffer(3);
 
 // Or create a specific CharBuffer implementation:
-var TypedArrayBuffer = require('char-buffer/typed-array-buffer'),
+var CharBuffer = require('char-buffer'),
+    TypedArrayBuffer = CharBuffer.TypedArrayBuffer,
     buffer           = new TypedArrayBuffer(3);
 
 
@@ -128,7 +129,8 @@ console.log(buffer.append(102).append(111).append(111).toString());
 
 See [systemjs/systemjs](https://github.com/systemjs/systemjs) for details.
 
-Install [system.js](https://github.com/systemjs/systemjs): {{#code_helper lang="bash"}}bower install system.js{{/code_helper}}
+Install [system.js](https://github.com/systemjs/systemjs):
+{{#code_helper lang="bash"}}bower install system.js{{/code_helper}}
 
 {{#code_helper lang="html"}}<script type="text/javascript" src="bower_components/traceur/traceur.js"></script>
 <script type="text/javascript" src="bower_components/es6-module-loader/dist/es6-module-loader.js"></script>
@@ -143,8 +145,7 @@ Install [system.js](https://github.com/systemjs/systemjs): {{#code_helper lang="
 
   // Output 'foo'
   console.log(buffer.append(102).append(111).append(111).toString());
-</script>
-{{/code_helper}}
+</script>{{/code_helper}}
 
 ### Examples using Browser Globals
 
