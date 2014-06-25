@@ -1,5 +1,5 @@
   return {
-    global: require('char-buffer'),
+    global: require('char-buffer/char-buffer'),
     require: require,
     define: define
   };

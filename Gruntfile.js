@@ -3,6 +3,7 @@ module.exports = function(grunt) {
   var es6ToCommonjsTransform = require('es6-module-jstransform'),
       scripts = grunt.file.expand({cwd: 'src'}, ['**/*.js', '!**/test/**/*']),
       tests = grunt.file.expand({cwd: 'src'}, ['!**/*.js', '**/test/**/*.js']),
+      testsRequireJs = tests.map( function(path) { return 'char-buffer/' + path; } ),
       packageJson = grunt.file.readJSON('package.json');
 
   // Project configuration.
@@ -35,7 +36,7 @@ module.exports = function(grunt) {
             expand: true,
             cwd: 'src',
             src: ['**/*.js'],
-            dest: 'temp/commonjs',
+            dest: 'temp/char-buffer',
           },
         ],
       },
@@ -150,7 +151,7 @@ module.exports = function(grunt) {
           },
           {
             expand: true,
-            cwd: 'temp/commonjs/char-buffer',
+            cwd: 'temp/char-buffer',
             src: ['**', '**/.*'],
             dest: 'target/npm',
           },
@@ -160,17 +161,20 @@ module.exports = function(grunt) {
     requirejs: {
       amd: {
         options: {
-          baseUrl: 'temp/commonjs',
-          name: 'char-buffer',
+          baseUrl: 'temp',
+          name: 'char-buffer/char-buffer',
           cjsTranslate: true,
           out: 'temp/amd/char-buffer.amd.js',
           optimize: 'none',
+          wrap: {
+            end: 'define(\'char-buffer\', [\'char-buffer/char-buffer\'], function(cb){ return cb; });',
+          }
         },
       },
       'amd_test': {
         options: {
-          baseUrl: 'temp/commonjs',
-          include: tests,
+          baseUrl: 'temp',
+          include: testsRequireJs,
           paths: {
             'expect': 'empty:',
             'char-buffer': 'empty:',
@@ -182,9 +186,9 @@ module.exports = function(grunt) {
       },
       global: {
         options: {
-          baseUrl: 'temp/commonjs',
-          name: '../../node_modules/almond/almond',
-          include: ['char-buffer'],
+          baseUrl: 'temp',
+          name: '../node_modules/almond/almond',
+          include: ['char-buffer/char-buffer'],
           cjsTranslate: true,
           wrap: {
             startFile: 'build/master/wrap.global.start.js.frag',
@@ -201,20 +205,20 @@ module.exports = function(grunt) {
           reporter: 'spec',
         },
         src: [
-          'temp/commonjs/**/test/**/*_test.js',
-          '!temp/commonjs/**/test/**/*_slow_test.js',
+          'temp/char-buffer/**/test/**/*_test.js',
+          '!temp/char-buffer/**/test/**/*_slow_test.js',
         ],
       },
       slow: {
         options: {
           reporter: 'spec',
         },
-        src: ['temp/commonjs/**/test/**/*_slow_test.js'],
+        src: ['temp/char-buffer/**/test/**/*_slow_test.js'],
       },
     },
     'mocha_istanbul': {
       coverage: {
-        src: 'temp/commonjs/char-buffer',
+        src: 'temp/char-buffer',
         options: {
           recursive: true,
           reporter: 'spec',
@@ -224,7 +228,7 @@ module.exports = function(grunt) {
         },
       },
       coveralls: {
-        src: 'temp/commonjs/char-buffer',
+        src: 'temp/char-buffer',
         options: {
           coverage: true,
           recursive: true,
@@ -236,8 +240,8 @@ module.exports = function(grunt) {
       },
     },
     jsduck: {
-      'temp/commonjs': {
-        src: ['temp/commonjs/char-buffer/**/*.js', '!temp/commonjs/**/test/**/*.js'],
+      'temp/char-buffer': {
+        src: ['temp/char-buffer/**/*.js', '!temp/char-buffer/**/test/**/*.js'],
         dest: 'target/gh-pages/api',
         options: {
           'builtin-classes': true,
@@ -275,20 +279,20 @@ module.exports = function(grunt) {
           src: ['Gruntfile.js'],
         },
       },
-      'temp/commonjs': {
+      'temp/char-buffer': {
         options: {
           config: 'build/.jscsrc',
         },
         files: {
-          src: ['temp/commonjs/**/*.js', '!temp/commonjs/**/test/**/*.js'],
+          src: ['temp/char-buffer/**/*.js', '!temp/char-buffer/**/test/**/*.js'],
         },
       },
-      'temp/commonjs/test': {
+      'temp/char-buffer/test': {
         options: {
           config: 'build/.jscsrc',
         },
         files: {
-          src: ['!temp/commonjs/**/*.js', 'temp/commonjs/**/test/**/*.js'],
+          src: ['!temp/char-buffer/**/*.js', 'temp/char-buffer/**/test/**/*.js'],
         },
       },
     },
@@ -324,6 +328,8 @@ module.exports = function(grunt) {
   });
 
   grunt.event.on('coverage', function(lcov, done) {
+    // repair paths
+    lcov = lcov.replace(/\/temp\/char-buffer\//g, '/src/');
     require('coveralls').handleInput(lcov, function(err) {
       if (err) {
         return done(err);

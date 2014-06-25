@@ -1,5 +1,5 @@
 'use strict';
-import CharBuffer from '../index';
+import CharBuffer from '../char-buffer';
 import expect from 'expect';
 
 function buildTestString(len) {
@@ -155,8 +155,8 @@ describe('default CharBuffer', function() {
 });
 
 describe('CharBuffer.CharBuffers', function() {
-  it('should contain CharBuffer._default', function() {
-    expect(CharBuffer.CharBuffers).to.contain(CharBuffer._default);
+  it('should contain CharBuffer', function() {
+    expect(CharBuffer.CharBuffers).to.contain(CharBuffer);
   });
 
   for (i = 0; i < CharBuffer.CharBuffers.length; i++) {
