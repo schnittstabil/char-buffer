@@ -118,7 +118,8 @@ var CharBuffer = require('char-buffer'),
     buffer = new CharBuffer(3);
 
 // Or create a specific CharBuffer implementation:
-var TypedArrayBuffer = require('char-buffer/typed-array-buffer'),
+var CharBuffer = require('char-buffer'),
+    TypedArrayBuffer = CharBuffer.TypedArrayBuffer,
     buffer           = new TypedArrayBuffer(3);
 
 
@@ -148,7 +149,8 @@ console.log(buffer.append(102).append(111).append(111).toString());
 
 See [systemjs/systemjs](https://github.com/systemjs/systemjs) for details.
 
-Install [system.js](https://github.com/systemjs/systemjs): ```bash
+Install [system.js](https://github.com/systemjs/systemjs):
+```bash
 bower install system.js
 ```
 
