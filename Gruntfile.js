@@ -2,6 +2,7 @@
 
 module.exports = function(grunt) {
   var browsers = grunt.file.readJSON('browsers.json'),
+      legacyBrowsers = grunt.file.readJSON('legacy-browsers.json'),
       testname = 'char-buffer_' + grunt.template.today('yymmdd-HH:MM'),
       build = process.env.TRAVIS_JOB_ID + '_' + grunt.template.today('yymmdd-HHMM');
 
@@ -15,14 +16,26 @@ module.exports = function(grunt) {
       }
     },
     'saucelabs-mocha': {
-      global: {
+      es6: {
         options: {
           urls: [
-            'http://127.0.0.1:9999/char-buffer/test/index.global.html',
+            'http://127.0.0.1:9999/tests.html',
           ],
           build: build,
           throttled: 1,
           browsers: browsers,
+          testname: testname,
+          tags: ['es6'],
+        },
+      },
+      global: {
+        options: {
+          urls: [
+            'http://127.0.0.1:9999/tests_global.html',
+          ],
+          build: build,
+          throttled: 1,
+          browsers: legacyBrowsers,
           testname: testname,
           tags: ['global'],
         },
@@ -30,11 +43,11 @@ module.exports = function(grunt) {
       component: {
         options: {
           urls: [
-            'http://127.0.0.1:9999/char-buffer/test/index.component.html',
+            'http://127.0.0.1:9999/tests_component.html',
           ],
           build: build,
           throttled: 1,
-          browsers: browsers,
+          browsers: legacyBrowsers,
           testname: testname,
           tags: ['component'],
         },
@@ -42,11 +55,11 @@ module.exports = function(grunt) {
       amd: {
         options: {
           urls: [
-            'http://127.0.0.1:9999/char-buffer/test/index.amd.html',
+            'http://127.0.0.1:9999/tests_amd.html',
           ],
           build: build,
           throttled: 1,
-          browsers: browsers,
+          browsers: legacyBrowsers,
           testname: testname,
           tags: ['amd'],
         },

@@ -3,10 +3,10 @@
   'use strict';
   if (typeof define === 'function' && define.amd) {
     // AMD
-    define(['expect', '../index'], factory);
+    define(['expect', '../char-buffer'], factory);
   } else if (typeof exports === 'object') {
     // CommonJS
-    factory(require('expect'), require('../index'));
+    factory(require('expect'), require('../char-buffer'));
   } else {
     // Browser globals
     factory(expect, root.CharBuffer);

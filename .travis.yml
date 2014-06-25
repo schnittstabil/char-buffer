@@ -7,7 +7,7 @@ before_script:
 - npm install -g component@1.0.0-rc5
 - component install --dev
 - component build --dev
-- cd char-buffer/test && bower install && cd ../..
+- bower install
 env:
   global:
   - secure: sWCmGm3iEto/u3IQzZ8r0nXsP0FwFaXHd2UMOXiJTRuTpRGCnV6u7Lppd55vPm50ZZRBRlYQUvvIWikemuDbl2oDG+sC/jcr+8eNcvAd25t4QmDNPwe0fQZQpdY2OJPXbq+7ZWvA4Avmo9mSw4+VJ/qlaNDn+mo/SRlOlg0lKwc=

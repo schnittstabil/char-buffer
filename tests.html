@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Tests</title>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  <link rel="stylesheet" href="bower_components/mocha/mocha.css" />
+  <link rel="stylesheet" href="bower_components/mocha-screencast-reporter/screencast-reporter.css" />
+  <script type="text/javascript" src="bower_components/traceur/traceur.js"></script>
+  <script type="text/javascript" src="bower_components/es6-module-loader/dist/es6-module-loader.js"></script>
+  <script type="text/javascript" src="bower_components/system.js/dist/system.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      System.paths['screencast-reporter'] = 'bower_components/mocha-screencast-reporter/screencast-reporter.js';
+
+      System.paths['mocha'] = 'bower_components/mocha/mocha.js';
+      System.meta['mocha'] = { format: 'global' };
+
+      System.paths['expect'] = 'bower_components/expect/index.js';
+
+      System.import('screencast-reporter').then(function(ScreencastReporter) {
+        return System.import('mocha').then(function(mocha) {
+          // setup mocha
+          mocha.setup('bdd');
+          mocha.reporter(ScreencastReporter);
+          return System.import('test/char-buffer_test').then(function() {
+            var runner = mocha.run(),
+                count = 5,
+                check;
+            // check if ended (with workaround)
+            check = setInterval(function(){
+              if (runner.stats.end) {
+                window.mochaResults = runner.stats;
+                if(count>0){
+                  count--;
+                }else{
+                  clearInterval(check);
+                }
+              }
+            }, 1000);
+          });
+        });
+      }).catch(function(e) {
+        console.error(e);
+      });
+    };
+  </script>
+</head>
+<body>
+  <div id="mocha"></div>
+</body>
+</html>

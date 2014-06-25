@@ -1,5 +1,5 @@
-define('char-buffer/test/char-buffer_test.js',['require','exports','module','../index','expect'],function (require, exports, module) {
-var CharBuffer = require('../index');
+define('char-buffer/test/char-buffer_test.js',['require','exports','module','../char-buffer','expect'],function (require, exports, module) {
+var CharBuffer = require('../char-buffer');
 var expect = require('expect');
 
 function buildTestString(len) {
@@ -155,8 +155,8 @@ describe('default CharBuffer', function() {
 });
 
 describe('CharBuffer.CharBuffers', function() {
-  it('should contain CharBuffer._default', function() {
-    expect(CharBuffer.CharBuffers).to.contain(CharBuffer._default);
+  it('should contain CharBuffer', function() {
+    expect(CharBuffer.CharBuffers).to.contain(CharBuffer);
   });
 
   for (i = 0; i < CharBuffer.CharBuffers.length; i++) {
@@ -172,10 +172,10 @@ describe('CharBuffer.CharBuffers', function() {
   
   if (typeof define === 'function' && define.amd) {
     // AMD
-    define('char-buffer/test/umd_test.js',['expect', '../index'], factory);
+    define('char-buffer/test/umd_test.js',['expect', '../char-buffer'], factory);
   } else if (typeof exports === 'object') {
     // CommonJS
-    factory(require('expect'), require('../index'));
+    factory(require('expect'), require('../char-buffer'));
   } else {
     // Browser globals
     factory(expect, root.CharBuffer);

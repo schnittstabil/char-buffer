@@ -427,7 +427,7 @@ var requirejs, require, define;
     };
 }());
 
-define("../../node_modules/almond/almond", function(){});
+define("../node_modules/almond/almond", function(){});
 
 define('char-buffer/abstract-char-buffer',['require','exports','module'],function (require, exports, module) {
 /**
@@ -1015,7 +1015,7 @@ module.exports = NodeBuffer;
 
 });
 
-define('char-buffer/index',['require','exports','module','./abstract-char-buffer','./string-buffer','./string-array-buffer','./typed-array-buffer','./node-buffer'],function (require, exports, module) {
+define('char-buffer/char-buffer',['require','exports','module','./abstract-char-buffer','./string-buffer','./string-array-buffer','./typed-array-buffer','./node-buffer'],function (require, exports, module) {
 var AbstractCharBuffer = require('./abstract-char-buffer');
 var StringBuffer = require('./string-buffer');
 var StringArrayBuffer = require('./string-array-buffer');
@@ -1029,34 +1029,37 @@ var NodeBuffer = require('./node-buffer');
 /**
   * @method constructor
   *
-  * Construct the {@link CharBuffer#_default} object.
+  * Construct the default default implementation of {@link CharBuffer.AbstractCharBuffer} of the current platform.
   *
   * @param {Number} initCapacity The initial capacity (i.e. the expected
-  *   {@link String#length length} of the {@link String} represented by this
-  *   buffer).
+  *     {@link String#length length} of the {@link String} represented by this
+  *     buffer).
   */
-function CharBuffer(initCapacity) {
-  return CharBuffer._default.call(this, initCapacity);
-}
+var CharBuffer = null;
 
-/* istanbul ignore if: IE-fix */
-if (!CharBuffer.name) {
-  CharBuffer.name = 'CharBuffer';
-}
+var supported = [],
+    CharBuffers = [
+      AbstractCharBuffer,
+      StringBuffer,
+      StringArrayBuffer,
+      TypedArrayBuffer,
+      NodeBuffer
+    ],
+    i,
+    buffer;
 
-/**
-  * @property {CharBuffer[]} CharBuffers
-  * @static
-  *
-  * Array of all {@link CharBuffer.AbstractCharBuffer} implementations.
-  */
-CharBuffer.CharBuffers = [
-  AbstractCharBuffer,
-  StringBuffer,
-  StringArrayBuffer,
-  TypedArrayBuffer,
-  NodeBuffer
-];
+// last supported {@link CharBuffer.CharBuffers} becomes
+// {@link CharBuffer}
+for (i = 0; i < CharBuffers.length; i++) {
+  buffer = CharBuffers[i];
+
+  /* istanbul ignore else */
+  if (buffer.isSupported) {
+    supported.push(buffer.name);
+    CharBuffer = buffer;
+  }
+
+}
 
 /**
   * @property {String[]} [supported=["StringBuffer", "StringArrayBuffer",
@@ -1066,59 +1069,29 @@ CharBuffer.CharBuffers = [
   * Names of the supported {@link CharBuffer.AbstractCharBuffer} implementations of the
   * current platform.
   */
-CharBuffer.supported = [];
+CharBuffer.supported = supported;
 
 /**
-  * @property {CharBuffer.AbstractCharBuffer} [_default=
-  *   CharBuffers.filter(isSupported).last()]
+  * @property {CharBuffer[]} CharBuffers
   * @static
-  * @private
   *
-  * The default implementation of the current platform.
-  * See [High-performance String Concatenation in JavaScript][1].
-  *
-  * [1]: http://www.sitepoint.com/javascript-fast-string-concatenation
+  * Array of all {@link CharBuffer.AbstractCharBuffer} implementations.
   */
-CharBuffer._default = null;
+CharBuffer.CharBuffers = CharBuffers;
 
-var i,
-    buffer;
-
-// last supported {@link CharBuffer.CharBuffers} becomes
-// {@link CharBuffer._default}
-for (i = 0; i < CharBuffer.CharBuffers.length; i++) {
-  buffer = CharBuffer.CharBuffers[i];
-
-  /* istanbul ignore else */
-  if (buffer.isSupported) {
-    CharBuffer.supported.push(buffer.name);
-    CharBuffer._default = buffer;
-  }
+for (i = 0; i < CharBuffers.length; i++) {
+  buffer = CharBuffers[i];
 
   // export buffer
   CharBuffer[buffer.name] = buffer;
 }
 
-/* istanbul ignore next */
-/**
-  * @property {Boolean}
-  * @static
-  * Indicates whether any CharBuffer is supported by the current platform.
-  */
-CharBuffer.isSupported = CharBuffer._default ? CharBuffer._default.isSupported : false;
-
 module.exports = CharBuffer;
 
 });
 
-define('char-buffer',['require','exports','module','./char-buffer/index'],function (require, exports, module) {
-var Facade = require('./char-buffer/index');
-module.exports = Facade;
-
-});
-
   return {
-    global: require('char-buffer'),
+    global: require('char-buffer/char-buffer'),
     require: require,
     define: define
   };
