@@ -29,13 +29,15 @@ function NodeBuffer(initCapacity) {
 
 NodeBuffer.prototype = new AbstractCharBuffer();
 
+NodeBuffer.prototype.constructor = NodeBuffer;
+
 /* istanbul ignore if: IE-fix */
 if (!NodeBuffer.name) {
   NodeBuffer.name = 'NodeBuffer';
 }
 
 /**
-  * @method _ensureCapacity
+  * @method
   * @protected
   *
   * Ensures a minimum capacity.
@@ -55,6 +57,7 @@ NodeBuffer.prototype._ensureCapacity = function(minCapacity) {
 };
 
 /**
+  * @method
   * Write a charCode to the buffer using
   * [Buffer.writeUInt16LE(charCode, ...)][1].
   *
@@ -72,23 +75,24 @@ NodeBuffer.prototype.write = function(charCode, offset) {
   return this;
 };
 
-/** */
+/** @method */
 NodeBuffer.prototype.append = NodeBuffer.prototype.write;
 
-/** */
+/** @method */
 NodeBuffer.prototype.read = function(offset) {
   return this._buffer.readUInt16LE(offset * 2);
 };
 
-/** */
+/** @method */
 NodeBuffer.prototype.charCodeAt = NodeBuffer.prototype.read;
 
-/** */
+/** @method */
 NodeBuffer.prototype.charAt = function(offset) {
   return String.fromCharCode(this.read(offset));
 };
 
 /**
+  * @method
   * Returns the {@link String} represented by this buffer using
   * [Buffer.toString('utf16le', ...)][1].
   *
@@ -100,10 +104,7 @@ NodeBuffer.prototype.toString = function() {
   return this._buffer.toString('utf16le', 0, this.length * 2);
 };
 
-/**
-  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
-  * @static
-  */
+/** @static @property */
 NodeBuffer.isSupported = (function() {
   try {
     var buffer = new Buffer('A', 'utf16le');
@@ -113,5 +114,8 @@ NodeBuffer.isSupported = (function() {
     return false;
   }
 }());
+
+/** @static @method */
+NodeBuffer.fromString = AbstractCharBuffer.fromStringConstr(NodeBuffer);
 
 export default NodeBuffer;

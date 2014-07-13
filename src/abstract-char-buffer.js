@@ -36,10 +36,11 @@ if (!AbstractCharBuffer.name) {
 AbstractCharBuffer.prototype.append = undefined;
 
 /**
-  * @chainable
   * @abstract
+  * @method
+  * @chainable
   *
-  * Write a charCode to the buffer at an offset.
+  * Writes a charCode to the buffer at an offset.
   *
   * @param {Number} charCode The charCode to write.
   * @param {Number} offset The zero based offset to write at.
@@ -49,8 +50,9 @@ AbstractCharBuffer.prototype.write = undefined;
 
 /**
   * @abstract
+  * @method
   *
-  * Read the charCode at an offset.
+  * Reads the charCode at an offset.
   *
   * @param {Number} offset The zero based offset.
   * @return {Number} The charCode.
@@ -60,8 +62,9 @@ AbstractCharBuffer.prototype.read = undefined;
 
 /**
   * @abstract
+  * @method
   *
-  * Read the charCode at an offset.
+  * Reads the charCode at an offset.
   *
   * @param {Number} offset The zero based offset.
   * @return {Number} The charCode.
@@ -71,8 +74,9 @@ AbstractCharBuffer.prototype.charCodeAt = undefined;
 
 /**
   * @abstract
+  * @method
   *
-  * Read the char at an offset.
+  * Reads the char at an offset.
   *
   * @param {Number} offset The zero based offset.
   * @return {String} The char.
@@ -88,6 +92,7 @@ AbstractCharBuffer.prototype.length = 0;
 
 /**
   * @abstract
+  * @method
   *
   * Gets the length of the {@link String} represented by this buffer.
   * @return {Number} The length of the {@link String}.
@@ -97,6 +102,7 @@ AbstractCharBuffer.prototype.getLength = function() {
 };
 
 /**
+  * @method
   * @chainable
   *
   * Sets the length of the {@link String} represented by this buffer.
@@ -115,7 +121,69 @@ AbstractCharBuffer.prototype.setLength = function(newLength) {
 };
 
 /**
+  * @method
+  *
+  * Executes a function once per charCode.
+  * See also {@link Array#forEach}
+  *
+  * @param {Function} callback            Function to execute for each charCode.
+  * @param {Number}   callback.charCode   The charCode.
+  * @param {Number}   callback.index      The index of the charCode.
+  * @param {Object}   callback.charbuffer The CharBuffer being traversed.
+  * @param {Object}   [thisArg=undefined] Value to use as this when executing callback.
+  */
+AbstractCharBuffer.prototype.forEach = function(callback, thisArg) {
+  var T,
+      i,
+      len = this.length;
+
+  if (typeof callback !== 'function') {
+    throw new TypeError(callback + ' is not a function');
+  }
+  if (arguments.length > 1) {
+    T = thisArg;
+  }
+  for (i = 0; i < len; i++) {
+    callback.call(T, this.charCodeAt(i), i, this);
+  }
+};
+
+/**
+  * @method
+  *
+  * Creates a new CharBuffer with the results of calling a provided function on every charCode.
+  * See also {@link Array#map}
+  *
+  * @param {Function} callback            Function to execute for each charCode.
+  * @param {Number}   callback.charCode   The charCode.
+  * @param {Number}   callback.index      The index of the charCode.
+  * @param {Object}   callback.charbuffer The CharBuffer being traversed.
+  * @param {Number}   callback.return     The new charCode to write into the new CharBuffer.
+  * @param {Object}   [thisArg=undefined] Value to use as this when executing callback.
+  * @return {CharBuffer} CharBuffer of the return values of callback function.
+  */
+AbstractCharBuffer.prototype.map = function(callback, thisArg) {
+  var T,
+      i,
+      len = this.length,
+      output = new this.constructor(len);
+
+  if (typeof callback !== 'function') {
+    throw new TypeError(callback + ' is not a function');
+  }
+  if (arguments.length > 1) {
+    T = thisArg;
+  }
+
+  for (i = 0; i < len; i++) {
+    output.append(callback.call(T, this.charCodeAt(i), i, this));
+  }
+  return output;
+};
+
+/**
   * @abstract
+  * @method
   *
   * Returns the {@link String} represented by this buffer.
   * @return {String} The string.
@@ -123,11 +191,70 @@ AbstractCharBuffer.prototype.setLength = function(newLength) {
 AbstractCharBuffer.prototype.toString = undefined;
 
 /**
-  * @property {Boolean}
   * @static
+  * @property {Boolean} [isSupported=true]
   * @template
-  * Indicates whether this AbstractCharBuffer is supported by the current platform.
+  * @inheritable
+  * Indicates whether this CharBuffer is supported by the current platform.
   */
 AbstractCharBuffer.isSupported = false;
+
+/**
+  * @static
+  * @method
+  * @inheritable
+  *
+  * Creates a new CharBuffer from a {@link String}.
+  *
+  * @param {String} string The string.
+  * @param {Function} [transform=identity]  Function that produces a charCode of the new CharBuffer
+  *                                         from a charCode of the string parameter.
+  * @param {Number} transform.charCode The charCode of the string.
+  * @param {Number} transform.index The index of the charCode within the string.
+  * @param {Number} transform.return The charCode to write into the new CharBuffer.
+  * @return {CharBuffer} CharBuffer of the string, transformed by transform.
+  *
+  *     @example
+  *     var charBuffer;
+  *
+  *     charBuffer = CharBuffer.fromString('abc');
+  *     console.log(charBuffer.toString()); // output: abc
+  *
+  *     charBuffer = CharBuffer.fromString('abc', function(charCode, index){
+  *       return charCode + 3;
+  *     });
+  *     console.log(charBuffer.toString()); // output: def
+  *
+  */
+AbstractCharBuffer.fromString = null;
+
+/**
+  * @static
+  * @method
+  * @protected
+  *
+  * Creates a fromString implementation.
+  *
+  * @param {Function} Constr A CharBuffer constructor.
+  * @return {Function} A default fromString implementation for Constr.
+  */
+AbstractCharBuffer.fromStringConstr = function(Constr) {
+  return function(string, transform) {
+    var len = string.length,
+        output = new Constr(len),
+        i;
+    // manual loop optimization :-)
+    if (transform) {
+      for (i = 0; i < len; i++) {
+        output.append(transform.call(transform, string.charCodeAt(i), i));
+      }
+    } else {
+      for (i = 0; i < len; i++) {
+        output.append(string.charCodeAt(i));
+      }
+    }
+    return output;
+  };
+};
 
 export default AbstractCharBuffer;

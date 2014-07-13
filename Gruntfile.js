@@ -2,8 +2,8 @@
 module.exports = function(grunt) {
   var es6ToCommonjsTransform = require('es6-module-jstransform'),
       scripts = grunt.file.expand({cwd: 'src'}, ['**/*.js', '!**/test/**/*']),
-      tests = grunt.file.expand({cwd: 'src'}, ['!**/*.js', '**/test/**/*.js']),
-      testsRequireJs = tests.map( function(path) { return 'char-buffer/' + path; } ),
+      tests = grunt.file.expand({cwd: 'src'}, ['test/**/*.js']),
+      testsRequireJs = tests.map( function(path) { return 'char-buffer/' + path.slice(0, -3); } ),
       packageJson = grunt.file.readJSON('package.json');
 
   // Project configuration.
@@ -177,7 +177,7 @@ module.exports = function(grunt) {
           include: testsRequireJs,
           paths: {
             'expect': 'empty:',
-            'char-buffer': 'empty:',
+            'char-buffer/char-buffer': 'empty:',
           },
           cjsTranslate: true,
           out: 'temp/amd_tests/char-buffer.amd_tests.js',
@@ -267,7 +267,11 @@ module.exports = function(grunt) {
         options: {
           jshintrc: 'build/src.test.jshintrc',
         },
-        src: ['!src/**/*.js', 'src/**/test/**/*.js'],
+        src: [
+          'temp/char-buffer/test/**/*.js',
+          '!temp/char-buffer/*.js',
+          '!temp/char-buffer/test/**/test-strings.js',
+        ],
       },
     },
     jscs: {
@@ -292,7 +296,11 @@ module.exports = function(grunt) {
           config: 'build/.jscsrc',
         },
         files: {
-          src: ['!temp/char-buffer/**/*.js', 'temp/char-buffer/**/test/**/*.js'],
+          src: [
+            'temp/char-buffer/test/**/*.js',
+            '!temp/char-buffer/*.js',
+            '!temp/char-buffer/test/**/test-strings.js',
+          ],
         },
       },
     },

@@ -31,13 +31,15 @@ function TypedArrayBuffer(initCapacity) {
 
 TypedArrayBuffer.prototype = new AbstractCharBuffer();
 
+TypedArrayBuffer.prototype.constructor = TypedArrayBuffer;
+
 /* istanbul ignore if: IE-fix */
 if (!TypedArrayBuffer.name) {
   TypedArrayBuffer.name = 'TypedArrayBuffer';
 }
 
 /**
-  * @method _ensureCapacity
+  * @method
   * @protected
   *
   * Ensures a minimum capacity.
@@ -57,6 +59,7 @@ TypedArrayBuffer.prototype._ensureCapacity = function(minCapacity) {
 };
 
 /**
+  * @method
   * Appends a charCode to the buffer using [...].
   *
   * @param {Number} charCode The charCode to append.
@@ -72,24 +75,25 @@ TypedArrayBuffer.prototype.write = function(charCode, offset) {
   return this;
 };
 
-/** */
+/** @method */
 TypedArrayBuffer.prototype.append = TypedArrayBuffer.prototype.write;
 
-/** */
+/** @method */
 TypedArrayBuffer.prototype.read = function(offset) {
   return this._buffer[offset];
 };
 
-/** */
+/** @method */
 TypedArrayBuffer.prototype.charCodeAt = TypedArrayBuffer.prototype.read;
 
-/** */
+/** @method */
 TypedArrayBuffer.prototype.charAt = function(offset) {
   return String.fromCharCode(this.read(offset));
 };
 
 // jshint -W101
 /**
+  * @method
   * Returns the {@link String} represented by this buffer using
   * {@link String#fromCharCode}.
   *
@@ -133,10 +137,7 @@ TypedArrayBuffer.prototype.toString = function() {
   return buf;
 };
 
-/**
-  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
-  * @static
-  */
+/** @static @property */
 TypedArrayBuffer.isSupported = (function() {
   try {
     return String.fromCharCode.apply(null, new Uint16Array()) === '';
@@ -145,5 +146,8 @@ TypedArrayBuffer.isSupported = (function() {
     return false;
   }
 }());
+
+/** @static @method */
+TypedArrayBuffer.fromString = AbstractCharBuffer.fromStringConstr(TypedArrayBuffer);
 
 export default TypedArrayBuffer;
