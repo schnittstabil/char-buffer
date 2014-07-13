@@ -28,12 +28,15 @@ function StringArrayBuffer(initCapacity) {
 
 StringArrayBuffer.prototype = new AbstractCharBuffer();
 
+StringArrayBuffer.prototype.constructor = StringArrayBuffer;
+
 /* istanbul ignore if: IE-fix */
 if (!StringArrayBuffer.name) {
   StringArrayBuffer.name = 'StringArrayBuffer';
 }
 
 /**
+  * @method
   * Write a charCode to the buffer using
   * {@link String#fromCharCode} and {@link Array#push []}.
   *
@@ -49,23 +52,24 @@ StringArrayBuffer.prototype.write = function(charCode, offset) {
   return this;
 };
 
-/** */
+/** @method */
 StringArrayBuffer.prototype.append = StringArrayBuffer.prototype.write;
 
-/** */
+/** @method */
 StringArrayBuffer.prototype.read = function(offset) {
   return this._buffer[offset].charCodeAt(0);
 };
 
-/** */
+/** @method */
 StringArrayBuffer.prototype.charAt = function(offset) {
   return this._buffer[offset];
 };
 
-/** */
+/** @method */
 StringArrayBuffer.prototype.charCodeAt = StringArrayBuffer.prototype.read;
 
 /**
+  * @method
   * Returns the {@link String} represented by this buffer.
   * @return {String} The string.
   */
@@ -73,10 +77,10 @@ StringArrayBuffer.prototype.toString = function() {
   return this._buffer.slice(0, this.length).join('');
 };
 
-/**
-  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
-  * @static
-  */
+/** @static @property */
 StringArrayBuffer.isSupported = true;
+
+/** @static @method */
+StringArrayBuffer.fromString = AbstractCharBuffer.fromStringConstr(StringArrayBuffer);
 
 export default StringArrayBuffer;

@@ -23,12 +23,15 @@ function StringBuffer() {
 
 StringBuffer.prototype = new AbstractCharBuffer();
 
+StringBuffer.prototype.constructor = StringBuffer;
+
 /* istanbul ignore if: IE-fix */
 if (!StringBuffer.name) {
   StringBuffer.name = 'StringBuffer';
 }
 
 /**
+  * @method
   * Write a charCode to the buffer using
   * {@link String#fromCharCode} and {@link String#concat +}.
   *
@@ -46,34 +49,35 @@ StringBuffer.prototype.write = function(charCode, offset) {
   return this;
 };
 
-/** */
+/** @method */
 StringBuffer.prototype.append = function(charCode) {
   this._buffer += String.fromCharCode(charCode);
   this.length = this._buffer.length;
   return this;
 };
 
-/** */
+/** @method */
 StringBuffer.prototype.charCodeAt = function(offset) {
   return this._buffer.charCodeAt(offset);
 };
 
-/** */
+/** @method */
 StringBuffer.prototype.charAt = function(offset) {
   return this._buffer.charAt(offset);
 };
 
-/** */
+/** @method */
 StringBuffer.prototype.read = StringBuffer.prototype.charCodeAt;
 
-/** */
+/** @method */
 StringBuffer.prototype.setLength = function(newLength) {
-  this.constructor.prototype.setLength.call(this, newLength);
+  AbstractCharBuffer.prototype.setLength.call(this, newLength);
   this._buffer = this._buffer.slice(0, this.length);
   return this;
 };
 
 /**
+  * @method
   * Returns the internal {@link String}.
   * @return {String} The string.
   */
@@ -81,10 +85,29 @@ StringBuffer.prototype.toString = function() {
   return this._buffer;
 };
 
-/**
-  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
-  * @static
-  */
+/** @static @property */
 StringBuffer.isSupported = true;
+
+/** @static @method */
+StringBuffer.fromString = function(string, transform) {
+  var output = new StringBuffer(),
+      len = string.length,
+      buffer,
+      i;
+
+  if (transform) {
+    buffer = '';
+    for (i = 0; i < len; i++) {
+      buffer += String.fromCharCode(transform.call(transform, string.charCodeAt(i), i));
+    }
+  } else {
+    // JavaScript strings are immutable
+    buffer = string;
+  }
+
+  output._buffer = buffer;
+  output.length = len;
+  return output;
+};
 
 export default StringBuffer;

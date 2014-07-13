@@ -36,10 +36,11 @@ if (!AbstractCharBuffer.name) {
 AbstractCharBuffer.prototype.append = undefined;
 
 /**
-  * @chainable
   * @abstract
+  * @method
+  * @chainable
   *
-  * Write a charCode to the buffer at an offset.
+  * Writes a charCode to the buffer at an offset.
   *
   * @param {Number} charCode The charCode to write.
   * @param {Number} offset The zero based offset to write at.
@@ -49,8 +50,9 @@ AbstractCharBuffer.prototype.write = undefined;
 
 /**
   * @abstract
+  * @method
   *
-  * Read the charCode at an offset.
+  * Reads the charCode at an offset.
   *
   * @param {Number} offset The zero based offset.
   * @return {Number} The charCode.
@@ -60,8 +62,9 @@ AbstractCharBuffer.prototype.read = undefined;
 
 /**
   * @abstract
+  * @method
   *
-  * Read the charCode at an offset.
+  * Reads the charCode at an offset.
   *
   * @param {Number} offset The zero based offset.
   * @return {Number} The charCode.
@@ -71,8 +74,9 @@ AbstractCharBuffer.prototype.charCodeAt = undefined;
 
 /**
   * @abstract
+  * @method
   *
-  * Read the char at an offset.
+  * Reads the char at an offset.
   *
   * @param {Number} offset The zero based offset.
   * @return {String} The char.
@@ -88,6 +92,7 @@ AbstractCharBuffer.prototype.length = 0;
 
 /**
   * @abstract
+  * @method
   *
   * Gets the length of the {@link String} represented by this buffer.
   * @return {Number} The length of the {@link String}.
@@ -97,6 +102,7 @@ AbstractCharBuffer.prototype.getLength = function() {
 };
 
 /**
+  * @method
   * @chainable
   *
   * Sets the length of the {@link String} represented by this buffer.
@@ -115,7 +121,69 @@ AbstractCharBuffer.prototype.setLength = function(newLength) {
 };
 
 /**
+  * @method
+  *
+  * Executes a function once per charCode.
+  * See also {@link Array#forEach}
+  *
+  * @param {Function} callback            Function to execute for each charCode.
+  * @param {Number}   callback.charCode   The charCode.
+  * @param {Number}   callback.index      The index of the charCode.
+  * @param {Object}   callback.charbuffer The CharBuffer being traversed.
+  * @param {Object}   [thisArg=undefined] Value to use as this when executing callback.
+  */
+AbstractCharBuffer.prototype.forEach = function(callback, thisArg) {
+  var T,
+      i,
+      len = this.length;
+
+  if (typeof callback !== 'function') {
+    throw new TypeError(callback + ' is not a function');
+  }
+  if (arguments.length > 1) {
+    T = thisArg;
+  }
+  for (i = 0; i < len; i++) {
+    callback.call(T, this.charCodeAt(i), i, this);
+  }
+};
+
+/**
+  * @method
+  *
+  * Creates a new CharBuffer with the results of calling a provided function on every charCode.
+  * See also {@link Array#map}
+  *
+  * @param {Function} callback            Function to execute for each charCode.
+  * @param {Number}   callback.charCode   The charCode.
+  * @param {Number}   callback.index      The index of the charCode.
+  * @param {Object}   callback.charbuffer The CharBuffer being traversed.
+  * @param {Number}   callback.return     The new charCode to write into the new CharBuffer.
+  * @param {Object}   [thisArg=undefined] Value to use as this when executing callback.
+  * @return {CharBuffer} CharBuffer of the return values of callback function.
+  */
+AbstractCharBuffer.prototype.map = function(callback, thisArg) {
+  var T,
+      i,
+      len = this.length,
+      output = new this.constructor(len);
+
+  if (typeof callback !== 'function') {
+    throw new TypeError(callback + ' is not a function');
+  }
+  if (arguments.length > 1) {
+    T = thisArg;
+  }
+
+  for (i = 0; i < len; i++) {
+    output.append(callback.call(T, this.charCodeAt(i), i, this));
+  }
+  return output;
+};
+
+/**
   * @abstract
+  * @method
   *
   * Returns the {@link String} represented by this buffer.
   * @return {String} The string.
@@ -123,12 +191,71 @@ AbstractCharBuffer.prototype.setLength = function(newLength) {
 AbstractCharBuffer.prototype.toString = undefined;
 
 /**
-  * @property {Boolean}
   * @static
+  * @property {Boolean} [isSupported=true]
   * @template
-  * Indicates whether this AbstractCharBuffer is supported by the current platform.
+  * @inheritable
+  * Indicates whether this CharBuffer is supported by the current platform.
   */
 AbstractCharBuffer.isSupported = false;
+
+/**
+  * @static
+  * @method
+  * @inheritable
+  *
+  * Creates a new CharBuffer from a {@link String}.
+  *
+  * @param {String} string The string.
+  * @param {Function} [transform=identity]  Function that produces a charCode of the new CharBuffer
+  *                                         from a charCode of the string parameter.
+  * @param {Number} transform.charCode The charCode of the string.
+  * @param {Number} transform.index The index of the charCode within the string.
+  * @param {Number} transform.return The charCode to write into the new CharBuffer.
+  * @return {CharBuffer} CharBuffer of the string, transformed by transform.
+  *
+  *     @example
+  *     var charBuffer;
+  *
+  *     charBuffer = CharBuffer.fromString('abc');
+  *     console.log(charBuffer.toString()); // output: abc
+  *
+  *     charBuffer = CharBuffer.fromString('abc', function(charCode, index){
+  *       return charCode + 3;
+  *     });
+  *     console.log(charBuffer.toString()); // output: def
+  *
+  */
+AbstractCharBuffer.fromString = null;
+
+/**
+  * @static
+  * @method
+  * @protected
+  *
+  * Creates a fromString implementation.
+  *
+  * @param {Function} Constr A CharBuffer constructor.
+  * @return {Function} A default fromString implementation for Constr.
+  */
+AbstractCharBuffer.fromStringConstr = function(Constr) {
+  return function(string, transform) {
+    var len = string.length,
+        output = new Constr(len),
+        i;
+    // manual loop optimization :-)
+    if (transform) {
+      for (i = 0; i < len; i++) {
+        output.append(transform.call(transform, string.charCodeAt(i), i));
+      }
+    } else {
+      for (i = 0; i < len; i++) {
+        output.append(string.charCodeAt(i));
+      }
+    }
+    return output;
+  };
+};
 
 module.exports = AbstractCharBuffer;
 
@@ -159,12 +286,15 @@ function StringBuffer() {
 
 StringBuffer.prototype = new AbstractCharBuffer();
 
+StringBuffer.prototype.constructor = StringBuffer;
+
 /* istanbul ignore if: IE-fix */
 if (!StringBuffer.name) {
   StringBuffer.name = 'StringBuffer';
 }
 
 /**
+  * @method
   * Write a charCode to the buffer using
   * {@link String#fromCharCode} and {@link String#concat +}.
   *
@@ -182,34 +312,35 @@ StringBuffer.prototype.write = function(charCode, offset) {
   return this;
 };
 
-/** */
+/** @method */
 StringBuffer.prototype.append = function(charCode) {
   this._buffer += String.fromCharCode(charCode);
   this.length = this._buffer.length;
   return this;
 };
 
-/** */
+/** @method */
 StringBuffer.prototype.charCodeAt = function(offset) {
   return this._buffer.charCodeAt(offset);
 };
 
-/** */
+/** @method */
 StringBuffer.prototype.charAt = function(offset) {
   return this._buffer.charAt(offset);
 };
 
-/** */
+/** @method */
 StringBuffer.prototype.read = StringBuffer.prototype.charCodeAt;
 
-/** */
+/** @method */
 StringBuffer.prototype.setLength = function(newLength) {
-  this.constructor.prototype.setLength.call(this, newLength);
+  AbstractCharBuffer.prototype.setLength.call(this, newLength);
   this._buffer = this._buffer.slice(0, this.length);
   return this;
 };
 
 /**
+  * @method
   * Returns the internal {@link String}.
   * @return {String} The string.
   */
@@ -217,11 +348,30 @@ StringBuffer.prototype.toString = function() {
   return this._buffer;
 };
 
-/**
-  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
-  * @static
-  */
+/** @static @property */
 StringBuffer.isSupported = true;
+
+/** @static @method */
+StringBuffer.fromString = function(string, transform) {
+  var output = new StringBuffer(),
+      len = string.length,
+      buffer,
+      i;
+
+  if (transform) {
+    buffer = '';
+    for (i = 0; i < len; i++) {
+      buffer += String.fromCharCode(transform.call(transform, string.charCodeAt(i), i));
+    }
+  } else {
+    // JavaScript strings are immutable
+    buffer = string;
+  }
+
+  output._buffer = buffer;
+  output.length = len;
+  return output;
+};
 
 module.exports = StringBuffer;
 
@@ -257,12 +407,15 @@ function StringArrayBuffer(initCapacity) {
 
 StringArrayBuffer.prototype = new AbstractCharBuffer();
 
+StringArrayBuffer.prototype.constructor = StringArrayBuffer;
+
 /* istanbul ignore if: IE-fix */
 if (!StringArrayBuffer.name) {
   StringArrayBuffer.name = 'StringArrayBuffer';
 }
 
 /**
+  * @method
   * Write a charCode to the buffer using
   * {@link String#fromCharCode} and {@link Array#push []}.
   *
@@ -278,23 +431,24 @@ StringArrayBuffer.prototype.write = function(charCode, offset) {
   return this;
 };
 
-/** */
+/** @method */
 StringArrayBuffer.prototype.append = StringArrayBuffer.prototype.write;
 
-/** */
+/** @method */
 StringArrayBuffer.prototype.read = function(offset) {
   return this._buffer[offset].charCodeAt(0);
 };
 
-/** */
+/** @method */
 StringArrayBuffer.prototype.charAt = function(offset) {
   return this._buffer[offset];
 };
 
-/** */
+/** @method */
 StringArrayBuffer.prototype.charCodeAt = StringArrayBuffer.prototype.read;
 
 /**
+  * @method
   * Returns the {@link String} represented by this buffer.
   * @return {String} The string.
   */
@@ -302,11 +456,11 @@ StringArrayBuffer.prototype.toString = function() {
   return this._buffer.slice(0, this.length).join('');
 };
 
-/**
-  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
-  * @static
-  */
+/** @static @property */
 StringArrayBuffer.isSupported = true;
+
+/** @static @method */
+StringArrayBuffer.fromString = AbstractCharBuffer.fromStringConstr(StringArrayBuffer);
 
 module.exports = StringArrayBuffer;
 
@@ -345,13 +499,15 @@ function TypedArrayBuffer(initCapacity) {
 
 TypedArrayBuffer.prototype = new AbstractCharBuffer();
 
+TypedArrayBuffer.prototype.constructor = TypedArrayBuffer;
+
 /* istanbul ignore if: IE-fix */
 if (!TypedArrayBuffer.name) {
   TypedArrayBuffer.name = 'TypedArrayBuffer';
 }
 
 /**
-  * @method _ensureCapacity
+  * @method
   * @protected
   *
   * Ensures a minimum capacity.
@@ -371,6 +527,7 @@ TypedArrayBuffer.prototype._ensureCapacity = function(minCapacity) {
 };
 
 /**
+  * @method
   * Appends a charCode to the buffer using [...].
   *
   * @param {Number} charCode The charCode to append.
@@ -386,24 +543,25 @@ TypedArrayBuffer.prototype.write = function(charCode, offset) {
   return this;
 };
 
-/** */
+/** @method */
 TypedArrayBuffer.prototype.append = TypedArrayBuffer.prototype.write;
 
-/** */
+/** @method */
 TypedArrayBuffer.prototype.read = function(offset) {
   return this._buffer[offset];
 };
 
-/** */
+/** @method */
 TypedArrayBuffer.prototype.charCodeAt = TypedArrayBuffer.prototype.read;
 
-/** */
+/** @method */
 TypedArrayBuffer.prototype.charAt = function(offset) {
   return String.fromCharCode(this.read(offset));
 };
 
 // jshint -W101
 /**
+  * @method
   * Returns the {@link String} represented by this buffer using
   * {@link String#fromCharCode}.
   *
@@ -447,10 +605,7 @@ TypedArrayBuffer.prototype.toString = function() {
   return buf;
 };
 
-/**
-  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
-  * @static
-  */
+/** @static @property */
 TypedArrayBuffer.isSupported = (function() {
   try {
     return String.fromCharCode.apply(null, new Uint16Array()) === '';
@@ -459,6 +614,9 @@ TypedArrayBuffer.isSupported = (function() {
     return false;
   }
 }());
+
+/** @static @method */
+TypedArrayBuffer.fromString = AbstractCharBuffer.fromStringConstr(TypedArrayBuffer);
 
 module.exports = TypedArrayBuffer;
 
@@ -495,13 +653,15 @@ function NodeBuffer(initCapacity) {
 
 NodeBuffer.prototype = new AbstractCharBuffer();
 
+NodeBuffer.prototype.constructor = NodeBuffer;
+
 /* istanbul ignore if: IE-fix */
 if (!NodeBuffer.name) {
   NodeBuffer.name = 'NodeBuffer';
 }
 
 /**
-  * @method _ensureCapacity
+  * @method
   * @protected
   *
   * Ensures a minimum capacity.
@@ -521,6 +681,7 @@ NodeBuffer.prototype._ensureCapacity = function(minCapacity) {
 };
 
 /**
+  * @method
   * Write a charCode to the buffer using
   * [Buffer.writeUInt16LE(charCode, ...)][1].
   *
@@ -538,23 +699,24 @@ NodeBuffer.prototype.write = function(charCode, offset) {
   return this;
 };
 
-/** */
+/** @method */
 NodeBuffer.prototype.append = NodeBuffer.prototype.write;
 
-/** */
+/** @method */
 NodeBuffer.prototype.read = function(offset) {
   return this._buffer.readUInt16LE(offset * 2);
 };
 
-/** */
+/** @method */
 NodeBuffer.prototype.charCodeAt = NodeBuffer.prototype.read;
 
-/** */
+/** @method */
 NodeBuffer.prototype.charAt = function(offset) {
   return String.fromCharCode(this.read(offset));
 };
 
 /**
+  * @method
   * Returns the {@link String} represented by this buffer using
   * [Buffer.toString('utf16le', ...)][1].
   *
@@ -566,10 +728,7 @@ NodeBuffer.prototype.toString = function() {
   return this._buffer.toString('utf16le', 0, this.length * 2);
 };
 
-/**
-  * @inheritdoc CharBuffer.AbstractCharBuffer#isSupported
-  * @static
-  */
+/** @static @property */
 NodeBuffer.isSupported = (function() {
   try {
     var buffer = new Buffer('A', 'utf16le');
@@ -579,6 +738,9 @@ NodeBuffer.isSupported = (function() {
     return false;
   }
 }());
+
+/** @static @method */
+NodeBuffer.fromString = AbstractCharBuffer.fromStringConstr(NodeBuffer);
 
 module.exports = NodeBuffer;
 
@@ -593,6 +755,7 @@ var NodeBuffer = require('./node-buffer');
 
 /**
   * @class CharBuffer
+  * @extends CharBuffer.AbstractCharBuffer
   */
 
 /**
@@ -627,13 +790,12 @@ for (i = 0; i < CharBuffers.length; i++) {
     supported.push(buffer.name);
     CharBuffer = buffer;
   }
-
 }
 
 /**
+  * @static
   * @property {String[]} [supported=["StringBuffer", "StringArrayBuffer",
   *   "TypedArrayBuffer", "NodeBuffer"]]
-  * @static
   *
   * Names of the supported {@link CharBuffer.AbstractCharBuffer} implementations of the
   * current platform.
@@ -641,8 +803,8 @@ for (i = 0; i < CharBuffers.length; i++) {
 CharBuffer.supported = supported;
 
 /**
-  * @property {CharBuffer[]} CharBuffers
   * @static
+  * @property {CharBuffer[]} CharBuffers
   *
   * Array of all {@link CharBuffer.AbstractCharBuffer} implementations.
   */

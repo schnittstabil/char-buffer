@@ -2,7 +2,7 @@
   "name": "char-buffer",
   "repo": "schnittstabil/char-buffer",
   "description": "Collect CharCodes and convert them to string.",
-  "version": "0.5.10",
+  "version": "0.6.0",
   "keywords": [
     "Char",
     "CharCode",
@@ -29,6 +29,8 @@
       },
       "scripts": [
         "test/char-buffer_test.js",
+        "test/for-each.js",
+        "test/test-strings.js",
         "test/umd_test.js"
       ]
   },

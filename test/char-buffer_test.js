@@ -1,45 +1,33 @@
 'use strict';
 import CharBuffer from '../char-buffer';
 import expect from 'expect';
+import forEach from './for-each';
 
-function buildTestString(len) {
-  var strBuffer = '',
-      i,
-      charCode;
+import testStrings from './test-strings'
 
-  for (i = 0; i < len; i++) {
-    charCode = i % 94 + 32; // only ASCII CharCodes
-    strBuffer += String.fromCharCode(charCode);
+function shortenString(string, maxLength) {
+  var len = string.length <= maxLength ? string.length : maxLength,
+      shortened = string.substring(0, len);
+  if (len < string.length) {
+    shortened += '...';
   }
-  return strBuffer;
+  return shortened;
 }
 
-var testStrings = {
-      defaults: [
-        'user@example.com',
-        '\uD834\uDF06',
-        'latinкирилицаαβγδεζηあいうえお',
-        buildTestString(500),
-        buildTestString(65535 * 2 + 1)
-      ]
-    },
-    i, charBufferName;
-
-function describeBasicTest(BufferConstr, testString, useNew) {
+function describeBasicTest(BufferConstr, testString) {
   var testStringLen = testString.length,
       MAX_LEN = testStringLen <= 40 ? testStringLen : 40,
       MID = Math.round(testStringLen / 2),
       TEST_CHAR = 'a',
       TEST_CHARCODE = TEST_CHAR.charCodeAt(0),
-      shortened = testString.substring(0, MAX_LEN),
-      bufferConstr = BufferConstr;
+      shortened = shortenString(testString, MAX_LEN);
 
   if (testStringLen > MAX_LEN) {
     shortened += '...';
   }
 
   it('should work well on "' + shortened + '"', function(done) {
-    var buffer = useNew ? new BufferConstr(testStringLen) : bufferConstr(testStringLen),
+    var buffer = new BufferConstr(testStringLen),
         j;
 
     // append testString
@@ -92,16 +80,6 @@ function describeBasicTest(BufferConstr, testString, useNew) {
   });
 }
 
-function describeBasicTests(BufferConstr, dataArray) {
-  dataArray = dataArray || testStrings.defaults;
-
-  describe(BufferConstr.name, function() {
-    for (var i = 0; i < dataArray.length; i++) {
-      describeBasicTest(BufferConstr, dataArray[i], i % 2);
-    }
-  });
-}
-
 function describeAppendFunction(SUT) {
   if (SUT.isSupported) {
     describe(SUT.name, function() {
@@ -144,10 +122,22 @@ function describeShouldBeAnAbstractCharBufferInstance(SUT) {
   });
 }
 
-for (i = 0; i < CharBuffer.supported.length; i++) {
-  charBufferName = CharBuffer.supported[i];
-  describeBasicTests(CharBuffer[charBufferName]);
-}
+forEach(CharBuffer.supported, function(charBufferName) {
+  var Constr = CharBuffer[charBufferName];
+  describe(Constr.name, function() {
+    switch (Constr.name) {
+      case 'TypedArrayBuffer':
+        forEach(testStrings.slow, function(testString) {
+          describeBasicTest(Constr, testString);
+        });
+        break;
+      default:
+        forEach(testStrings.fast, function(testString) {
+          describeBasicTest(Constr, testString);
+        });
+    }
+  });
+});
 
 describe('default CharBuffer', function() {
   describeShouldBeAnAbstractCharBufferInstance(CharBuffer);
@@ -159,8 +149,97 @@ describe('CharBuffer.CharBuffers', function() {
     expect(CharBuffer.CharBuffers).to.contain(CharBuffer);
   });
 
-  for (i = 0; i < CharBuffer.CharBuffers.length; i++) {
-    describeShouldBeAnAbstractCharBufferInstance(CharBuffer.CharBuffers[i]);
-    describeAppendFunction(CharBuffer.CharBuffers[i]);
-  }
+  forEach(CharBuffer.CharBuffers, function(Constr) {
+    describeShouldBeAnAbstractCharBufferInstance(Constr);
+    describeAppendFunction(Constr);
+  });
+});
+
+function plusOne(x) {
+  return x + 1;
+}
+
+function minusOne(x) {
+  return x - 1;
+}
+
+forEach(CharBuffer.supported, function(charBufferName) {
+  describe(charBufferName + '.fromString', function() {
+    forEach(testStrings.fast, function(string) {
+      it('(minusOne ° plusOne) should act like identity for ' + shortenString(string, 40), function() {
+        expect(CharBuffer[charBufferName].fromString(string).toString()).to.be(string);
+        var p1 = CharBuffer[charBufferName].fromString(string, plusOne).toString(),
+            id = CharBuffer[charBufferName].fromString(p1, minusOne).toString();
+        expect(id).to.be(string);
+      });
+    });
+  });
+});
+
+forEach(CharBuffer.supported, function(charBufferName) {
+  describe(charBufferName + '.map', function() {
+
+    it('throws exception on non callback', function() {
+      expect(function() {
+        new CharBuffer[charBufferName]().map(null);
+      }).to.throwException(/not a function/);
+    });
+
+    it('should respect thisArg', function() {
+      var thisArg = { count: 0 },
+          buffer = new CharBuffer[charBufferName](3);
+      buffer.append(102).append(111);
+      buffer.map(function(charCode, index, charBuffer) {
+        expect(charBuffer).to.be(buffer);
+        expect(charCode).to.be(index ? 111 : 102);
+        expect(this).to.be(thisArg);
+        this.count++;
+        return charCode;
+      }, thisArg);
+      expect(thisArg.count).to.be(2);
+    });
+
+    forEach(testStrings.fast, function(string) {
+      it('(minusOne ° plusOne) should act like identity for ' + shortenString(string, 40), function() {
+        var org = CharBuffer[charBufferName].fromString(string),
+            p1 = org.map(plusOne),
+            id = p1.map(minusOne);
+        expect(id.toString()).to.be(string);
+      });
+    });
+  });
+});
+
+forEach(CharBuffer.supported, function(charBufferName) {
+  describe(charBufferName + '.forEach', function() {
+
+    it('throws exception on non callback', function() {
+      expect(function() {
+        new CharBuffer[charBufferName]().forEach(null);
+      }).to.throwException(/not a function/);
+    });
+
+    it('should call callback with every written charCode', function() {
+      var count = 0,
+          buffer = new CharBuffer[charBufferName](3);
+      buffer.append(102).append(111);
+      buffer.forEach(function(charCode, index, charBuffer) {
+        expect(charBuffer).to.be(buffer);
+        expect(charCode).to.be(index ? 111 : 102);
+        count++;
+      });
+      expect(count).to.be(2);
+    });
+
+    it('should respect thisArg', function() {
+      var thisArg = { count: 0 },
+          buffer = new CharBuffer[charBufferName](2);
+      buffer.append(102).append(111);
+      buffer.forEach(function() {
+        expect(this).to.be(thisArg);
+        this.count++;
+      }, thisArg);
+      expect(thisArg.count).to.be(2);
+    });
+  });
 });

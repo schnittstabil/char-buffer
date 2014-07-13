@@ -7,6 +7,7 @@ import NodeBuffer from './node-buffer';
 
 /**
   * @class CharBuffer
+  * @extends CharBuffer.AbstractCharBuffer
   */
 
 /**
@@ -41,13 +42,12 @@ for (i = 0; i < CharBuffers.length; i++) {
     supported.push(buffer.name);
     CharBuffer = buffer;
   }
-
 }
 
 /**
+  * @static
   * @property {String[]} [supported=["StringBuffer", "StringArrayBuffer",
   *   "TypedArrayBuffer", "NodeBuffer"]]
-  * @static
   *
   * Names of the supported {@link CharBuffer.AbstractCharBuffer} implementations of the
   * current platform.
@@ -55,8 +55,8 @@ for (i = 0; i < CharBuffers.length; i++) {
 CharBuffer.supported = supported;
 
 /**
-  * @property {CharBuffer[]} CharBuffers
   * @static
+  * @property {CharBuffer[]} CharBuffers
   *
   * Array of all {@link CharBuffer.AbstractCharBuffer} implementations.
   */

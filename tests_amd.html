@@ -20,7 +20,7 @@
         requireJsDefine = define;
     define = function() {
       requireJsDefine.apply(this, arguments);
-      if(arguments.length > 0 && typeof arguments[0] === 'string' && arguments[0].match(/^.*\/test\/.*_test.js$/)){
+      if(arguments.length > 0 && typeof arguments[0] === 'string' && arguments[0].match(/^.*\/test\/.*_test$/)){
         testModules.push(arguments[0]);
       }
     };
