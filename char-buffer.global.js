@@ -564,18 +564,15 @@ AbstractCharBuffer.prototype.setLength = function(newLength) {
   * @param {Object}   [thisArg=undefined] Value to use as this when executing callback.
   */
 AbstractCharBuffer.prototype.forEach = function(callback, thisArg) {
-  var T,
-      i,
+  var i,
       len = this.length;
 
   if (typeof callback !== 'function') {
     throw new TypeError(callback + ' is not a function');
   }
-  if (arguments.length > 1) {
-    T = thisArg;
-  }
+
   for (i = 0; i < len; i++) {
-    callback.call(T, this.charCodeAt(i), i, this);
+    callback.call(thisArg, this.charCodeAt(i), i, this);
   }
 };
 
@@ -594,20 +591,16 @@ AbstractCharBuffer.prototype.forEach = function(callback, thisArg) {
   * @return {CharBuffer} CharBuffer of the return values of callback function.
   */
 AbstractCharBuffer.prototype.map = function(callback, thisArg) {
-  var T,
-      i,
+  var i,
       len = this.length,
       output = new this.constructor(len);
 
   if (typeof callback !== 'function') {
     throw new TypeError(callback + ' is not a function');
   }
-  if (arguments.length > 1) {
-    T = thisArg;
-  }
 
   for (i = 0; i < len; i++) {
-    output.append(callback.call(T, this.charCodeAt(i), i, this));
+    output.append(callback.call(thisArg, this.charCodeAt(i), i, this));
   }
   return output;
 };
@@ -642,7 +635,9 @@ AbstractCharBuffer.isSupported = false;
   *                                         from a charCode of the string parameter.
   * @param {Number} transform.charCode The charCode of the string.
   * @param {Number} transform.index The index of the charCode within the string.
+  * @param {Object} transform.string The string being transformed.
   * @param {Number} transform.return The charCode to write into the new CharBuffer.
+  * @param {Object} [thisArg=undefined] Value to use as this when executing transform.
   * @return {CharBuffer} CharBuffer of the string, transformed by transform.
   *
   *     @example
@@ -670,14 +665,14 @@ AbstractCharBuffer.fromString = null;
   * @return {Function} A default fromString implementation for Constr.
   */
 AbstractCharBuffer.fromStringConstr = function(Constr) {
-  return function(string, transform) {
+  return function(string, transform, thisArg) {
     var len = string.length,
         output = new Constr(len),
         i;
     // manual loop optimization :-)
     if (transform) {
       for (i = 0; i < len; i++) {
-        output.append(transform.call(transform, string.charCodeAt(i), i));
+        output.append(transform.call(thisArg, string.charCodeAt(i), i, string));
       }
     } else {
       for (i = 0; i < len; i++) {
