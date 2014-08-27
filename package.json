@@ -1,0 +1,45 @@
+{
+  "name": "char-buffer",
+  "version": "0.6.1",
+  "description": "Collect CharCodes and convert them to string.",
+  "homepage": "https://github.com/schnittstabil/char-buffer",
+  "keywords": [
+    "Char",
+    "CharCode",
+    "ASCII",
+    "Buffer",
+    "CharBuffer",
+    "NodeBuffer",
+    "StringArrayBuffer",
+    "StringBuffer",
+    "TypedArrayBuffer",
+    "TypedArray",
+    "Uint16Array",
+    "Array",
+    "String"
+  ],
+  "author": "Michael Mayer <michael@schnittstabil.de>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/schnittstabil/char-buffer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/schnittstabil/char-buffer/issues"
+  },
+  "preferGlobal": false,
+  "main": "char-buffer.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha --recursive"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "dependencies": {
+    
+  },
+  "devDependencies": {
+    "xpect": "^0.3.1",
+    "mocha": "^1.20.1"
+  }
+}
