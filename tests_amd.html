@@ -9,12 +9,16 @@
 </head>
 <body>
   <div id="mocha"></div>
-  <script type="text/javascript" src="bower_components/expect/index.js"></script>
   <script type="text/javascript" src="bower_components/mocha-screencast-reporter/screencast-reporter.js"></script>
   <script type="text/javascript" src="bower_components/mocha/mocha.js"></script>
 
   <script type="text/javascript" src="bower_components/requirejs/require.js"></script>
   <script type="text/javascript">
+    requirejs.config({
+      paths: {
+        'xpect': '/bower_components/xpect/xpect'
+      }
+    });
     // track test modules
     var testModules = [],
         requireJsDefine = define;
@@ -30,11 +34,6 @@
         define[attr] = requireJsDefine[attr];
       }
     }
-
-    // tiny shim
-    define('expect',[],function(){
-      return expect;
-    });
   </script>
 
   <script type="text/javascript" src="/char-buffer.amd.js"></script>

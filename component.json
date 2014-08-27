@@ -23,9 +23,9 @@
   },
   "development": {
       "dependencies": {
-        "schnittstabil/expect": "*",
-        "schnittstabil/mocha-screencast-reporter": "*",
-        "visionmedia/mocha": "*"
+        "schnittstabil/xpect": "^0.3.1",
+        "schnittstabil/mocha-screencast-reporter": "^0.1.4",
+        "visionmedia/mocha": "^1.21.4"
       },
       "scripts": [
         "test/char-buffer_test.js",

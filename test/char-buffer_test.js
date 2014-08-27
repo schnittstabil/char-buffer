@@ -1,6 +1,6 @@
 'use strict';
 import CharBuffer from '../char-buffer';
-import expect from 'expect';
+import xpect from 'xpect';
 import forEach from './for-each';
 
 import testStrings from './test-strings'
@@ -35,14 +35,14 @@ function describeBasicTest(BufferConstr, testString) {
       buffer.append(testString.charCodeAt(j));
       if (j === MID) {
         // check length and content
-        expect(buffer.length).to.be(j + 1);
-        expect(buffer.toString()).to.be(testString.substr(0, j + 1));
+        xpect(buffer.length).to.be(j + 1);
+        xpect(buffer.toString()).to.be(testString.substr(0, j + 1));
       }
     }
 
     // check length and content
-    expect(buffer.length).to.be(testStringLen);
-    expect(buffer.toString()).to.be(testString);
+    xpect(buffer.length).to.be(testStringLen);
+    xpect(buffer.toString()).to.be(testString);
 
     // overwrite char
     buffer.write(TEST_CHARCODE, MID);
@@ -50,31 +50,31 @@ function describeBasicTest(BufferConstr, testString) {
     // check content
     for (j = 0; j < MAX_LEN; j++) {
       if (j === MID) {
-        expect(buffer.charAt(j)).to.be(TEST_CHAR);
-        expect(buffer.charCodeAt(j)).to.be(TEST_CHARCODE);
+        xpect(buffer.charAt(j)).to.be(TEST_CHAR);
+        xpect(buffer.charCodeAt(j)).to.be(TEST_CHARCODE);
       } else {
-        expect(buffer.charAt(j)).to.be(testString.charAt(j));
-        expect(buffer.charCodeAt(j)).to.be(testString.charCodeAt(j));
+        xpect(buffer.charAt(j)).to.be(testString.charAt(j));
+        xpect(buffer.charCodeAt(j)).to.be(testString.charCodeAt(j));
       }
     }
 
     // try illegal truncation
-    expect(function() {
+    xpect(function() {
       buffer.setLength(-1);
     }).to.throwException();
 
     // truncate
-    expect(function() {
+    xpect(function() {
       buffer.setLength(1);
     }).not.to.throwException();
-    expect(buffer.toString()).to.be(testString.substr(0, 1));
+    xpect(buffer.toString()).to.be(testString.substr(0, 1));
 
     // append single char
-    expect(function() {
+    xpect(function() {
       // same as append
       buffer.write(testString.charCodeAt(1), buffer.getLength());
     }).not.to.throwException();
-    expect(buffer.toString()).to.be(testString.substr(0, 2));
+    xpect(buffer.toString()).to.be(testString.substr(0, 2));
 
     done();
   });
@@ -85,16 +85,16 @@ function describeAppendFunction(SUT) {
     describe(SUT.name, function() {
       it('should act like a CharBuffer', function() {
         var sut = SUT;
-        expect(sut(0)).to.be.ok();
-        expect(sut(0).append).to.be.a('function');
-        expect(new SUT(0).append).to.be.a('function');
-        expect(
+        xpect(sut(0)).to.be.ok();
+        xpect(sut(0).append).to.be.a('function');
+        xpect(new SUT(0).append).to.be.a('function');
+        xpect(
           sut(3).append(102).append(111).append(111).toString()
         ).to.be('foo');
-        expect(
+        xpect(
           new SUT(3).append(102).append(111).append(111).toString()
         ).to.be('foo');
-        expect(
+        xpect(
           sut(1).append(102).append(111).append(111).toString()
         ).to.be('foo');
       });
@@ -106,17 +106,17 @@ function describeShouldBeAnAbstractCharBufferInstance(SUT) {
   var sut = SUT;
   describe(SUT.name, function() {
     it('should exists', function() {
-      expect(SUT).to.be.a('function');
+      xpect(SUT).to.be.a('function');
     });
     it('should have a name', function() {
-      expect(SUT.name).to.be.a('string');
+      xpect(SUT.name).to.be.a('string');
     });
     if (SUT.isSupported && SUT !== CharBuffer.AbstractCharBuffer) {
       it('constructor should return an instance of AbstractCharBuffer', function() {
-        expect(sut(0) instanceof CharBuffer.AbstractCharBuffer).to.be.ok();
+        xpect(sut(0) instanceof CharBuffer.AbstractCharBuffer).to.be.ok();
       });
       it('constructor (using new) should return an instance of AbstractCharBuffer', function() {
-        expect(new SUT(0) instanceof CharBuffer.AbstractCharBuffer).to.be.ok();
+        xpect(new SUT(0) instanceof CharBuffer.AbstractCharBuffer).to.be.ok();
       });
     }
   });
@@ -146,7 +146,7 @@ describe('default CharBuffer', function() {
 
 describe('CharBuffer.CharBuffers', function() {
   it('should contain CharBuffer', function() {
-    expect(CharBuffer.CharBuffers).to.contain(CharBuffer);
+    xpect(CharBuffer.CharBuffers).to.contain(CharBuffer);
   });
 
   forEach(CharBuffer.CharBuffers, function(Constr) {
@@ -167,10 +167,10 @@ forEach(CharBuffer.supported, function(charBufferName) {
   describe(charBufferName + '.fromString', function() {
     forEach(testStrings.fast, function(string) {
       it('(minusOne ° plusOne) should act like identity for ' + shortenString(string, 40), function() {
-        expect(CharBuffer[charBufferName].fromString(string).toString()).to.be(string);
+        xpect(CharBuffer[charBufferName].fromString(string).toString()).to.be(string);
         var p1 = CharBuffer[charBufferName].fromString(string, plusOne).toString(),
             id = CharBuffer[charBufferName].fromString(p1, minusOne).toString();
-        expect(id).to.be(string);
+        xpect(id).to.be(string);
       });
     });
   });
@@ -180,7 +180,7 @@ forEach(CharBuffer.supported, function(charBufferName) {
   describe(charBufferName + '.map', function() {
 
     it('throws exception on non callback', function() {
-      expect(function() {
+      xpect(function() {
         new CharBuffer[charBufferName]().map(null);
       }).to.throwException(/not a function/);
     });
@@ -190,13 +190,13 @@ forEach(CharBuffer.supported, function(charBufferName) {
           buffer = new CharBuffer[charBufferName](3);
       buffer.append(102).append(111);
       buffer.map(function(charCode, index, charBuffer) {
-        expect(charBuffer).to.be(buffer);
-        expect(charCode).to.be(index ? 111 : 102);
-        expect(this).to.be(thisArg);
+        xpect(charBuffer).to.be(buffer);
+        xpect(charCode).to.be(index ? 111 : 102);
+        xpect(this).to.be(thisArg);
         this.count++;
         return charCode;
       }, thisArg);
-      expect(thisArg.count).to.be(2);
+      xpect(thisArg.count).to.be(2);
     });
 
     forEach(testStrings.fast, function(string) {
@@ -204,7 +204,7 @@ forEach(CharBuffer.supported, function(charBufferName) {
         var org = CharBuffer[charBufferName].fromString(string),
             p1 = org.map(plusOne),
             id = p1.map(minusOne);
-        expect(id.toString()).to.be(string);
+        xpect(id.toString()).to.be(string);
       });
     });
   });
@@ -214,7 +214,7 @@ forEach(CharBuffer.supported, function(charBufferName) {
   describe(charBufferName + '.forEach', function() {
 
     it('throws exception on non callback', function() {
-      expect(function() {
+      xpect(function() {
         new CharBuffer[charBufferName]().forEach(null);
       }).to.throwException(/not a function/);
     });
@@ -224,11 +224,11 @@ forEach(CharBuffer.supported, function(charBufferName) {
           buffer = new CharBuffer[charBufferName](3);
       buffer.append(102).append(111);
       buffer.forEach(function(charCode, index, charBuffer) {
-        expect(charBuffer).to.be(buffer);
-        expect(charCode).to.be(index ? 111 : 102);
+        xpect(charBuffer).to.be(buffer);
+        xpect(charCode).to.be(index ? 111 : 102);
         count++;
       });
-      expect(count).to.be(2);
+      xpect(count).to.be(2);
     });
 
     it('should respect thisArg', function() {
@@ -236,10 +236,10 @@ forEach(CharBuffer.supported, function(charBufferName) {
           buffer = new CharBuffer[charBufferName](2);
       buffer.append(102).append(111);
       buffer.forEach(function() {
-        expect(this).to.be(thisArg);
+        xpect(this).to.be(thisArg);
         this.count++;
       }, thisArg);
-      expect(thisArg.count).to.be(2);
+      xpect(thisArg.count).to.be(2);
     });
   });
 });

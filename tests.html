@@ -16,10 +16,13 @@
       System.paths['mocha'] = 'bower_components/mocha/mocha.js';
       System.meta['mocha'] = { format: 'global' };
 
-      System.paths['expect'] = 'bower_components/expect/index.js';
+      System.paths['xpect'] = 'bower_components/xpect/xpect.js';
+      System.meta['xpect'] = { format: 'amd' };
 
       System.import('screencast-reporter').then(function(ScreencastReporter) {
-        return System.import('mocha').then(function(mocha) {
+        return System.import('mocha').then(function(mochaGlobals) {
+          var mocha = mochaGlobals.mocha;
+
           // setup mocha
           mocha.setup('bdd');
           mocha.reporter(ScreencastReporter);
@@ -42,6 +45,7 @@
         });
       }).catch(function(e) {
         console.error(e);
+        throw e;
       });
     };
   </script>
