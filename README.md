@@ -45,9 +45,17 @@ console.log(buffer.toString());
 * [Code Coverage Report](http://schnittstabil.github.io/char-buffer/coverage)
 
 
-## Node Package Manager (npm)
+## Node.js
 
-### Installation
+### Installation using Debian package
+
+See [Ubuntu Launchpad](https://launchpad.net/~schnittstabil/+archive/ubuntu/node-char-buffer) for details.
+
+```bash
+$ sudo add-apt-repository ppa:schnittstabil/node-char-buffer
+$ sudo apt-get install node-char-buffer
+```
+### Installation using Node Package Manager (npm)
 
 1. Install [node.js](http://nodejs.org/) ([npm comes with node](https://www.npmjs.org/doc/README.html#super-easy-install)).
 
@@ -57,6 +65,7 @@ console.log(buffer.toString());
     ```
 
 ### Examples
+
 ```javascript
 // Create the default CharBuffer implementation:
 var CharBuffer = require('char-buffer'),
@@ -229,6 +238,9 @@ require(['char-buffer/typed-array-buffer'], function(TypedArrayBuffer){
 ```
 
 ## Changelog
+
+* v0.6.2
+    * New: Debian package at [Ubuntu Launchpad](https://launchpad.net/~schnittstabil/+archive/ubuntu/node-char-buffer)
 
 * v0.6.1
     * Fix: CharBuffer#fromString(string, [transform], [thisArg])
