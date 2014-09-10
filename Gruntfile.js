@@ -38,21 +38,6 @@ module.exports = function(grunt) {
           tags: ['es6'],
         },
       },
-      global: {
-        options: {
-          urls: [
-            'http://127.0.0.1:9999/tests_global.html',
-          ],
-          testname: testname,
-          build: build + ' global',
-          'public': visiblity,
-          'record-video': false,
-          'record-screenshots': true,
-          throttled: 1,
-          browsers: legacyBrowsers,
-          tags: ['global'],
-        },
-      },
       component: {
         options: {
           urls: [
@@ -81,6 +66,21 @@ module.exports = function(grunt) {
           throttled: 1,
           browsers: legacyBrowsers,
           tags: ['amd'],
+        },
+      },
+      global: {
+        options: {
+          urls: [
+            'http://127.0.0.1:9999/tests_global.html',
+          ],
+          testname: testname,
+          build: build + ' global',
+          'public': visiblity,
+          'record-video': false,
+          'record-screenshots': true,
+          throttled: 1,
+          browsers: legacyBrowsers,
+          tags: ['global'],
         },
       },
     },
