@@ -49,7 +49,7 @@ module.exports = function(grunt) {
           'record-video': false,
           'record-screenshots': true,
           throttled: 1,
-          browsers: legacyBrowsers,
+          browsers: browsers,
           tags: ['component'],
         },
       },

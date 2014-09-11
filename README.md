@@ -239,6 +239,9 @@ require(['char-buffer/typed-array-buffer'], function(TypedArrayBuffer){
 
 ## Changelog
 
+* v0.7.0
+    * Remove componentjs support for legacy browsers
+
 * v0.6.2
     * New: Debian package at [Ubuntu Launchpad](https://launchpad.net/~schnittstabil/+archive/ubuntu/node-char-buffer)
 
