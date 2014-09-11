@@ -52,8 +52,9 @@ console.log(buffer.toString());
 See [Ubuntu Launchpad](https://launchpad.net/~schnittstabil/+archive/ubuntu/node-char-buffer) for details.
 
 ```bash
-$ sudo add-apt-repository ppa:schnittstabil/node-char-buffer
-$ sudo apt-get install node-char-buffer
+sudo add-apt-repository -y ppa:schnittstabil/node-char-buffer
+sudo apt-get update
+sudo apt-get install node-char-buffer
 ```
 ### Installation using Node Package Manager (npm)
 
@@ -238,6 +239,9 @@ require(['char-buffer/typed-array-buffer'], function(TypedArrayBuffer){
 ```
 
 ## Changelog
+
+* v0.7.1
+    * Fix: README.md typos
 
 * v0.7.0
     * Remove componentjs support for legacy browsers
