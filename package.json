@@ -1,6 +1,6 @@
 {
   "name": "char-buffer",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Collect CharCodes and convert them to string.",
   "homepage": "https://github.com/schnittstabil/char-buffer",
   "keywords": [
@@ -33,13 +33,13 @@
     "test": "node_modules/.bin/mocha --recursive"
   },
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 0.6.0"
   },
   "dependencies": {
     
   },
   "devDependencies": {
-    "xpect": "^0.3.1",
-    "mocha": "^1.20.1"
+    "mocha": ">=1.21.4 <2.0.0",
+    "xpect": ">=0.3.2 <0.4.0"
   }
 }
