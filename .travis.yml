@@ -4,9 +4,6 @@ language: node_js
 before_script:
 - npm install -g grunt-cli
 - npm install -g bower
-- npm install -g component@1.0.0-rc5
-- component install --dev
-- component build --dev
 - bower install
 env:
   global:
@@ -17,7 +14,6 @@ env:
   matrix:
   - TEST_SUITE=es6
   - TEST_SUITE=global
-  - TEST_SUITE=component
   - TEST_SUITE=amd
 
 script: "grunt test:$TEST_SUITE"

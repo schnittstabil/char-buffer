@@ -1,6 +1,5 @@
 {
   "name": "char-buffer",
-  "version": "0.7.1",
   "homepage": "https://github.com/schnittstabil/char-buffer",
   "authors": [
     "Michael Mayer <michael@schnittstabil.de>"
@@ -34,8 +33,6 @@
     "legacy-browsers.json",
     "build/",
     "build.txt",
-    "component.json",
-    "components/",
     "**/.*",
     "Gruntfile.js",
     "node_modules",

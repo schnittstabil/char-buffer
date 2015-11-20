@@ -38,21 +38,6 @@ module.exports = function(grunt) {
           tags: ['es6'],
         },
       },
-      component: {
-        options: {
-          urls: [
-            'http://127.0.0.1:9999/tests_component.html',
-          ],
-          testname: testname,
-          build: build + ' component',
-          'public': visiblity,
-          'record-video': false,
-          'record-screenshots': true,
-          throttled: 1,
-          browsers: browsers,
-          tags: ['component'],
-        },
-      },
       amd: {
         options: {
           urls: [
@@ -97,6 +82,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test:es6', ['connect', 'saucelabs-mocha:es6']);
   grunt.registerTask('test:global', ['connect', 'saucelabs-mocha:global']);
-  grunt.registerTask('test:component', ['connect', 'saucelabs-mocha:component']);
   grunt.registerTask('test:amd', ['connect', 'saucelabs-mocha:amd']);
 };
