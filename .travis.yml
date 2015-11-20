@@ -1,5 +1,6 @@
+sudo: false
 node_js:
-- "0.10"
+  - 'stable'
 language: node_js
 before_script:
 - npm install -g grunt-cli
@@ -11,9 +12,5 @@ env:
   - secure: aUMUbKjEMWesxTj1N45+poGRoV6MKveoMs/wff/EXyXWPCGs+BGCHcn593wb7ztTvIaIu/SHCi+ZD6+yIHtVZdWyQULBw6CK36mZyzmwNJilUZ5Oho8tB7OfoCsYdf5urj9YOeUqCeFWFJt8KkQ+sXx8zSp0nvyUcwB3x47djnU=
   - secure: ZJAeTSZE9nGcHaWbPgR4V/NUnBJQQsag3n88VaKY7Zm5RM1ylp3iBPjBQ/SJLlFb4tVZ/bn0iiVCLCanilxZdR0o1Ai7tCOixhLjqqye+jjsh8tpPMYrIxpt5aezX3pm+6e9g0W5oDDsIHrIiYPfGx2Q4tttJqLJSe/3GR+6Vbs=
   - secure: Baji/0sf98ZBRJJTLZf689N8RrntORIusANQsZyOFjvwv8bu4vEOFBhfvbO3EeHvX7Y1PMBKw/k9kJMD7MVTOpRnRGWOHh8U8TxaTl5TCzvhXgjSMjst2ekMChm2Dm8a6Hn8JEWcy340naJOBb1O7eImX8fPGteNz55k4nqF0lo=
-  matrix:
-  - TEST_SUITE=es6
-  - TEST_SUITE=global
-  - TEST_SUITE=amd
 
-script: "grunt test:$TEST_SUITE"
+script: "grunt test"
