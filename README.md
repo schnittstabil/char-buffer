@@ -269,7 +269,4 @@ require(['char-buffer/typed-array-buffer'], function(TypedArrayBuffer){
 
 ## License
 
-Copyright (c) 2014 Michael Mayer
-
-Licensed under the MIT license.
-
+MIT © [Michael Mayer](http://schnittstabil.de)
