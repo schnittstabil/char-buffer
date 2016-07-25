@@ -1,3 +1,9 @@
-build
-node_modules
-bower_components
+/.nyc_output/
+/coverage/
+/node_modules/
+/gh-pages/
+/jspm_packages/
+
+/char-buffer-*.tgz
+/build.js*
+/*.log

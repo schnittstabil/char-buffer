@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tests</title>
+  <link href="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.css" rel="stylesheet"/>
+  <link href="https://cdn.rawgit.com/schnittstabil/mocha-screencast-reporter/v0.1.4/screencast-reporter.css" rel="stylesheet"/>
+  <style>
+    #mocha {
+      font: 10pt monospace;
+    }
+  </style>
+</head>
+<body>
+  <div id="mocha">Loading…</div>
+  <script src="https://cdn.rawgit.com/schnittstabil/xpect/0.3.2/xpect.js"></script>
+  <script src="https://cdn.rawgit.com/schnittstabil/mocha-screencast-reporter/v0.1.4/screencast-reporter.js"></script>
+  <script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
+  <script>
+    mocha.setup({
+      ui: 'bdd',
+      reporter: ScreencastReporter
+    });
+  </script>
+  <script src="build.js"></script>
+</body>
+</html>
