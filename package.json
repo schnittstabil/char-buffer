@@ -18,6 +18,10 @@
     "Array",
     "String"
   ],
+  "preferGlobal": false,
+  "engines": {
+    "node": ">= 0.10"
+  },
   "author": "Michael Mayer <michael@schnittstabil.de>",
   "license": "MIT",
   "repository": {
@@ -26,24 +30,6 @@
   },
   "bugs": {
     "url": "https://github.com/schnittstabil/char-buffer/issues"
-  },
-  "preferGlobal": false,
-  "main": "node-buffer.js",
-  "files": [
-    "*-buffer.js"
-  ],
-  "scripts": {
-    "test": "xo && ava",
-    "test-cover": "xo && nyc ava",
-    "test-cover-html": "npm run test-cover && nyc report --reporter=html",
-    "test-browser-local": "grunt default",
-    "test-browser-saucelabs": "grunt saucelabs",
-    "docs-clean": "del readme.md gh-pages/api gh-pages/readme.md",
-    "docs-build": "grunt docs && jsduck --builtin-classes --welcome=gh-pages/readme.md --title=char-buffer --output=gh-pages/api *-buffer.js",
-    "docs": "npm run docs-clean && npm run docs-build"
-  },
-  "engines": {
-    "node": ">= 0.10"
   },
   "dependencies": {},
   "devDependencies": {
@@ -99,5 +85,19 @@
     },
     "dependencies": {},
     "devDependencies": {}
+  },
+  "main": "node-buffer.js",
+  "files": [
+    "*-buffer.js"
+  ],
+  "scripts": {
+    "test": "xo && ava",
+    "test-cover": "xo && nyc ava",
+    "test-cover-html": "npm run test-cover && nyc report --reporter=html",
+    "test-browser-local": "grunt default",
+    "test-browser-saucelabs": "grunt saucelabs",
+    "docs-clean": "del readme.md gh-pages/api gh-pages/readme.md",
+    "docs-build": "grunt docs && jsduck --builtin-classes --welcome=gh-pages/readme.md --title=char-buffer --output=gh-pages/api *-buffer.js",
+    "docs": "npm run docs-clean && npm run docs-build"
   }
 }

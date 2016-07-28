@@ -15,7 +15,7 @@ npm run test-cover-html
 
 ```bash
 node_modules/.bin/jspm update
-node_modules/.bin/jspm bundle test/_mocha.js test-build.js
+node_modules/.bin/jspm bundle test/_mocha.js build.js
 # Local
 npm run test-browser-local
 # Saucelabs
