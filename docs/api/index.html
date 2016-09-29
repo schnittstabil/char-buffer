@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>char-buffer</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="fragment" content="!">
+
+  
+
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+  <link rel="stylesheet" href="resources/css/app-4689d2a5522dcd3c9e9923ca59c33f27.css" type="text/css" />
+  <link rel="stylesheet" href="styles-3eba09980fa05ead185cb17d9c0deb0f.css" type="text/css" />
+
+  <script type="text/javascript" src="extjs/ext-all.js"></script>
+  <script type="text/javascript" src="data-789a3a7d9befccf7691a76f5423b7ac7.js"></script>
+
+  <script type="text/javascript" src="app-0c945a27f43452df695771ddb60b3d14.js"></script>
+
+  
+
+</head>
+<body id="ext-body">
+
+  <div id="loading"><span class="title">char-buffer</span><span class="logo"></span></div>
+
+  <div id="header-content">char-buffer</div>
+  <div id='welcome-content' style='display:none'><div class="markdown"><h1>char-buffer <a href="https://gemnasium.com/schnittstabil/char-buffer"><img src="https://gemnasium.com/schnittstabil/char-buffer.svg" alt="Dependencies Status Image" /></a> <a href="https://travis-ci.org/schnittstabil/char-buffer"><img src="https://travis-ci.org/schnittstabil/char-buffer.svg" alt="Build Status Image" /></a> <a href="https://coveralls.io/github/schnittstabil/char-buffer?branch=master"><img src="https://coveralls.io/repos/github/schnittstabil/char-buffer/badge.svg?branch=master" alt="Coverage Status" /></a> <a href="http://gruntjs.com/"><img src="https://cdn.gruntjs.com/builtwith.svg" alt="Built with Grunt" /></a> <a href="https://github.com/sindresorhus/xo"><img src="https://img.shields.io/badge/code_style-XO-5ed9c7.svg" alt="XO code style" /></a></h1>
+
+<blockquote><p>Collect CharCodes and convert them to a string.</p></blockquote>
+
+<h2>Install</h2>
+
+<pre><code class="bash">$ npm install --save char-buffer
+# or
+$ jspm install char-buffer=github:schnittstabil/char-buffer
+</code></pre>
+
+<h2>Usage</h2>
+
+<pre><code class="javascript">const CharBuffer = require('char-buffer');
+
+// Create a CharBuffer
+var buffer = new CharBuffer();
+
+// Append a CharCode:
+buffer.append(102);
+
+// Append two more CharCodes:
+buffer.append(111).append(111);
+
+// Output 'foo':
+console.log(buffer.toString());
+</code></pre>
+
+<h2>Documentation</h2>
+
+<ul>
+<li>See <a href="http://schnittstabil.github.io/char-buffer/api/#!/api">API</a> for thorough documentation.</li>
+</ul>
+
+
+<h2>Related</h2>
+
+<ul>
+<li><a href="https://github.com/schnittstabil/caesar-salad">caesar-salad</a> uses <code>char-buffer</code> for Caesar, Vigenere and ROT encryption.</li>
+</ul>
+
+
+<h2>License</h2>
+
+<p>MIT © <a href="http://schnittstabil.de">Michael Mayer</a></p>
+
+<script>
+    if (Ext && Ext.onReady && prettyPrint) {
+        Ext.onReady(() => {
+            if ((document.querySelector('#footer-content a') || {}).innerText === 'JSDuck') {
+                Array.from(document.querySelectorAll('pre code')).forEach(e => {
+                    e.parentNode.classList.add('prettyprint');
+                    e.classList.add('lang-' + e.className);
+                });
+
+                prettyPrint();
+            }
+        });
+    }
+</script>
+
+</div></div>
+            <div id='categories-content' style='display:none'>
+            <div class='section'>
+<h1>CharBuffer</h1>
+<div class='left-column'>
+<h3>Others...</h3>
+<ul class='links'>
+<li><a href="#!/api/CharBuffer.AbstractCharBuffer" rel="CharBuffer.AbstractCharBuffer" class="docClass">CharBuffer.AbstractCharBuffer</a></li>
+<li><a href="#!/api/CharBuffer.NodeBuffer" rel="CharBuffer.NodeBuffer" class="docClass">CharBuffer.NodeBuffer</a></li>
+<li><a href="#!/api/CharBuffer.StringArrayBuffer" rel="CharBuffer.StringArrayBuffer" class="docClass">CharBuffer.StringArrayBuffer</a></li>
+<li><a href="#!/api/CharBuffer.StringBuffer" rel="CharBuffer.StringBuffer" class="docClass">CharBuffer.StringBuffer</a></li>
+<li><a href="#!/api/CharBuffer.TypedArrayBuffer" rel="CharBuffer.TypedArrayBuffer" class="docClass">CharBuffer.TypedArrayBuffer</a></li>
+</ul>
+</div>
+<div class='middle-column'>
+</div>
+<div class='right-column'>
+</div>
+<div style='clear:both'></div>
+</div>
+<div class='section'>
+<h1>Others...</h1>
+<div class='left-column'>
+<h3>Others...</h3>
+<ul class='links'>
+<li><a href="#!/api/Array" rel="Array" class="docClass">Array</a></li>
+<li><a href="#!/api/Boolean" rel="Boolean" class="docClass">Boolean</a></li>
+<li><a href="#!/api/Date" rel="Date" class="docClass">Date</a></li>
+<li><a href="#!/api/Function" rel="Function" class="docClass">Function</a></li>
+<li><a href="#!/api/Number" rel="Number" class="docClass">Number</a></li>
+<li><a href="#!/api/Object" rel="Object" class="docClass">Object</a></li>
+<li><a href="#!/api/RegExp" rel="RegExp" class="docClass">RegExp</a></li>
+<li><a href="#!/api/String" rel="String" class="docClass">String</a></li>
+</ul>
+</div>
+<div class='middle-column'>
+</div>
+<div class='right-column'>
+</div>
+<div style='clear:both'></div>
+</div>
+          </div>
+
+  
+  
+  <div id='footer-content' style='display: none'>Generated on Thu 29 Sep 2016 23:41:32 by <a href='https://github.com/senchalabs/jsduck'>JSDuck</a> 5.3.4.</div>
+
+  
+
+  <script type="text/javascript">
+  (function(){
+    var protocol = (document.location.protocol === "https:") ? "https:" : "http:";
+    document.write("<link href='"+protocol+"//fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css' />");
+  })();
+  </script>
+
+</body>
+</html>

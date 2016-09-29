@@ -13,4 +13,4 @@ before_install:
 script:
   - 'if [ -n "$COVER" ]; then npm run test-cover; else npm test; fi'
 after_success:
-    - 'if [ -n "$COVER" ]; then ./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls; fi'
+  - 'if [ -n "$COVER" ]; then node_modules/.bin/nyc report --reporter=text-lcov | node_modules/.bin/coveralls; fi'

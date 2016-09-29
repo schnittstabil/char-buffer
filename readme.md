@@ -40,4 +40,17 @@ console.log(buffer.toString());
 ## License
 
 MIT © [Michael Mayer](http://schnittstabil.de)
+<script>
+	if (Ext && Ext.onReady && prettyPrint) {
+		Ext.onReady(() => {
+			if ((document.querySelector('#footer-content a') || {}).innerText === 'JSDuck') {
+				Array.from(document.querySelectorAll('pre code')).forEach(e => {
+					e.parentNode.classList.add('prettyprint');
+					e.classList.add('lang-' + e.className);
+				});
 
+				prettyPrint();
+			}
+		});
+	}
+</script>

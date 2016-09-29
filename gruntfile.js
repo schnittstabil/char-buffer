@@ -61,30 +61,6 @@ module.exports = function (grunt) {
 	}] : defaultBrowsers;
 
 	grunt.initConfig({
-		'compile-handlebars': {
-			'gh-pages': {
-				files: [{
-					src: 'readme.md.hbs',
-					dest: 'gh-pages/readme.md'
-				}],
-				templateData: {html: true},
-				globals: [
-					'./package.json'
-				],
-				helpers: 'resources/handlebars-code-helper.js'
-			},
-			'readme': {
-				files: [{
-					src: 'readme.md.hbs',
-					dest: 'readme.md'
-				}],
-				templateData: {html: false},
-				globals: [
-					'./package.json'
-				],
-				helpers: 'resources/handlebars-code-helper.js'
-			}
-		},
 		'connect': {
 			server: {
 				options: {
@@ -149,5 +125,4 @@ module.exports = function (grunt) {
 	});
 	grunt.registerTask('default', ['connect', 'watch']);
 	grunt.registerTask('saucelabs', ['outputBrowsers', 'connect', 'saucelabs-mocha']);
-	grunt.registerTask('docs', ['compile-handlebars']);
 };

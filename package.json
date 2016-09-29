@@ -33,27 +33,24 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "ava": "^0.15.2",
-    "chalk": "^1.1.3",
-    "coveralls": "^2.11.11",
-    "del-cli": "^0.2.0",
+    "ava": "^0.16",
+    "chalk": "^1.0",
+    "coveralls": "^2.0",
     "dots": "^0.1.0",
     "execa": "^0.4.0",
-    "grunt": "^1.0.1",
-    "grunt-compile-handlebars": "^2.0.2",
-    "grunt-contrib-connect": "^1.0.2",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-saucelabs": "^9.0.0",
-    "handlebars": "^4.0.5",
-    "jspm": "^0.16.39",
-    "nyc": "^7.1.0-candidate3",
-    "xo": "^0.16.0"
+    "grunt": "^1.0",
+    "grunt-contrib-connect": "^1.0",
+    "grunt-contrib-watch": "^1.0",
+    "grunt-saucelabs": "^9.0",
+    "jspm": "^0.16",
+    "nyc": "^8.3",
+    "rimraf": "^2.5",
+    "xo": "^0.16"
   },
   "xo": {
     "ignores": [
       "**/.nyc_output/**",
-      "**/coverage/**",
-      "**/gh-pages/**",
+      "**/docs/**",
       "**/jspm_packages/**",
       "config.js",
       "build.js"
@@ -66,6 +63,7 @@
           "browser"
         ],
         "globals": [
+          "exposeMochaResults",
           "xpect"
         ]
       }
@@ -93,11 +91,11 @@
   "scripts": {
     "test": "xo && ava",
     "test-cover": "xo && nyc ava",
-    "test-cover-html": "npm run test-cover && nyc report --reporter=html",
     "test-browser-local": "grunt default",
     "test-browser-saucelabs": "grunt saucelabs",
-    "docs-clean": "del readme.md gh-pages/api gh-pages/readme.md",
-    "docs-build": "grunt docs && jsduck --builtin-classes --welcome=gh-pages/readme.md --title=char-buffer --output=gh-pages/api *-buffer.js",
-    "docs": "npm run docs-clean && npm run docs-build"
+    "docs-clean": "rimraf docs/api docs/coverage",
+    "docs-api": "jsduck --builtin-classes --welcome=readme.md --title=char-buffer --output=docs/api *-buffer.js",
+    "docs-coverage": "npm run test-cover && nyc report --reporter=html --report-dir=docs/coverage",
+    "docs": "npm run docs-clean && npm run docs-api && npm run docs-coverage"
   }
 }

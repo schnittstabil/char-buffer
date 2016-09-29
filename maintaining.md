@@ -15,7 +15,7 @@ npm run test-cover-html
 
 ```bash
 node_modules/.bin/jspm update
-node_modules/.bin/jspm bundle test/_mocha.js build.js
+node_modules/.bin/jspm bundle-sfx test/_mocha.js build.js
 # Local
 npm run test-browser-local
 # Saucelabs
@@ -25,42 +25,15 @@ SAUCE_USERNAME=schnittstabil SAUCE_ACCESS_KEY=… node_modules/.bin/grunt saucel
 
 ## Publish
 
-### 1. gh-pages
-
-#### Prerequisites
+### 1. docs
 
 ```bash
-[sudo] gem install jsduck
-
-mkdir gh-pages
-cd gh-pages
-git clone git@github.com:schnittstabil/char-buffer.git .
-git checkout gh-pages
-cd ..
-```
-
-#### Build
-
-```bash
-cd gh-pages && git pull && cd ..
 npm run docs
-```
-
-#### Upload
-
-```bash
-cd gh-pages && git add . && git commit && git push && cd ..
-# or
-cd gh-pages && git add . && git commit --amend && git push --force && cd ..
 ```
 
 ### 2. master
 
 ```bash
-
-# ensure readme.md is the current version
-npm run docs
-
 git add . && git commit && git push
 # or
 git add . && git commit --amend  && git push --force
@@ -68,9 +41,6 @@ git add . && git commit --amend  && git push --force
 
 ### 3. npm
 ```bash
-
-# ensure readme.md is the current version
-npm run docs
 
 # build and review package
 npm pack && xdg-open char-buffer*.tgz

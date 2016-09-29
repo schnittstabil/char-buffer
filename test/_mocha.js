@@ -57,28 +57,16 @@ import TypedArrayBuffer from '../typed-array-buffer';
 	})
 );
 
-var runner;
-var errors = [];
-
 window.onload = function () {
-	function exposeMochaResults() {
-		window.mochaResults = runner.stats;
-	}
-
 	document.getElementById('mocha').innerHTML = '';
 
-	try {
-		runner = mocha.run();
-		runner.on('end', exposeMochaResults);
+	var runner = mocha.run();
+	runner.on('end', function () {
+		exposeMochaResults(runner.stats);
+	});
 
-		// test if already ended:
-		if (runner.stats.end) {
-			exposeMochaResults();
-		}
-	} catch (err) {
-		errors.unshift(err);
-		document.write(errors);
-
-		throw err;
+	// test if already ended:
+	if (runner.stats.end) {
+		exposeMochaResults(runner.stats);
 	}
 };
