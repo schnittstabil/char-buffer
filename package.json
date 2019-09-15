@@ -20,7 +20,7 @@
   ],
   "preferGlobal": false,
   "engines": {
-    "node": ">= 0.10"
+    "node": ">=8"
   },
   "author": "Michael Mayer <michael@schnittstabil.de>",
   "license": "MIT",
@@ -33,25 +33,19 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "ava": "^0.16",
-    "chalk": "^1.0",
-    "coveralls": "^2.0",
+    "ava": "^2.3.0",
+    "chalk": "^2.4.2",
+    "coveralls": "^3.0.6",
     "dots": "^0.1.0",
-    "execa": "^0.4.0",
-    "grunt": "^1.0",
-    "grunt-contrib-connect": "^1.0",
-    "grunt-contrib-watch": "^1.0",
-    "grunt-saucelabs": "^9.0",
-    "jspm": "^0.16",
-    "nyc": "^8.3",
-    "rimraf": "^2.5",
-    "xo": "^0.16"
+    "execa": "^2.0.4",
+    "nyc": "^14.1.1",
+    "rimraf": "^3.0.0",
+    "xo": "^0.24.0"
   },
   "xo": {
     "ignores": [
       "**/.nyc_output/**",
       "**/docs/**",
-      "**/jspm_packages/**",
       "config.js",
       "build.js"
     ],
@@ -69,28 +63,12 @@
       }
     ]
   },
-  "jspm": {
-    "main": "typed-array-buffer",
-    "format": "cjs",
-    "directories": {
-      "files": [
-        "./abstract-char-buffer.js",
-        "./string-array-buffer.js",
-        "./string-buffer.js",
-        "./typed-array-buffer.js"
-      ],
-      "lib": "."
-    },
-    "dependencies": {},
-    "devDependencies": {}
-  },
   "main": "node-buffer.js",
   "files": [
     "*-buffer.js"
   ],
   "scripts": {
-    "test": "xo && ava",
-    "test-cover": "xo && nyc ava",
+    "test": "xo && nyc ava",
     "test-browser-local": "grunt default",
     "test-browser-saucelabs": "grunt saucelabs",
     "docs-clean": "rimraf docs/api docs/coverage",

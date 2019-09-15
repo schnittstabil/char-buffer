@@ -1,7 +1,6 @@
-'use strict';
-const util = require('util');
-const chalk = require('chalk');
-const execa = require('execa');
+import util from 'util';
+import execa from 'execa';
+
 const pkg = require('./package.json');
 
 const defaultBrowsers = [
@@ -61,7 +60,7 @@ module.exports = function (grunt) {
 	}] : defaultBrowsers;
 
 	grunt.initConfig({
-		'connect': {
+		connect: {
 			server: {
 				options: {
 					base: '',
@@ -69,17 +68,16 @@ module.exports = function (grunt) {
 				}
 			}
 		},
-		'watch': {
-		},
+		watch: {},
 		'saucelabs-mocha': {
 			all: {
 				options: {
 					urls: [
 						'http://127.0.0.1:9999/test.html'
 					],
-					testname: pkg.name + (tags.length ? ' ' + tags.join('-') : ''),
+					testname: pkg.name + (tags.length === 0 ? '' : ' ' + tags.join('-')),
 					build: hash,
-					public: tags.length ? 'public' : 'share',
+					public: tags.length === 0 ? 'share' : 'public',
 					sauceConfig: {
 						'record-video': false,
 						'record-screenshots': true
@@ -87,41 +85,42 @@ module.exports = function (grunt) {
 					statusCheckAttempts: 900,
 					maxRetries: 2,
 					tags: [pkg.name, hash],
-					onTestComplete: function (result, cb) {
+					onTestComplete: (result, cb) => {
 						if (!result.passed) {
 							if (result.result && result.result.reports) {
-								console.error(chalk.red('reports:'));
+								console.error('reports:');
 
-								result.result.reports.forEach(function (report) {
-									var stack = report.stack;
+								result.result.reports.forEach(report => {
+									const {stack} = report;
 									delete report.stack;
 									console.error(util.inspect(report, {colors: true, showHidden: false, depth: null}));
-									console.error(chalk.red(stack));
+									console.error(stack);
 								});
 							} else {
-								console.error(chalk.red('no reports found'));
+								console.error('no reports found');
 							}
 
-							console.error(chalk.yellow('Want to rerun? Try:\n  grunt saucelabs --browser="' + result.platform[1] + ':' + result.platform[2] + '"'));
+							console.error('Want to rerun? Try:\n  grunt saucelabs --browser="' + result.platform[1] + ':' + result.platform[2] + '"');
 						}
 
 						cb(null, result.passed);
 					},
-					browsers: browsers
+					browsers
 				}
 			}
 		}
 	});
 
 	// Loading dependencies
-	for (var key in grunt.file.readJSON('package.json').devDependencies) {
+	const {devDependencies} = grunt.file.readJSON('package.json');
+	for (const key of Object.keys(devDependencies)) {
 		if (key !== 'grunt' && key.indexOf('grunt') === 0) {
 			grunt.loadNpmTasks(key);
 		}
 	}
 
-	grunt.registerTask('outputBrowsers', 'output selected browsers', function () {
-		console.error(chalk.yellow(util.inspect(browsers, {colors: true, depth: null})));
+	grunt.registerTask('outputBrowsers', 'output selected browsers', () => {
+		console.error(util.inspect(browsers, {colors: true, depth: null}));
 	});
 	grunt.registerTask('default', ['connect', 'watch']);
 	grunt.registerTask('saucelabs', ['outputBrowsers', 'connect', 'saucelabs-mocha']);

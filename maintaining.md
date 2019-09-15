@@ -1,12 +1,18 @@
 # Maintaining [![Dependency Status](https://david-dm.org/schnittstabil/char-buffer.svg)](https://david-dm.org/schnittstabil/char-buffer) [![devDependency Status](https://david-dm.org/schnittstabil/char-buffer/dev-status.svg)](https://david-dm.org/schnittstabil/char-buffer#info=devDependencies) [![Coverage Status](https://coveralls.io/repos/github/schnittstabil/char-buffer/badge.svg?branch=master)](https://coveralls.io/github/schnittstabil/char-buffer?branch=master)
 
 
+## Setup
+
+```bash
+docker run -it --rm -v $PWD:/app -w /app  node:8 npm i
+```
+
 ## Testing
 
 ### Linting and Unit Tests
 
 ```bash
-npm test
+docker run -it --rm -v $PWD:/app -w /app  node:8 npm test
 # or with coverage report
 npm run test-cover-html
 ```

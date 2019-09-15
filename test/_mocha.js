@@ -1,5 +1,5 @@
 import AbstractCharBuffer from '../abstract-char-buffer';
-import StringArrayBuffer from '../string-array-buffer.js';
+import StringArrayBuffer from '../string-array-buffer';
 import StringBuffer from '../string-buffer';
 import TypedArrayBuffer from '../typed-array-buffer';
 
@@ -16,33 +16,31 @@ import TypedArrayBuffer from '../typed-array-buffer';
 		name: 'TypedArrayBuffer',
 		CharBuffer: TypedArrayBuffer
 	}
-].filter(function (t) {
-	return t.CharBuffer.isSupported;
-}).map(
-	({name, CharBuffer}) => describe(name, function () {
+].filter(t => t.CharBuffer.isSupported)
+	.map(({name, CharBuffer}) => describe(name, () => {
 		const charBuffer = CharBuffer;
 
-		it('should exists', function () {
+		it('should exists', () => {
 			xpect(CharBuffer).to.be.a('function');
 		});
 
-		it('should have a name', function () {
+		it('should have a name', () => {
 			xpect(CharBuffer.name).to.be.a('string');
 		});
 
-		it('constructor should return an instance of AbstractCharBuffer', function () {
+		it('constructor should return an instance of AbstractCharBuffer', () => {
 			xpect(charBuffer(0) instanceof AbstractCharBuffer).to.be.ok();
 		});
 
-		it('constructor (using new) should return an instance of AbstractCharBuffer', function () {
+		it('constructor (using new) should return an instance of AbstractCharBuffer', () => {
 			xpect(new CharBuffer(0) instanceof AbstractCharBuffer).to.be.ok();
 		});
 
-		it('constructor (using new) should return an instance of AbstractCharBuffer', function () {
+		it('constructor (using new) should return an instance of AbstractCharBuffer', () => {
 			xpect(new CharBuffer(0) instanceof AbstractCharBuffer).to.be.ok();
 		});
 
-		it('should support append', function () {
+		it('should support append', () => {
 			xpect(charBuffer(0)).to.be.ok();
 
 			xpect(charBuffer(0).append).to.be.a('function');
@@ -54,19 +52,18 @@ import TypedArrayBuffer from '../typed-array-buffer';
 			xpect(charBuffer(1).append(102).append(111).append(111).toString()).to.be('foo');
 			xpect(new CharBuffer(1).append(102).append(111).append(111).toString()).to.be('foo');
 		});
-	})
-);
+	}));
 
-window.onload = function () {
-	document.getElementById('mocha').innerHTML = '';
+window.addEventListener('load', () => {
+	document.querySelector('#mocha').innerHTML = '';
 
-	var runner = mocha.run();
-	runner.on('end', function () {
+	const runner = mocha.run();
+	runner.on('end', () => {
 		exposeMochaResults(runner.stats);
 	});
 
-	// test if already ended:
+	// Test if already ended:
 	if (runner.stats.end) {
 		exposeMochaResults(runner.stats);
 	}
-};
+});

@@ -1,10 +1,10 @@
-function appendTests(test, BufferConstr) {
+export default (test, BufferConstr) => {
 	if (BufferConstr.isSupported) {
 		return;
 	}
 
-	test(BufferConstr.name + ' should support append', function (t) {
-		var buffer = BufferConstr;
+	test(BufferConstr.name + ' should support append', t => {
+		const buffer = BufferConstr;
 
 		t.truthy(buffer(0));
 
@@ -17,6 +17,4 @@ function appendTests(test, BufferConstr) {
 		t.is(buffer(1).append(102).append(111).append(111).toString(), 'foo');
 		t.is(new BufferConstr(1).append(102).append(111).append(111).toString(), 'foo');
 	});
-}
-
-module.exports = appendTests;
+};

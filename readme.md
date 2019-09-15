@@ -6,8 +6,6 @@
 
 ```bash
 $ npm install --save char-buffer
-# or
-$ jspm install char-buffer=github:schnittstabil/char-buffer
 ```
 
 ## Usage

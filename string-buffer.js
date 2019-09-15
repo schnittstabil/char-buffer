@@ -1,22 +1,23 @@
 'use strict';
-var AbstractCharBuffer = require('./abstract-char-buffer');
+const AbstractCharBuffer = require('./abstract-char-buffer');
 
 /**
-	* @class CharBuffer.StringBuffer
-	* @extends CharBuffer.AbstractCharBuffer
-	*
-	* {@link CharBuffer.AbstractCharBuffer} implementation using a single {@link String}.
-	*/
+ * @class CharBuffer.StringBuffer
+ * @extends CharBuffer.AbstractCharBuffer
+ *
+ * {@link CharBuffer.AbstractCharBuffer} implementation using a single {@link String}.
+ */
 
 /**
-	* @method constructor
-	*
-	* Constructs a StringBuffer representing an empty string.
-	*/
+ * @method constructor
+ *
+ * Constructs a StringBuffer representing an empty string.
+ */
 function StringBuffer() {
 	if (!(this instanceof StringBuffer)) {
 		return new StringBuffer();
 	}
+
 	AbstractCharBuffer.call(this);
 	this._buffer = '';
 }
@@ -31,19 +32,20 @@ if (!StringBuffer.name) {
 }
 
 /**
-	* @method
-	* Write a charCode to the buffer using
-	* {@link String#fromCharCode} and {@link String#concat +}.
-	*
-	* @param {Number} charCode The charCode to append.
-	* @param {Number} offset The zero based offset to write at.
-	*/
+ * @method
+ * Write a charCode to the buffer using
+ * {@link String#fromCharCode} and {@link String#concat +}.
+ *
+ * @param {Number} charCode The charCode to append.
+ * @param {Number} offset The zero based offset to write at.
+ */
 StringBuffer.prototype.write = function (charCode, offset) {
 	if (typeof offset === 'undefined' || offset === this.length) {
 		return this.append(charCode);
 	}
-	var pre = this._buffer.slice(0, offset);
-	var post = this._buffer.slice(offset + 1);
+
+	const pre = this._buffer.slice(0, offset);
+	const post = this._buffer.slice(offset + 1);
 	this._buffer = pre + String.fromCharCode(charCode) + post;
 	this.length = this._buffer.length;
 	return this;
@@ -77,10 +79,10 @@ StringBuffer.prototype.setLength = function (newLength) {
 };
 
 /**
-	* @method
-	* Returns the internal {@link String}.
-	* @return {String} The string.
-	*/
+ * @method
+ * Returns the internal {@link String}.
+ * @return {String} The string.
+ */
 StringBuffer.prototype.toString = function () {
 	return this._buffer;
 };
@@ -90,10 +92,10 @@ StringBuffer.isSupported = true;
 
 /** @static @method */
 StringBuffer.fromString = function (string, transform) {
-	var output = new StringBuffer();
-	var len = string.length;
-	var buffer;
-	var i;
+	const output = new StringBuffer();
+	const len = string.length;
+	let buffer;
+	let i;
 
 	if (transform) {
 		buffer = '';
