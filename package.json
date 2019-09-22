@@ -1,6 +1,6 @@
 {
   "name": "char-buffer",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Collect CharCodes and convert them to string.",
   "homepage": "https://github.com/schnittstabil/char-buffer",
   "keywords": [
@@ -100,6 +100,7 @@
   },
   "main": "node-buffer.js",
   "files": [
+    "*-buffer.js",
     "lib/**/*"
   ],
   "scripts": {
