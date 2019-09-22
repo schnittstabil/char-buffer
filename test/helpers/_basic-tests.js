@@ -41,18 +41,19 @@ const basicTest = (test, BufferConstr, testString) => {
 
 		// Try illegal truncation
 		t.throws(() => {
-			buffer.setLength(-1);
+			buffer.length = -1;
 		});
 
 		// Truncate
 		t.notThrows(() => {
-			buffer.setLength(1);
+			buffer.length = 1;
 		});
+
 		t.is(buffer.toString(), testString.substr(0, 1));
 
 		// Append single char
 		t.notThrows(() => {
-			buffer.write(testString.charCodeAt(1), buffer.getLength());
+			buffer.write(testString.charCodeAt(1), buffer.length);
 		});
 		t.is(buffer.toString(), testString.substr(0, 2));
 	});
@@ -61,5 +62,16 @@ const basicTest = (test, BufferConstr, testString) => {
 export default (test, BufferConstr) => {
 	testStrings.forEach(s => {
 		basicTest(test, BufferConstr, s);
+	});
+
+	test('isSupported is a property', t => {
+		t.true(Object.prototype.hasOwnProperty.call(BufferConstr, 'isSupported'));
+	});
+
+	test('negative initCapacity throws', t => {
+		t.throws(() => {
+			// eslint-disable-next-line no-new
+			new BufferConstr(-1);
+		});
 	});
 };

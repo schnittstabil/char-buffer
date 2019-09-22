@@ -1,146 +1,208 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html class="default no-js">
 <head>
-  <title>char-buffer</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <meta name="fragment" content="!">
-
-  
-
-  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
-  <link rel="stylesheet" href="resources/css/app-4689d2a5522dcd3c9e9923ca59c33f27.css" type="text/css" />
-  <link rel="stylesheet" href="styles-3eba09980fa05ead185cb17d9c0deb0f.css" type="text/css" />
-
-  <script type="text/javascript" src="extjs/ext-all.js"></script>
-  <script type="text/javascript" src="data-789a3a7d9befccf7691a76f5423b7ac7.js"></script>
-
-  <script type="text/javascript" src="app-0c945a27f43452df695771ddb60b3d14.js"></script>
-
-  
-
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>char-buffer</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
 </head>
-<body id="ext-body">
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">char-buffer</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> char-buffer</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#char-buffer-a-hrefhttpstravis-ciorgschnittstabilchar-bufferimg-srchttpstravis-ciorgschnittstabilchar-buffersvg-altbuild-status-imagea-a-hrefhttpscoverallsiogithubschnittstabilchar-bufferbranchmasterimg-srchttpscoverallsioreposgithubschnittstabilchar-bufferbadgesvgbranchmaster-altcoverage-statusa-a-hrefhttpgruntjscomimg-srchttpsgruntjscomcdnbuiltwithsvg-altbuilt-with-grunta-a-hrefhttpsgithubcomsindresorhusxoimg-srchttpsimgshieldsiobadgecode_style-xo-5ed9c7svg-altxo-code-stylea" id="char-buffer-a-hrefhttpstravis-ciorgschnittstabilchar-bufferimg-srchttpstravis-ciorgschnittstabilchar-buffersvg-altbuild-status-imagea-a-hrefhttpscoverallsiogithubschnittstabilchar-bufferbranchmasterimg-srchttpscoverallsioreposgithubschnittstabilchar-bufferbadgesvgbranchmaster-altcoverage-statusa-a-hrefhttpgruntjscomimg-srchttpsgruntjscomcdnbuiltwithsvg-altbuilt-with-grunta-a-hrefhttpsgithubcomsindresorhusxoimg-srchttpsimgshieldsiobadgecode_style-xo-5ed9c7svg-altxo-code-stylea" style="color: inherit; text-decoration: none;">
+					<h1>char-buffer <a href="https://travis-ci.org/schnittstabil/char-buffer"><img src="https://travis-ci.org/schnittstabil/char-buffer.svg" alt="Build Status Image"></a> <a href="https://coveralls.io/github/schnittstabil/char-buffer?branch=master"><img src="https://coveralls.io/repos/github/schnittstabil/char-buffer/badge.svg?branch=master" alt="Coverage Status"></a> <a href="http://gruntjs.com"><img src="https://gruntjs.com/cdn/builtwith.svg" alt="Built with Grunt"></a> <a href="https://github.com/sindresorhus/xo"><img src="https://img.shields.io/badge/code_style-XO-5ed9c7.svg" alt="XO code style"></a></h1>
+				</a>
+				<blockquote>
+					<p>Collect CharCodes and convert them to a string.</p>
+				</blockquote>
+				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
+					<h2>Install</h2>
+				</a>
+				<pre><code class="language-bash">$ npm install --save char-buffer</code></pre>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> CharBuffer = <span class="hljs-built_in">require</span>(<span class="hljs-string">'char-buffer'</span>);
 
-  <div id="loading"><span class="title">char-buffer</span><span class="logo"></span></div>
+<span class="hljs-comment">// Create a CharBuffer</span>
+<span class="hljs-keyword">var</span> buffer = <span class="hljs-keyword">new</span> CharBuffer();
 
-  <div id="header-content">char-buffer</div>
-  <div id='welcome-content' style='display:none'><div class="markdown"><h1>char-buffer <a href="https://gemnasium.com/schnittstabil/char-buffer"><img src="https://gemnasium.com/schnittstabil/char-buffer.svg" alt="Dependencies Status Image" /></a> <a href="https://travis-ci.org/schnittstabil/char-buffer"><img src="https://travis-ci.org/schnittstabil/char-buffer.svg" alt="Build Status Image" /></a> <a href="https://coveralls.io/github/schnittstabil/char-buffer?branch=master"><img src="https://coveralls.io/repos/github/schnittstabil/char-buffer/badge.svg?branch=master" alt="Coverage Status" /></a> <a href="http://gruntjs.com/"><img src="https://cdn.gruntjs.com/builtwith.svg" alt="Built with Grunt" /></a> <a href="https://github.com/sindresorhus/xo"><img src="https://img.shields.io/badge/code_style-XO-5ed9c7.svg" alt="XO code style" /></a></h1>
+<span class="hljs-comment">// Append a CharCode:</span>
+buffer.append(<span class="hljs-number">102</span>);
 
-<blockquote><p>Collect CharCodes and convert them to a string.</p></blockquote>
+<span class="hljs-comment">// Append two more CharCodes:</span>
+buffer.append(<span class="hljs-number">111</span>).append(<span class="hljs-number">111</span>);
 
-<h2>Install</h2>
-
-<pre><code class="bash">$ npm install --save char-buffer
-# or
-$ jspm install char-buffer=github:schnittstabil/char-buffer
-</code></pre>
-
-<h2>Usage</h2>
-
-<pre><code class="javascript">const CharBuffer = require('char-buffer');
-
-// Create a CharBuffer
-var buffer = new CharBuffer();
-
-// Append a CharCode:
-buffer.append(102);
-
-// Append two more CharCodes:
-buffer.append(111).append(111);
-
-// Output 'foo':
-console.log(buffer.toString());
-</code></pre>
-
-<h2>Documentation</h2>
-
-<ul>
-<li>See <a href="http://schnittstabil.github.io/char-buffer/api/#!/api">API</a> for thorough documentation.</li>
-</ul>
-
-
-<h2>Related</h2>
-
-<ul>
-<li><a href="https://github.com/schnittstabil/caesar-salad">caesar-salad</a> uses <code>char-buffer</code> for Caesar, Vigenere and ROT encryption.</li>
-</ul>
-
-
-<h2>License</h2>
-
-<p>MIT © <a href="http://schnittstabil.de">Michael Mayer</a></p>
-
-<script>
-    if (Ext && Ext.onReady && prettyPrint) {
-        Ext.onReady(() => {
-            if ((document.querySelector('#footer-content a') || {}).innerText === 'JSDuck') {
-                Array.from(document.querySelectorAll('pre code')).forEach(e => {
-                    e.parentNode.classList.add('prettyprint');
-                    e.classList.add('lang-' + e.className);
-                });
-
-                prettyPrint();
-            }
-        });
-    }
-</script>
-
-</div></div>
-            <div id='categories-content' style='display:none'>
-            <div class='section'>
-<h1>CharBuffer</h1>
-<div class='left-column'>
-<h3>Others...</h3>
-<ul class='links'>
-<li><a href="#!/api/CharBuffer.AbstractCharBuffer" rel="CharBuffer.AbstractCharBuffer" class="docClass">CharBuffer.AbstractCharBuffer</a></li>
-<li><a href="#!/api/CharBuffer.NodeBuffer" rel="CharBuffer.NodeBuffer" class="docClass">CharBuffer.NodeBuffer</a></li>
-<li><a href="#!/api/CharBuffer.StringArrayBuffer" rel="CharBuffer.StringArrayBuffer" class="docClass">CharBuffer.StringArrayBuffer</a></li>
-<li><a href="#!/api/CharBuffer.StringBuffer" rel="CharBuffer.StringBuffer" class="docClass">CharBuffer.StringBuffer</a></li>
-<li><a href="#!/api/CharBuffer.TypedArrayBuffer" rel="CharBuffer.TypedArrayBuffer" class="docClass">CharBuffer.TypedArrayBuffer</a></li>
-</ul>
+<span class="hljs-comment">// Output 'foo':</span>
+<span class="hljs-built_in">console</span>.log(buffer.toString());</code></pre>
+				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+					<h2>Documentation</h2>
+				</a>
+				<ul>
+					<li>See <a href="http://schnittstabil.github.io/char-buffer/api/#!/api">API</a> for thorough documentation.</li>
+				</ul>
+				<a href="#related" id="related" style="color: inherit; text-decoration: none;">
+					<h2>Related</h2>
+				</a>
+				<ul>
+					<li><a href="https://github.com/schnittstabil/caesar-salad">caesar-salad</a> uses <code>char-buffer</code> for Caesar, Vigenere and ROT encryption.</li>
+				</ul>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
+				<p>MIT © <a href="http://schnittstabil.de">Michael Mayer</a></p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_abstract_char_buffer_.html">"abstract-<wbr>char-<wbr>buffer"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_node_buffer_.html">"node-<wbr>buffer"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_string_array_buffer_.html">"string-<wbr>array-<wbr>buffer"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_string_buffer_.html">"string-<wbr>buffer"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_typed_array_buffer_.html">"typed-<wbr>array-<wbr>buffer"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
 </div>
-<div class='middle-column'>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
-<div class='right-column'>
-</div>
-<div style='clear:both'></div>
-</div>
-<div class='section'>
-<h1>Others...</h1>
-<div class='left-column'>
-<h3>Others...</h3>
-<ul class='links'>
-<li><a href="#!/api/Array" rel="Array" class="docClass">Array</a></li>
-<li><a href="#!/api/Boolean" rel="Boolean" class="docClass">Boolean</a></li>
-<li><a href="#!/api/Date" rel="Date" class="docClass">Date</a></li>
-<li><a href="#!/api/Function" rel="Function" class="docClass">Function</a></li>
-<li><a href="#!/api/Number" rel="Number" class="docClass">Number</a></li>
-<li><a href="#!/api/Object" rel="Object" class="docClass">Object</a></li>
-<li><a href="#!/api/RegExp" rel="RegExp" class="docClass">RegExp</a></li>
-<li><a href="#!/api/String" rel="String" class="docClass">String</a></li>
-</ul>
-</div>
-<div class='middle-column'>
-</div>
-<div class='right-column'>
-</div>
-<div style='clear:both'></div>
-</div>
-          </div>
-
-  
-  
-  <div id='footer-content' style='display: none'>Generated on Thu 29 Sep 2016 23:41:32 by <a href='https://github.com/senchalabs/jsduck'>JSDuck</a> 5.3.4.</div>
-
-  
-
-  <script type="text/javascript">
-  (function(){
-    var protocol = (document.location.protocol === "https:") ? "https:" : "http:";
-    document.write("<link href='"+protocol+"//fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css' />");
-  })();
-  </script>
-
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

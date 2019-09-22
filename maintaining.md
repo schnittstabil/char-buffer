@@ -12,29 +12,17 @@ docker run -it --rm -v $PWD:/app -w /app  node:8 npm i
 ### Linting and Unit Tests
 
 ```bash
-docker run -it --rm -v $PWD:/app -w /app  node:8 npm test
-# or with coverage report
-npm run test-cover-html
+docker run -it --rm -v $PWD:/app -w /app node:8 npm test
 ```
-
-### Browser
-
-```bash
-node_modules/.bin/jspm update
-node_modules/.bin/jspm bundle-sfx test/_mocha.js build.js
-# Local
-npm run test-browser-local
-# Saucelabs
-SAUCE_USERNAME=schnittstabil SAUCE_ACCESS_KEY=… node_modules/.bin/grunt saucelabs
-```
-
 
 ## Publish
 
 ### 1. docs
 
 ```bash
-npm run docs
+docker run -it --rm -v $PWD:/app -w /app node:12 npm i
+docker run -it --rm -v $PWD:/app -w /app node:12 npm run build
+docker run -it --rm -v $PWD:/app -w /app node:12 npm run docs
 ```
 
 ### 2. master

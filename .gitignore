@@ -1,8 +1,8 @@
 /.nyc_output/
 /coverage/
+/lib/
 /node_modules/
 /gh-pages/
 
 /char-buffer-*.tgz
-/build.js*
 /*.log

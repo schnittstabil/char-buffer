@@ -33,21 +33,35 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.3.0",
+    "@typescript-eslint/parser": "^2.3.0",
     "ava": "^2.3.0",
     "chalk": "^2.4.2",
     "coveralls": "^3.0.6",
     "dots": "^0.1.0",
+    "eslint-config-xo-typescript": "^0.18.0",
     "execa": "^2.0.4",
     "nyc": "^14.1.1",
+    "onchange": "^6.1.0",
     "rimraf": "^3.0.0",
+    "typedoc": "^0.15.0",
+    "typescript": "^3.6.3",
     "xo": "^0.24.0"
   },
   "xo": {
+    "extends": "xo-typescript",
+    "extensions": [
+      "ts"
+    ],
     "ignores": [
       "**/.nyc_output/**",
       "**/docs/**",
+      "build.js",
       "config.js",
-      "build.js"
+      "*-buffer.js",
+      "*-buffer.d.ts",
+      "umd.js",
+      "test"
     ],
     "overrides": [
       {
@@ -63,17 +77,40 @@
       }
     ]
   },
+  "nyc": {
+    "all": true,
+    "cache": false,
+    "check-coverage": true,
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "docs/**",
+      "test/**",
+      "**/node_modules/**",
+      "gruntfile.js"
+    ],
+    "reporter": [
+      "lcov",
+      "html",
+      "text"
+    ],
+    "report-dir": "docs/coverage"
+  },
   "main": "node-buffer.js",
   "files": [
-    "*-buffer.js"
+    "lib/**/*"
   ],
   "scripts": {
-    "test": "xo && nyc ava",
+    "build": "npx tsc",
+    "test": "xo && npm run build && nyc ava",
+    "test-watch": "onchange -i 'src/**/*.ts' -- npm run test",
     "test-browser-local": "grunt default",
     "test-browser-saucelabs": "grunt saucelabs",
     "docs-clean": "rimraf docs/api docs/coverage",
-    "docs-api": "jsduck --builtin-classes --welcome=readme.md --title=char-buffer --output=docs/api *-buffer.js",
-    "docs-coverage": "npm run test-cover && nyc report --reporter=html --report-dir=docs/coverage",
+    "docs-api": "typedoc --module char-buffer --out docs/api src",
+    "docs-coverage": "npm run test && nyc report",
     "docs": "npm run docs-clean && npm run docs-api && npm run docs-coverage"
   }
 }

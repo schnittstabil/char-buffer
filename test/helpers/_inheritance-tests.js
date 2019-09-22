@@ -1,18 +1,12 @@
 import AbstractCharBuffer from '../../abstract-char-buffer';
 
 const _inheritanceTests = (test, BufferConstr) => {
-	const buffer = BufferConstr;
-
 	test(BufferConstr.name + ' should exists', t => {
 		t.is(typeof BufferConstr, 'function');
 	});
 
 	test(BufferConstr.name + ' should have a name', t => {
 		t.is(typeof BufferConstr.name, 'string');
-	});
-
-	test(BufferConstr.name + ' constructor should return an instance of AbstractCharBuffer', t => {
-		t.truthy(buffer(0) instanceof AbstractCharBuffer);
 	});
 
 	test(BufferConstr.name + ' constructor (using new) should return an instance of AbstractCharBuffer', t => {
